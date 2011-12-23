@@ -1,0 +1,21 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<parent>
+		<artifactId>frontlinesms-pom-parent</artifactId>
+		<groupId>net.frontlinesms.core</groupId>
+		<version>1.7.00-beta-7-SNAPSHOT</version>
+		<relativePath>../pom-parent</relativePath>
+	</parent>
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>net.frontlinesms.plugins</groupId>
+	<artifactId>frontlinesms-plugin-learn</artifactId>
+	<version>0.0.6-SNAPSHOT</version>
+	<name>Learn Plugin</name>
+	<description>A plugin for FrontlineSMS for running multiple choice quizzes.</description>
+
+	<dependencies>
+		<dependency>
+			<groupId>net.frontlinesms.core</groupId>
+			<artifactId>frontlinesms</artifactId>
+		</dependency>
+	</dependencies>
+</project>
