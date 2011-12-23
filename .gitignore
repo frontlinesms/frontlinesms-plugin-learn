@@ -10,3 +10,5 @@ bin/
 .project
 .settings/
 
+# vi temp files
+*.swp

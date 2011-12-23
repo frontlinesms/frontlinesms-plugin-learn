@@ -1,4 +1,6 @@
-package net.frontlinesms.plugins.learn.domain;
+package net.frontlinesms.plugins.learn.data.domain;
+
+import java.util.List;
 
 public class TopicTests extends net.frontlinesms.junit.BaseTestCase {
 	/** Instance of Topic under test */
@@ -58,8 +60,8 @@ public class TopicTests extends net.frontlinesms.junit.BaseTestCase {
 
 		// then
 		assertEquals(2, t.getItems().size());
-		assertEquals(item1, t.getItems.get(0));
-		assertEquals(item2, t.getItems.get(1));
+		assertEquals(item1, t.getItems().get(0));
+		assertEquals(item2, t.getItems().get(1));
 	}
 
 	public void testGetItemsIsUnmodifiable() {
@@ -70,4 +72,8 @@ public class TopicTests extends net.frontlinesms.junit.BaseTestCase {
 		} catch(RuntimeException ex) {
 			ex.printStackTrace(); // TODO remove this print once we know the exception type
 		}
+	}
+}
+
+class FakeTopicItem implements TopicItem {
 }

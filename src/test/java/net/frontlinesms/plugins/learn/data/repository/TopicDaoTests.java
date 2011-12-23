@@ -1,6 +1,8 @@
-package net.frontlinesms.plugins.learn;
+package net.frontlinesms.plugins.learn.data.repository;
 
 import net.frontlinesms.junit.HibernateTestCase;
+
+import net.frontlinesms.plugins.learn.data.domain.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
