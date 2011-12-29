@@ -5,11 +5,15 @@ import net.frontlinesms.plugins.learn.data.domain.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-class TopicDaoTests extends HibernateTestCase {
+public class TopicDaoTests extends HibernateTestCase {
 	/** dao under test */
 	@Autowired TopicDao topicDao;
 
-	public void testSave() {
+	public void setTopicDao(TopicDao topicDao) {
+		this.topicDao = topicDao;
+	}
+
+	public void testSave() throws Exception {
 		// given a topic exists in memory
 		Topic t = new Topic();
 		assertEquals(0, t.getId());
@@ -23,7 +27,7 @@ class TopicDaoTests extends HibernateTestCase {
 		assertEquals(1, topicDao.count());
 	}
 
-	public void testDelete() {
+	public void testDelete() throws Exception {
 		// given a topic is already saved
 		Topic t = new Topic();
 		assertEquals(0, topicDao.count());

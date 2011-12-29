@@ -1,14 +1,24 @@
 package net.frontlinesms.plugins.learn.data.repository;
 
+import net.frontlinesms.data.DuplicateKeyException;
+import net.frontlinesms.data.repository.hibernate.BaseHibernateDao;
 import net.frontlinesms.plugins.learn.data.domain.*;
 
-public class TopicDao {
-	public int count() {
-		return 0;
+public class TopicDao extends BaseHibernateDao<Topic> {
+	protected TopicDao() {
+		super(Topic.class);
 	}
 
-	public void save(Topic t) {}
+	public int count() {
+		return super.countAll();
+	}
 
-	public void delete(Topic t) {}
+	public void save(Topic t) throws DuplicateKeyException {
+		super.save(t);
+	}
+
+	public void delete(Topic t) {
+		super.delete(t);
+	}
 }
 

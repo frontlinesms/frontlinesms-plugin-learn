@@ -75,5 +75,4 @@ public class TopicTests extends net.frontlinesms.junit.BaseTestCase {
 	}
 }
 
-class FakeTopicItem implements TopicItem {
-}
+class FakeTopicItem extends TopicItem {}

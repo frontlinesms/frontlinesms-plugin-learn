@@ -10,8 +10,8 @@ import net.frontlinesms.ui.UiGeneratorController;
 
 @PluginControllerProperties(name="Learn (beta)",
 		i18nKey="plugins.learn.name", iconPath="icons/learn/logo.png",
-		hibernateConfigPath=PluginControllerProperties.NO_VALUE,
-		springConfigLocation=PluginControllerProperties.NO_VALUE)
+		hibernateConfigPath="classpath:net/frontlinesms/plugins/learn/hibernate.cfg.xml",
+		springConfigLocation="classpath:net/frontlinesms/plugins/learn/spring.xml")
 public class LearnPluginController extends BasePluginController {
 	public void init(FrontlineSMS frontlineController, ApplicationContext applicationContext) throws PluginInitialisationException {}
 
