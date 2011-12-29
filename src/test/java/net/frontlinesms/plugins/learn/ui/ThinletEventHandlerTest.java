@@ -51,6 +51,7 @@ public abstract class ThinletEventHandlerTest<E extends ThinletUiEventHandler> e
 	
 	private ThinletComponent create(Object parent, String componentName) {
 		Object component = Thinlet.find(parent, componentName);
+		if(component == null) component = ui.find(componentName);
 		if(component == null) return new MissingThinletComponent(componentName);
 		else return new RealThinletComponent(component);
 	}

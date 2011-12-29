@@ -10,6 +10,8 @@ public class LearnPluginTabHandler implements ThinletUiEventHandler {
 	public LearnPluginTabHandler(FrontlineUI ui) {
 		tab = Thinlet.create("tab");
 		ui.setName(tab, "plugin-learn");
+		ui.setText(tab, "Learn (beta)");
+		ui.setIcon(tab, "/icons/plugins/learn/logo_large.png");
 		Object tabbedPane = Thinlet.create(Thinlet.TABBEDPANE);
 		ui.add(tab, tabbedPane);
 		ui.add(tabbedPane, new TopicTabHandler(ui).getTab());

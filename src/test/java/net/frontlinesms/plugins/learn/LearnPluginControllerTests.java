@@ -6,17 +6,14 @@ import net.frontlinesms.ui.UiGeneratorController;
 
 import static org.mockito.Mockito.*;
 
-public class LearnPluginLoadingTest extends BasePluginControllerTests<LearnPluginController> {
+public class LearnPluginControllerTests extends BasePluginControllerTests<LearnPluginController> {
 	public Class<LearnPluginController> getControllerClass() {
 		return LearnPluginController.class;
 	}
 	
 	public void testTabAvailable() {
-		Object expectedTab = new Object();
 		UiGeneratorController ui = mock(UiGeneratorController.class);
-		when(ui.loadComponentFromFile(anyString(), any(LearnPluginTabHandler.class))).thenReturn(expectedTab);
-		Object actualTab = controller.getTab(ui);
-		assertEquals(expectedTab, actualTab);
+		assertNotNull(controller.getTab(ui));
 	}
 }
 
