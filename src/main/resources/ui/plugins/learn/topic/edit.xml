@@ -1,2 +1,9 @@
-<panel>
+<panel columns="2" gap="8">
+	<label text="i18n.plugins.learn.topic.new"/>
+	<textfield name="tfName"/>
+	
+	<panel colspan="2" columns="2" gap="8">
+		<button name="btSave" text="i18n.common.actions.save" icon="/icons/tick.png" action="save"/>
+		<button text="i18n.common.actions.cancel" icon="/icons/cross.png"/>
+	</panel>
 </panel>

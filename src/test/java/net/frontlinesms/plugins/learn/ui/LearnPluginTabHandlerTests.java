@@ -1,10 +1,25 @@
 package net.frontlinesms.plugins.learn.ui;
 
+import net.frontlinesms.plugins.learn.data.repository.TopicDao;
+
+import static org.mockito.Mockito.*;
+
 public class LearnPluginTabHandlerTests extends ThinletEventHandlerTest<LearnPluginTabHandler> {
+	private TopicDao topicDao;
+
 //> SETUP METHODS
 	@Override
-	protected LearnPluginTabHandler createHandler() {
-		return new LearnPluginTabHandler(ui);
+	protected void setUp() throws Exception {
+		topicDao = mock(TopicDao.class);
+		super.setUp();
+	}
+	
+	@Override
+	protected LearnPluginTabHandler initHandler() {
+		LearnPluginTabHandler h = new LearnPluginTabHandler();
+		h.setTopicDao(topicDao);
+		h.init(ui);
+		return h;
 	}
 	
 	@Override

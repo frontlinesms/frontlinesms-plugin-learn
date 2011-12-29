@@ -11,6 +11,8 @@ public abstract class ThinletEventHandlerTest<E extends ThinletUiEventHandler> e
 	protected FrontlineUI ui;
 	/** event handler instance under test */
 	protected E h;
+	/** root UI component that this handler is controlling */
+	private Object rootComponent;
 	
 	@SuppressWarnings("serial")
 	@Override
@@ -23,15 +25,16 @@ public abstract class ThinletEventHandlerTest<E extends ThinletUiEventHandler> e
 				throw new RuntimeException("Unhandled exception/throwable in UI.", t);
 			}
 		};
-		h = createHandler();
+		h = initHandler();
+		rootComponent = getRootComponent();
 	}
 
-	protected abstract E createHandler();
+	protected abstract E initHandler();
 	protected abstract Object getRootComponent();
 	
 //> UI INTERACTION METHODS/CLASSES
 	protected ThinletComponent $(String componentName) {
-		return create(getRootComponent(), componentName);
+		return create(rootComponent, componentName);
 	}
 
 	protected class RealThinletComponent implements ThinletComponent {
@@ -46,7 +49,19 @@ public abstract class ThinletEventHandlerTest<E extends ThinletUiEventHandler> e
 			ui.invokeAction(component);
 		}
 		
+		public String getText() {
+			return ui.getText(component);
+		}
+		
+		public void setText(String text) {
+			ui.setText(component, text);
+		}
+		
 		public void exists() {}
+		
+		public boolean isEnabled() {
+			return ui.isEnabled(component);
+		}
 	}
 	
 	private ThinletComponent create(Object parent, String componentName) {
@@ -64,20 +79,26 @@ class MissingThinletComponent implements ThinletComponent {
 		this.id = id;
 	}
 	
-	public void exists() {
-		fail();
-	}
-	
-	public void click() {
-		fail();
-	}
-	
+	public void exists() { fail(); }
+	public void click() { fail(); }
+	public String getText() { return fail(String.class); }
+	public void setText(String v) { fail(); }
+	public boolean isEnabled() { return fail(boolean.class); }
+
 	private void fail() {
 		BaseTestCase.fail("Component missing: " + id);
+	}
+	
+	private <T extends Object> T fail(Class<T> c) {
+		BaseTestCase.fail("Component missing: " + id);
+		return null;
 	}
 }
 
 interface ThinletComponent {
 	public void exists();
 	public void click();
+	public String getText();
+	public void setText(String text);
+	public boolean isEnabled();
 }

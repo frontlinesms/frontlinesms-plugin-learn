@@ -6,6 +6,7 @@ import net.frontlinesms.FrontlineSMS;
 import net.frontlinesms.plugins.BasePluginController;
 import net.frontlinesms.plugins.PluginControllerProperties;
 import net.frontlinesms.plugins.PluginInitialisationException;
+import net.frontlinesms.plugins.learn.data.repository.TopicDao;
 import net.frontlinesms.plugins.learn.ui.LearnPluginTabHandler;
 import net.frontlinesms.ui.UiGeneratorController;
 
@@ -14,12 +15,19 @@ import net.frontlinesms.ui.UiGeneratorController;
 		hibernateConfigPath="classpath:net/frontlinesms/plugins/learn/hibernate.cfg.xml",
 		springConfigLocation="classpath:net/frontlinesms/plugins/learn/spring.xml")
 public class LearnPluginController extends BasePluginController {
-	public void init(FrontlineSMS frontlineController, ApplicationContext applicationContext) throws PluginInitialisationException {}
+	private TopicDao topicDao;
+
+	public void init(FrontlineSMS frontlineController, ApplicationContext applicationContext) throws PluginInitialisationException {
+		this.topicDao = (TopicDao) applicationContext.getBean("topicDao");
+	}
 
 	public void deinit() {}
 
 	@Override
 	protected Object initThinletTab(UiGeneratorController ui) {
-		return new LearnPluginTabHandler(ui).getTab();
+		LearnPluginTabHandler tabHandler = new LearnPluginTabHandler();
+		tabHandler.setTopicDao(topicDao);
+		tabHandler.init(ui);
+		return tabHandler.getTab();
 	}
 }
