@@ -1,14 +1,19 @@
 package net.frontlinesms.plugins.learn.ui;
 
-import net.frontlinesms.junit.BaseTestCase;
-
-public class LearnPluginTabHandlerTests extends BaseTestCase {
+public class LearnPluginTabHandlerTests extends ThinletEventHandlerTest<LearnPluginTabHandler> {
+//> SETUP METHODS
 	@Override
-	protected void setUp() throws Exception {
-		TODO("load tab handler");
+	protected LearnPluginTabHandler createHandler() {
+		return new LearnPluginTabHandler(ui);
 	}
 	
+	@Override
+	protected Object getRootComponent() {
+		return h.getTab();
+	}
+
+//> TEST METHODS
 	public void testManageTopicsLoaded() {
-		TODO("assert that there is a sub-tab 'Manage Topics'");
+		$("tbManageTopics").exists();
 	}
 }

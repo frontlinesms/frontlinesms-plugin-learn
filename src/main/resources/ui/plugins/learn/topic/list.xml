@@ -1,0 +1,6 @@
+<tab name="tbManageTopics" text="i18n.plugins.learn.topic.tab.title">
+	<!-- <panel text="i18n.plugins.learn.topic">
+		<tree/>
+	</panel> -->
+	<button name="btNewTopic" action="newTopic"/>
+</tab>

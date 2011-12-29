@@ -1,19 +1,30 @@
 package net.frontlinesms.plugins.learn.ui;
 
-import net.frontlinesms.junit.BaseTestCase;
-
-public class TopicTabHandlerTests extends BaseTestCase {
+public class TopicTabHandlerTests extends ThinletEventHandlerTest<TopicTabHandler> {
+//> SETUP METHODS
 	@Override
-	protected void setUp() throws Exception {
-		TODO("load tab handler");
+	protected TopicTabHandler createHandler() {
+		return new TopicTabHandler(ui);
 	}
 	
+	@Override
+	protected Object getRootComponent() {
+		return h.getTab();
+	}
+	
+//> TEST METHODS
 	public void testTopicsListVisisble() {
-		TODO("check that there is a tree visible with expected name");
+		$("trTopics").exists();
 	}
 	
 	public void testNewTopicButton() {
-		TODO("test that the button is visible");
-		TODO("test that the button has appropriate click handler");
+		// given
+		ThinletComponent button = $("btNewTopic");
+		
+		// when
+		button.click();
+		
+		// then
+		$("dgNewTopic").exists();
 	}
 }
