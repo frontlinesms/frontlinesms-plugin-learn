@@ -1,6 +1,5 @@
 package net.frontlinesms.plugins.learn.data.repository;
 
-
 import net.frontlinesms.junit.HibernateTestCase;
 import net.frontlinesms.plugins.learn.data.domain.*;
 
