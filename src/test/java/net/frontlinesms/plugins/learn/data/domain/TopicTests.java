@@ -69,8 +69,8 @@ public class TopicTests extends net.frontlinesms.junit.BaseTestCase {
 		try {
 			t.getItems().add(new FakeTopicItem());
 			fail("topic.items should be unmodifiable outside of Topic class");
-		} catch(RuntimeException ex) {
-			ex.printStackTrace(); // TODO remove this print once we know the exception type
+		} catch(UnsupportedOperationException ex) {
+			// expected
 		}
 	}
 }
