@@ -1,6 +1,7 @@
 package net.frontlinesms.plugins.learn.ui;
 
 import org.mockito.ArgumentMatcher;
+import org.mockito.Mock;
 
 import net.frontlinesms.plugins.learn.data.domain.Topic;
 import net.frontlinesms.plugins.learn.data.repository.TopicDao;
@@ -10,15 +11,9 @@ import net.frontlinesms.test.ui.ThinletEventHandlerTest;
 import static org.mockito.Mockito.*;
 
 public class TopicNewDialogHandlerTests extends ThinletEventHandlerTest<TopicEditDialogHandler> {
-	private TopicDao dao;
+	@Mock private TopicDao dao;
 	
 //> SETUP
-	@Override
-	protected void setUp() throws Exception {
-		dao = mock(TopicDao.class);
-		super.setUp();
-	}
-	
 	@Override
 	protected TopicEditDialogHandler initHandler() {
 		return new TopicEditDialogHandler(ui, dao);

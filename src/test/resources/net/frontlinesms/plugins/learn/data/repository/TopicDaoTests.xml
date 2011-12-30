@@ -6,9 +6,6 @@
 	<!-- import an in-memory database and related hibernate paraphenalia -->
 	<import resource="classpath:spring-junit.xml" />
 
-	<!-- import an in-memory database and related hibernate paraphenalia -->
-	<import resource="classpath:net/frontlinesms/plugins/learn/spring.xml" />
-
 	<!-- DAO declarations -->	
 	<bean id="dao" class="net.frontlinesms.plugins.learn.data.repository.TopicDao" parent="baseHibernateDao"/>
 </beans>

@@ -1,25 +1,21 @@
 package net.frontlinesms.plugins.learn.ui;
 
+import net.frontlinesms.events.EventBus;
 import net.frontlinesms.plugins.learn.data.repository.TopicDao;
+import net.frontlinesms.test.spring.MockBean;
 import net.frontlinesms.test.ui.ThinletEventHandlerTest;
 
 import static org.mockito.Mockito.*;
 
 public class LearnPluginTabHandlerTests extends ThinletEventHandlerTest<LearnPluginTabHandler> {
-	private TopicDao topicDao;
+	@MockBean private TopicDao topicDao;
+	@MockBean private EventBus eventBus;
 
 //> SETUP METHODS
 	@Override
-	protected void setUp() throws Exception {
-		topicDao = mock(TopicDao.class);
-		super.setUp();
-	}
-	
-	@Override
 	protected LearnPluginTabHandler initHandler() {
 		LearnPluginTabHandler h = new LearnPluginTabHandler();
-		h.setTopicDao(topicDao);
-		h.init(ui);
+		h.init(ui, ctx);
 		return h;
 	}
 	
@@ -31,5 +27,11 @@ public class LearnPluginTabHandlerTests extends ThinletEventHandlerTest<LearnPlu
 //> TEST METHODS
 	public void testManageTopicsLoaded() {
 		$("tbManageTopics").exists();
+	}
+	
+	public void testInit() {
+		// given init was called in setup
+		// then
+		verify(eventBus).registerObserver(any(TopicTabHandler.class));
 	}
 }

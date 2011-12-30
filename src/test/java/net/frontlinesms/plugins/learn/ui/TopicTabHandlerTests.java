@@ -1,23 +1,27 @@
 package net.frontlinesms.plugins.learn.ui;
 
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.*;
+import static java.util.Arrays.asList;
+
+import org.mockito.Mock;
+
+import net.frontlinesms.data.events.EntityDeletedNotification;
+import net.frontlinesms.data.events.EntitySavedNotification;
+import net.frontlinesms.events.EventBus;
+import net.frontlinesms.plugins.learn.data.domain.Topic;
 import net.frontlinesms.plugins.learn.data.repository.TopicDao;
+import net.frontlinesms.test.spring.MockBean;
 import net.frontlinesms.test.ui.ThinletComponent;
 import net.frontlinesms.test.ui.ThinletEventHandlerTest;
 
 public class TopicTabHandlerTests extends ThinletEventHandlerTest<TopicTabHandler> {
-	private TopicDao topicDao;
+	@MockBean private EventBus eventBus;
+	@MockBean private TopicDao topicDao;
 
 //> SETUP METHODS
 	@Override
-	protected void setUp() throws Exception {
-		topicDao = mock(TopicDao.class);
-		super.setUp();
-	}
-	
-	@Override
 	protected TopicTabHandler initHandler() {
-		return new TopicTabHandler(ui, topicDao);
+		return new TopicTabHandler(ui, ctx);
 	}
 	
 	@Override
@@ -26,8 +30,44 @@ public class TopicTabHandlerTests extends ThinletEventHandlerTest<TopicTabHandle
 	}
 	
 //> TEST METHODS
-	public void testTopicsListVisisble() {
+	public void testTopicsListVisible() {
 		$("trTopics").exists();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public void testTopicListUpdatesOnNewTopicAndDeletion() {
+		// given
+		Topic mockTopic1 = mock(Topic.class);
+		Topic mockTopic2 = mock(Topic.class);
+		when(topicDao.list()).thenReturn(
+				emptyList(Topic.class),
+				asList(mockTopic1),
+				asList(mockTopic1, mockTopic2),
+				asList(mockTopic2),
+				emptyList(Topic.class));
+		
+		// then on load there are no topics in the list
+		assertEquals(0, $("trTopics").getChildCount());
+		
+		// when
+		h.notify(new EntitySavedNotification<Topic>(mockTopic1));
+		// then
+		assertEquals(1, $("trTopics").getChildCount());
+		
+		// when
+		h.notify(new EntitySavedNotification<Topic>(mockTopic2));
+		// then
+		assertEquals(2, $("trTopics").getChildCount());
+		
+		// when
+		h.notify(new EntityDeletedNotification<Topic>(mockTopic1));
+		// then
+		assertEquals(1, $("trTopics").getChildCount());
+		
+		// when
+		h.notify(new EntityDeletedNotification<Topic>(mockTopic2));
+		// then
+		assertEquals(0, $("trTopics").getChildCount());
 	}
 	
 	public void testNewTopicButton() {
@@ -38,6 +78,6 @@ public class TopicTabHandlerTests extends ThinletEventHandlerTest<TopicTabHandle
 		button.click();
 		
 		// then
-		$("dgNewTopic").exists();
+		assertEquals("i18n.plugins.learn.topic.new", $("dgEditTopic").getText());
 	}
 }
