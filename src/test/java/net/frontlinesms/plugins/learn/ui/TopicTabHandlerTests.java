@@ -2,6 +2,8 @@ package net.frontlinesms.plugins.learn.ui;
 
 import static org.mockito.Mockito.mock;
 import net.frontlinesms.plugins.learn.data.repository.TopicDao;
+import net.frontlinesms.test.ui.ThinletComponent;
+import net.frontlinesms.test.ui.ThinletEventHandlerTest;
 
 public class TopicTabHandlerTests extends ThinletEventHandlerTest<TopicTabHandler> {
 	private TopicDao topicDao;

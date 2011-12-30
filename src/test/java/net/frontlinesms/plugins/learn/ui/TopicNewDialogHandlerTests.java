@@ -4,6 +4,8 @@ import org.mockito.ArgumentMatcher;
 
 import net.frontlinesms.plugins.learn.data.domain.Topic;
 import net.frontlinesms.plugins.learn.data.repository.TopicDao;
+import net.frontlinesms.test.ui.ThinletComponent;
+import net.frontlinesms.test.ui.ThinletEventHandlerTest;
 
 import static org.mockito.Mockito.*;
 
@@ -28,6 +30,10 @@ public class TopicNewDialogHandlerTests extends ThinletEventHandlerTest<TopicEdi
 	}
 	
 //> TESTS
+	public void testDialogTitleIsCorrect() throws Exception {
+		assertEquals("i18n.plugins.learn.topic.new", $().getText());
+	}
+	
 	public void testNameIsBlank() throws Exception {
 		assertEquals("", $("tfName").getText());
 	}
@@ -59,8 +65,31 @@ public class TopicNewDialogHandlerTests extends ThinletEventHandlerTest<TopicEdi
 		
 		// then
 		verify(dao).save(topicWithName("Maths + English"));
+
+		// and
+		assertFalse($().isVisible());
+	}
+	
+	public void testCloseWorks() throws Exception {
+		// given
+		assertTrue($().isVisible());
+		
+		// when
+		$().close();
+		
+		// then
+		assertFalse($().isVisible());
+	}
+	
+	public void testCancelWorks() throws Exception {
+		// when
+		$("btCancel").click();
+		
+		// then
+		assertFalse($().isVisible());
 	}
 
+//> TEST HELPER METHODS
 	private Topic topicWithName(final String expectedName) {
 		return argThat(new ArgumentMatcher<Topic>() {
 			@Override

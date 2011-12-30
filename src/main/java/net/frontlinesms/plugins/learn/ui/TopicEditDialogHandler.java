@@ -25,22 +25,18 @@ public class TopicEditDialogHandler implements ThinletUiEventHandler {
 	public TopicEditDialogHandler(FrontlineUI ui, TopicDao dao, Topic t) {
 		this.dao = dao;
 		
-		String dialogName, dialogTitle;
+		String dialogTitle;
 		if(t == null) {
 			this.t = new Topic();
-			dialogName = "dgNewTopic";
 			dialogTitle = "i18n.plugins.learn.topic.new";
 		} else {
 			this.t = t;
-			dialogName = "dgEditTopic";
 			dialogTitle = "i18n.plugins.learn.topic.edit";
 		}
 		
 		this.ui = ui;
-		Object panel = ui.loadComponentFromFile(LAYOUT_FILE, this);
-		dialog = ui.createDialog(dialogTitle);
-		ui.setName(dialog, dialogName);
-		ui.add(dialog, panel);
+		dialog = ui.loadComponentFromFile(LAYOUT_FILE, this);
+		ui.setText(dialog, dialogTitle);
 		
 		validate();
 	}
@@ -50,9 +46,14 @@ public class TopicEditDialogHandler implements ThinletUiEventHandler {
 	}
 	
 //> UI EVENT METHODS
+	public void close() {
+		ui.remove(dialog);
+	}
+	
 	public void save() throws DuplicateKeyException {
 		t.setName(ui.getText(find(TF_NAME)));
 		dao.save(t);
+		close();
 	}
 	
 	public void validate() {
