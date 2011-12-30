@@ -2,7 +2,7 @@ package net.frontlinesms.plugins.learn.data.domain;
 
 import java.util.List;
 
-public class TopicTests extends net.frontlinesms.junit.BaseTestCase {
+public class TopicTest extends net.frontlinesms.junit.BaseTestCase {
 	/** Instance of Topic under test */
 	Topic t;
 

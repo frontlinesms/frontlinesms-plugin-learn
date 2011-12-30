@@ -10,7 +10,7 @@ import net.frontlinesms.test.ui.ThinletEventHandlerTest;
 
 import static org.mockito.Mockito.*;
 
-public class TopicNewDialogHandlerTests extends ThinletEventHandlerTest<TopicEditDialogHandler> {
+public class TopicNewDialogHandlerTest extends ThinletEventHandlerTest<TopicEditDialogHandler> {
 	@Mock private TopicDao dao;
 	
 //> SETUP

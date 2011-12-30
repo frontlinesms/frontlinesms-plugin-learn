@@ -5,7 +5,7 @@ import net.frontlinesms.plugins.learn.data.domain.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class TopicDaoTests extends HibernateTestCase {
+public class TopicDaoTest extends HibernateTestCase {
 	/** dao under test */
 	@Autowired TopicDao dao;
 

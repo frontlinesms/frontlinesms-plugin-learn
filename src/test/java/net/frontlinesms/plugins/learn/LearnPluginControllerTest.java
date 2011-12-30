@@ -8,7 +8,7 @@ import net.frontlinesms.ui.UiGeneratorController;
 
 import static org.mockito.Mockito.*;
 
-public class LearnPluginControllerTests extends BasePluginControllerTests<LearnPluginController> {
+public class LearnPluginControllerTest extends BasePluginControllerTests<LearnPluginController> {
 	@MockBean private EventBus eventBus;
 	@MockBean private TopicDao topicDao;
 	

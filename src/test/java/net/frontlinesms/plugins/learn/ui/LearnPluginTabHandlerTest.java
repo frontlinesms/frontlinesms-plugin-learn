@@ -7,7 +7,7 @@ import net.frontlinesms.test.ui.ThinletEventHandlerTest;
 
 import static org.mockito.Mockito.*;
 
-public class LearnPluginTabHandlerTests extends ThinletEventHandlerTest<LearnPluginTabHandler> {
+public class LearnPluginTabHandlerTest extends ThinletEventHandlerTest<LearnPluginTabHandler> {
 	@MockBean private TopicDao topicDao;
 	@MockBean private EventBus eventBus;
 
