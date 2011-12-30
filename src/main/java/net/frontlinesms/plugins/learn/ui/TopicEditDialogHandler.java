@@ -8,6 +8,9 @@ import net.frontlinesms.ui.FrontlineUI;
 import net.frontlinesms.ui.ThinletUiEventHandler;
 
 public class TopicEditDialogHandler implements ThinletUiEventHandler {
+	private static final String TF_NAME = "tfName";
+	private static final String BT_SAVE = "btSave";
+
 	private static final String LAYOUT_FILE = "/ui/plugins/learn/topic/edit.xml";
 
 	private final TopicDao dao;
@@ -38,6 +41,8 @@ public class TopicEditDialogHandler implements ThinletUiEventHandler {
 		dialog = ui.createDialog(dialogTitle);
 		ui.setName(dialog, dialogName);
 		ui.add(dialog, panel);
+		
+		validate();
 	}
 	
 	public Object getDialog() {
@@ -46,8 +51,13 @@ public class TopicEditDialogHandler implements ThinletUiEventHandler {
 	
 //> UI EVENT METHODS
 	public void save() throws DuplicateKeyException {
-		t.setName(ui.getText(find("tfName")));
+		t.setName(ui.getText(find(TF_NAME)));
 		dao.save(t);
+	}
+	
+	public void validate() {
+		boolean valid = !ui.getText(find(TF_NAME)).isEmpty();
+		ui.setEnabled(find(BT_SAVE), valid);
 	}
 	
 //> UI HELPER METHODS

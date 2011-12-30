@@ -1,30 +1,27 @@
 package net.frontlinesms.plugins.learn.ui;
 
+import java.awt.event.FocusEvent;
+import java.awt.event.KeyEvent;
 import java.util.Collections;
 
 import thinlet.Thinlet;
 import net.frontlinesms.junit.BaseTestCase;
+import net.frontlinesms.ui.BlockingFrontlineUiUpdateJob;
 import net.frontlinesms.ui.FrontlineUI;
 import net.frontlinesms.ui.ThinletUiEventHandler;
 
 public abstract class ThinletEventHandlerTest<E extends ThinletUiEventHandler> extends BaseTestCase  {
-	protected FrontlineUI ui;
+	protected TestFrontlineUI ui;
 	/** event handler instance under test */
 	protected E h;
 	/** root UI component that this handler is controlling */
 	private Object rootComponent;
 	
-	@SuppressWarnings("serial")
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
 		Thinlet.DEFAULT_ENGLISH_BUNDLE = Collections.emptyMap();
-		ui = new FrontlineUI() {
-			@Override
-			protected void handleException(Throwable t) {
-				throw new RuntimeException("Unhandled exception/throwable in UI.", t);
-			}
-		};
+		ui = new TestFrontlineUI();
 		h = initHandler();
 		rootComponent = getRootComponent();
 	}
@@ -54,7 +51,7 @@ public abstract class ThinletEventHandlerTest<E extends ThinletUiEventHandler> e
 		}
 		
 		public void setText(String text) {
-			ui.setText(component, text);
+			ui.type(component, text);
 		}
 		
 		public void exists() {}
@@ -101,4 +98,33 @@ interface ThinletComponent {
 	public String getText();
 	public void setText(String text);
 	public boolean isEnabled();
+}
+
+@SuppressWarnings("serial")
+class TestFrontlineUI extends FrontlineUI {
+	public TestFrontlineUI() {
+		// Fake that the Thinlet UI component has focus.
+		processEvent(new FocusEvent(this, FocusEvent.FOCUS_GAINED));
+	}
+	
+	@Override
+	protected void handleException(Throwable t) {
+		throw new RuntimeException("Unhandled exception/throwable in UI.", t);
+	}
+	
+	public void type(final Object component, final String text) {
+		new BlockingFrontlineUiUpdateJob() {
+			public void run() {
+				setFocus(component);
+				while(!getText(component).isEmpty()) {
+					processEvent(new KeyEvent(TestFrontlineUI.this, KeyEvent.KEY_PRESSED, now(), 0, KeyEvent.VK_BACK_SPACE, KeyEvent.CHAR_UNDEFINED));
+				}
+				for(char c : text.toCharArray()) {
+					processEvent(new KeyEvent(TestFrontlineUI.this, KeyEvent.KEY_TYPED, now(), 0, KeyEvent.VK_UNDEFINED, c));
+				}
+			}
+		}.execute();
+	}
+	
+	private long now() { return System.currentTimeMillis(); }
 }
