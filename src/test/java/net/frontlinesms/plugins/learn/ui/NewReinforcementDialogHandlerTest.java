@@ -2,11 +2,20 @@ package net.frontlinesms.plugins.learn.ui;
 
 import java.util.ArrayList;
 
+import net.frontlinesms.plugins.learn.data.domain.Topic;
+import net.frontlinesms.plugins.learn.data.repository.ReinforcementDao;
+import net.frontlinesms.plugins.learn.data.repository.TopicDao;
+import net.frontlinesms.test.spring.MockBean;
 import net.frontlinesms.test.ui.ThinletEventHandlerTest;
+
+import static org.mockito.Mockito.*;
 
 import static net.frontlinesms.plugins.learn.LearnTestUtils.*;
 
 public class NewReinforcementDialogHandlerTest extends ThinletEventHandlerTest<NewReinforcementDialogHandler> {
+	@MockBean private ReinforcementDao dao;
+	@MockBean private TopicDao topicDao;
+	
 //> SETUP METHODS
 	@Override
 	protected NewReinforcementDialogHandler initHandler() {
@@ -32,14 +41,14 @@ public class NewReinforcementDialogHandlerTest extends ThinletEventHandlerTest<N
 
 	public void testSettingTopicExternally() {
 		// given
-		mockTopics("Fascinating Topic 1", "Fascinating Topic 2");
+		Topic[] t = mockTopics("Fascinating Topic 1", "Fascinating Topic 2");
 		
 		// when
-		h.setTopic(t);
+		h.setTopic(t[0]);
 		
 		// then
-		assertEquals(t, $("cbTopic".getSelected().getAttachment()));
-		assertEquals("Fascinating Topic 1", $("cbTopic".getSelected().getText()));
+		assertEquals(t[0], $("cbTopic").getSelected().getAttachment());
+		assertEquals("Fascinating Topic 1", $("cbTopic").getSelected().getText());
 	}
 	
 	public void testValidation() {
@@ -108,13 +117,14 @@ public class NewReinforcementDialogHandlerTest extends ThinletEventHandlerTest<N
 				"Music"));
 	}
 	
-	private void mockTopics(String... names) {
+	private Topic[] mockTopics(String... names) {
 		ArrayList<Topic> topics = new ArrayList<Topic>();
-		for(String name: names) {
+		for(String name : names) {
 			Topic t = mock(Topic.class);
-			when(t.getName()).thenReturn("Fascinating Topic 1");
+			when(t.getName()).thenReturn(name);
 			topics.add(t);
 		}
-		when(dao.list()).thenReturn(topics);
+		when(topicDao.list()).thenReturn(topics);
+		return topics.toArray(new Topic[topics.size()]);
 	}
 }

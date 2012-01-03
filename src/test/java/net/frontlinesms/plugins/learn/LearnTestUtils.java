@@ -1,6 +1,7 @@
 package net.frontlinesms.plugins.learn;
 
 import static org.mockito.Matchers.argThat;
+import net.frontlinesms.plugins.learn.data.domain.Reinforcement;
 import net.frontlinesms.plugins.learn.data.domain.Topic;
 
 import org.mockito.ArgumentMatcher;
@@ -17,11 +18,11 @@ public class LearnTestUtils {
 		});
 	}
 	
-	public static Reinforcement reinforcementWithTextAndTopic(String expectedReinforementText, String expectedTopicName) {
+	public static Reinforcement reinforcementWithTextAndTopic(final String expectedReinforementText, final String expectedTopicName) {
 		return argThat(new ArgumentMatcher<Reinforcement>() {
 			@Override
 			public boolean matches(Object o) {
-				Reinforcement r = (Reinforcement) r;
+				Reinforcement r = (Reinforcement) o;
 				return r.getName().equals(expectedReinforementText) &&
 						r.getTopic().getName().equals(expectedTopicName);
 			}

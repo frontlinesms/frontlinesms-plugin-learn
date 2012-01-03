@@ -1,9 +1,7 @@
 package net.frontlinesms.plugins.learn.ui;
 
-import org.mockito.ArgumentMatcher;
 import org.mockito.Mock;
 
-import net.frontlinesms.plugins.learn.data.domain.Topic;
 import net.frontlinesms.plugins.learn.data.repository.TopicDao;
 import net.frontlinesms.test.ui.ThinletComponent;
 import net.frontlinesms.test.ui.ThinletEventHandlerTest;

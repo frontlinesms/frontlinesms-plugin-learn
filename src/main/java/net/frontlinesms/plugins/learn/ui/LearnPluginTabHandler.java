@@ -4,8 +4,6 @@ import org.springframework.context.ApplicationContext;
 
 import thinlet.Thinlet;
 
-import net.frontlinesms.events.EventBus;
-import net.frontlinesms.plugins.learn.data.repository.TopicDao;
 import net.frontlinesms.ui.FrontlineUI;
 import net.frontlinesms.ui.ThinletUiEventHandler;
 
