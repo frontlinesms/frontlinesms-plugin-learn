@@ -80,4 +80,11 @@ public class TopicTabHandlerTest extends ThinletEventHandlerTest<TopicTabHandler
 		// then
 		assertEquals("i18n.plugins.learn.topic.new", $("dgEditTopic").getText());
 	}
+	
+	public void testNewReinforcementButton() {
+		// when
+		$("btNewReinforcement").click();
+		// then
+		assertEquals("i18n.plugins.learn.reinforcement.new", $("dgEditReinforcement").getText());
+	}
 }

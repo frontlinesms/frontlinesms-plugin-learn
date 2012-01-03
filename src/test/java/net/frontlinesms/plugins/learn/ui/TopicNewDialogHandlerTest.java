@@ -10,6 +10,8 @@ import net.frontlinesms.test.ui.ThinletEventHandlerTest;
 
 import static org.mockito.Mockito.*;
 
+import static net.frontlinesms.plugins.learn.LearnTestUtils.topicWithName;
+
 public class TopicNewDialogHandlerTest extends ThinletEventHandlerTest<TopicEditDialogHandler> {
 	@Mock private TopicDao dao;
 	
@@ -82,16 +84,5 @@ public class TopicNewDialogHandlerTest extends ThinletEventHandlerTest<TopicEdit
 		
 		// then
 		assertFalse($().isVisible());
-	}
-
-//> TEST HELPER METHODS
-	private Topic topicWithName(final String expectedName) {
-		return argThat(new ArgumentMatcher<Topic>() {
-			@Override
-			public boolean matches(Object a) {
-				Topic t = (Topic) a;
-				return t.getName().equals(expectedName);
-			}
-		});
 	}
 }
