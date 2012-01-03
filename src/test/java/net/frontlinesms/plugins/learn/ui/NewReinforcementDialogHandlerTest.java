@@ -123,6 +123,10 @@ public class NewReinforcementDialogHandlerTest extends ThinletEventHandlerTest<N
 				"Music"));
 	}
 	
+	public void testFailedSaveGivesWarning() {
+		
+	}
+	
 	private Topic[] mockTopics(String... names) {
 		ArrayList<Topic> topics = new ArrayList<Topic>();
 		for(String name : names) {

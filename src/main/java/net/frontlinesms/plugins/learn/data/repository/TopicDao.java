@@ -5,6 +5,7 @@ import java.util.List;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Restrictions;
 
+import net.frontlinesms.data.DuplicateKeyException;
 import net.frontlinesms.data.repository.hibernate.BaseHibernateDao;
 import net.frontlinesms.plugins.learn.data.domain.*;
 
@@ -17,8 +18,8 @@ public class TopicDao extends BaseHibernateDao<Topic> {
 		return super.countAll();
 	}
 
-	public void save(Topic t) {
-		super.saveWithoutDuplicateHandling(t);
+	public void save(Topic t) throws DuplicateKeyException {
+		super.save(t);
 	}
 
 	public void delete(Topic t) {

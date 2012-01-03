@@ -19,6 +19,7 @@ public class Topic {
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(unique=true,nullable=false,updatable=false)
 	private long id;
+	@Column(nullable=false, unique=true)
 	private String name;
 	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
 	private List<TopicItem> items = new ArrayList<TopicItem>();

@@ -1,6 +1,7 @@
 package net.frontlinesms.plugins.learn.ui;
 
 import thinlet.Thinlet;
+import net.frontlinesms.data.DuplicateKeyException;
 import net.frontlinesms.plugins.learn.data.domain.Topic;
 import net.frontlinesms.plugins.learn.data.repository.TopicDao;
 import net.frontlinesms.ui.FrontlineUI;
@@ -49,7 +50,7 @@ public class TopicEditDialogHandler implements ThinletUiEventHandler {
 		ui.remove(dialog);
 	}
 	
-	public void save() {
+	public void save() throws DuplicateKeyException {
 		t.setName(ui.getText(find(TF_NAME)));
 		dao.save(t);
 		close();
