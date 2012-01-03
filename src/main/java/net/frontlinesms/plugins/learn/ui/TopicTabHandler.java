@@ -12,6 +12,7 @@ import net.frontlinesms.events.EventBus;
 import net.frontlinesms.events.EventObserver;
 import net.frontlinesms.events.FrontlineEventNotification;
 import net.frontlinesms.plugins.learn.data.domain.Topic;
+import net.frontlinesms.plugins.learn.data.repository.ReinforcementDao;
 import net.frontlinesms.plugins.learn.data.repository.TopicDao;
 import net.frontlinesms.ui.FrontlineUI;
 import net.frontlinesms.ui.ThinletUiEventHandler;
@@ -21,11 +22,13 @@ public class TopicTabHandler implements ThinletUiEventHandler, EventObserver {
 	private static final String TAB_LAYOUT = "/ui/plugins/learn/topic/list.xml";
 
 	private final TopicDao dao;
+	private final ReinforcementDao reinforcementDao;
 	private final FrontlineUI ui;
 	private final Object tab;
 
 	public TopicTabHandler(FrontlineUI ui, ApplicationContext ctx) {
 		this.dao = (TopicDao) ctx.getBean("topicDao");
+		this.reinforcementDao = (ReinforcementDao) ctx.getBean("reinforcementDao");
 		this.ui = ui;
 		this.tab = ui.loadComponentFromFile(TAB_LAYOUT, this);
 		
@@ -57,6 +60,10 @@ public class TopicTabHandler implements ThinletUiEventHandler, EventObserver {
 //> UI EVENT HANDLERS
 	public void newTopic() {
 		ui.add(new TopicEditDialogHandler(ui, dao).getDialog());
+	}
+	
+	public void newReinforcement() {
+		ui.add(new NewReinforcementDialogHandler(ui, reinforcementDao).getDialog());
 	}
 	
 //> UI HELPER METHODS
