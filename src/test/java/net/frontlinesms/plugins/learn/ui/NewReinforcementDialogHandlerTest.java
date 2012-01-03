@@ -19,12 +19,12 @@ public class NewReinforcementDialogHandlerTest extends ThinletEventHandlerTest<N
 //> SETUP METHODS
 	@Override
 	protected NewReinforcementDialogHandler initHandler() {
-		return null;
+		return new NewReinforcementDialogHandler(ui, dao, topicDao);
 	}
 
 	@Override
 	protected Object getRootComponent() {
-		return null;
+		return h.getDialog();
 	}
 	
 //> TEST METHODS
@@ -32,11 +32,10 @@ public class NewReinforcementDialogHandlerTest extends ThinletEventHandlerTest<N
 		assertEquals("i18n.plugins.learn.reinforcement.new", $().getText());
 	}
 	
-	public void testUnsetTopic() {
+	public void testTopicNotInitiallySet() {
 		// when topic has not been set
 		// then topic is "no topic set"
-		assertNull($("cbTopic").getSelected().getAttachment());
-		assertEquals("i18n.plugins.learn.topic.choose", $("cbTopic").getSelected().getText());
+		assertEquals("i18n.plugins.learn.topic.choose", $("cbTopic").getText());
 	}
 
 	public void testSettingTopicExternally() {
@@ -47,34 +46,41 @@ public class NewReinforcementDialogHandlerTest extends ThinletEventHandlerTest<N
 		h.setTopic(t[0]);
 		
 		// then
-		assertEquals(t[0], $("cbTopic").getSelected().getAttachment());
-		assertEquals("Fascinating Topic 1", $("cbTopic").getSelected().getText());
+		assertEquals("Fascinating Topic 1", $("cbTopic").getText());
 	}
 	
-	public void testValidation() {
+	public void testTopicNotEditable() {
+		assertFalse($("cbTopic").isEditable());
+	}
+	
+	public void testTopicValidation() {
 		// given
 		mockTopics("Psychology", "Physiognomy");
-		
-		// when no topic is selected and no text is entered		
-		// then save is disabled
-		assertFalse($("btSave").isEnabled());
-		
-		// when topic is entered, but no text is written
-		$("cbTopic").setSelectedByText("Physiognomy");
-		
-		// then save is disabled
-		assertFalse($("btSave").isEnabled());
-		
-		// when text is written but no topic is selected
-		$("cbTopic").setSelected(null);
 		$("taText").setText("Negative reinforcement is the best!");
 		
+		// when no topic is selected		
 		// then save is disabled
 		assertFalse($("btSave").isEnabled());
 		
 		// when topic is selected and text is entered
-		$("cbTopic").setSelectedByText("Physiognomy");
+		$("cbTopic").setSelected("Physiognomy");
 		
+		// then save is enabled
+		assertTrue($("btSave").isEnabled());
+	}
+	
+	public void testTextValidation() {
+		// given
+		mockTopics("Psychology", "Physiognomy");
+		$("cbTopic").setSelected("Physiognomy");
+		
+		// when no text is entered		
+		// then save is disabled
+		assertFalse($("btSave").isEnabled());
+		
+		// when text is entered
+		$("taText").setText("Negative reinforcement is the best!");
+
 		// then save is enabled
 		assertTrue($("btSave").isEnabled());
 	}
@@ -95,7 +101,7 @@ public class NewReinforcementDialogHandlerTest extends ThinletEventHandlerTest<N
 		assertTrue($("dgEditReinforcement").isVisible());
 		
 		// when
-		$("btClose").click();
+		$("btCancel").click();
 		
 		// then
 		assertFalse($("dgEditReinforcement").isVisible());
@@ -106,7 +112,7 @@ public class NewReinforcementDialogHandlerTest extends ThinletEventHandlerTest<N
 		mockTopics("Music");
 		
 		// when
-		$("cbTopic").setSelectedByText("Music");
+		$("cbTopic").setSelected("Music");
 		$("taText").setText("Remember: music can soothe, but it can also excite!");
 		$("btSave").click();
 		
@@ -122,9 +128,13 @@ public class NewReinforcementDialogHandlerTest extends ThinletEventHandlerTest<N
 		for(String name : names) {
 			Topic t = mock(Topic.class);
 			when(t.getName()).thenReturn(name);
+			when(topicDao.findByName(name)).thenReturn(t);
 			topics.add(t);
 		}
 		when(topicDao.list()).thenReturn(topics);
+		
+		initUiForTests();
+		
 		return topics.toArray(new Topic[topics.size()]);
 	}
 }

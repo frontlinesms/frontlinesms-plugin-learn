@@ -1,5 +1,6 @@
-<dialog name="dgEditReinforcement" columns="2" gap="8" close="close">
-	<label text="i18n.plugins.learn.reinforcement.new"/>
+<dialog name="dgEditReinforcement" columns="2" gap="8" close="close" text="i18n.plugins.learn.reinforcement.edit">
+	<combobox name="cbTopic" action="validate" text="i18n.plugins.learn.topic.choose" editable="false"/>
+	<textarea name="taText" action="validate"/>
 
 	<panel colspan="2" columns="2" gap="8">
 		<button name="btSave" text="i18n.common.actions.save" icon="/icons/tick.png" action="save"/>

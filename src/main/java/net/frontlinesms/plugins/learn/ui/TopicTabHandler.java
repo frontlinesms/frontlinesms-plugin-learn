@@ -63,7 +63,7 @@ public class TopicTabHandler implements ThinletUiEventHandler, EventObserver {
 	}
 	
 	public void newReinforcement() {
-		ui.add(new NewReinforcementDialogHandler(ui, reinforcementDao).getDialog());
+		ui.add(new NewReinforcementDialogHandler(ui, reinforcementDao, dao).getDialog());
 	}
 	
 //> UI HELPER METHODS

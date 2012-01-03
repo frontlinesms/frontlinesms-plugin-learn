@@ -23,8 +23,14 @@ public class LearnTestUtils {
 			@Override
 			public boolean matches(Object o) {
 				Reinforcement r = (Reinforcement) o;
-				return r.getName().equals(expectedReinforementText) &&
-						r.getTopic().getName().equals(expectedTopicName);
+				final boolean matches = expectedReinforementText.equals(r.getName()) &&
+						expectedTopicName.equals(r.getTopic().getName());
+				if(!matches) {
+					System.out.println("LearnTestUtils.reinforcementWithTextAndTopic(...).new ArgumentMatcher() {...}.matches()");
+					System.out.println("\tr.name:  " + r.getName());
+					System.out.println("\tr.topic: " + r.getTopic().getName());
+				}
+				return matches;
 			}
 		});
 	}
