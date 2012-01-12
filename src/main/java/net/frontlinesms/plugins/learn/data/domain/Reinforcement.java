@@ -1,8 +1,10 @@
 package net.frontlinesms.plugins.learn.data.domain;
 
-public class Reinforcement {
+import javax.persistence.Entity;
+
+@Entity
+public class Reinforcement extends TopicItem {
 	private String name;
-	private Topic topic;
 	
 	public String getName() {
 		return name;
@@ -10,13 +12,5 @@ public class Reinforcement {
 	
 	public void setName(String name) {
 		this.name = name;
-	}
-	
-	public Topic getTopic() {
-		return topic;
-	}
-	
-	public void setTopic(Topic topic) {
-		this.topic = topic;
 	}
 }

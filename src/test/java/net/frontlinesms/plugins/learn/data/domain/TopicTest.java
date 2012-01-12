@@ -1,7 +1,5 @@
 package net.frontlinesms.plugins.learn.data.domain;
 
-import java.util.List;
-
 public class TopicTest extends net.frontlinesms.junit.BaseTestCase {
 	/** Instance of Topic under test */
 	Topic t;
@@ -33,45 +31,6 @@ public class TopicTest extends net.frontlinesms.junit.BaseTestCase {
 
 		// then
 		assertEquals("Maths + English", t.getName());
-	}
-
-	public void testItemsInitiallyEmpty() {
-		// when
-		List<TopicItem> items = t.getItems();
-
-		// then
-		assertEquals(0, items.size());
-	}
-
-	public void testAddItemAppends() {
-		// given
-		TopicItem item1 = new FakeTopicItem();
-		TopicItem item2 = new FakeTopicItem();
-
-		// when
-		t.addItem(item1);
-
-		// then
-		assertEquals(1, t.getItems().size());
-		assertEquals(item1, t.getItems().get(0));
-
-		// when
-		t.addItem(item2);
-
-		// then
-		assertEquals(2, t.getItems().size());
-		assertEquals(item1, t.getItems().get(0));
-		assertEquals(item2, t.getItems().get(1));
-	}
-
-	public void testGetItemsIsUnmodifiable() {
-		// TODO find out what kind of exception this should throw and make this more specific.
-		try {
-			t.getItems().add(new FakeTopicItem());
-			fail("topic.items should be unmodifiable outside of Topic class");
-		} catch(UnsupportedOperationException ex) {
-			// expected
-		}
 	}
 }
 
