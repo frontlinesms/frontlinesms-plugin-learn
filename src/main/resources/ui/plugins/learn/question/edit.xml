@@ -1,0 +1,12 @@
+<dialog name="dgEditQuestion" columns="2" gap="8" close="close" text="i18n.plugins.learn.question.edit">
+	<combobox name="cbTopic" action="validate" text="i18n.plugins.learn.topic.choose" editable="false"/>
+	<textfield name="tfQuestion" action="validate"/>
+	
+	<checkbox group="rbType" name="rbType_binary" selected="true"/>
+	<checkbox group="rbType" name="rbType_multichoice"/>
+
+	<panel colspan="2" columns="2" gap="8">
+		<button name="btSave" text="i18n.common.actions.save" icon="/icons/tick.png" action="save"/>
+		<button name="btCancel" text="i18n.common.actions.cancel" icon="/icons/cross.png" action="close"/>
+	</panel>
+</dialog>
