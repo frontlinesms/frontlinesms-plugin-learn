@@ -4,13 +4,13 @@ import javax.persistence.Entity;
 
 @Entity
 public class Reinforcement extends TopicItem {
-	private String name;
+	private String messageText;
 	
-	public String getName() {
-		return name;
+	public String getMessageText() {
+		return messageText;
 	}
 	
 	public void setName(String name) {
-		this.name = name;
+		this.messageText = name;
 	}
 }

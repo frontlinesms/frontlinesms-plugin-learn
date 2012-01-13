@@ -16,6 +16,10 @@ public class EditReinforcementDialogHandler extends TopicItemDialogHandler<Reinf
 	public EditReinforcementDialogHandler(FrontlineUI ui, ReinforcementDao dao, TopicDao topicDao, Reinforcement r) {
 		super(ui, topicDao, r);
 		this.dao = dao;
+		
+		if(r.getTopic() != null) setTopic(r.getTopic());
+		ui.setText(find("taText"), r.getMessageText());
+		
 		validate();
 	}
 	

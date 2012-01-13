@@ -7,7 +7,7 @@ import static org.mockito.Mockito.*;
 
 import static net.frontlinesms.plugins.learn.LearnTestUtils.*;
 
-public class NewReinforcementDialogHandlerTest extends TopicItemDialogHandlerTest<NewReinforcementDialogHandler> {
+public class NewReinforcementDialogHandlerTest extends NewTopicItemDialogHandlerTest<NewReinforcementDialogHandler> {
 	@MockBean private ReinforcementDao dao;
 	
 //> SETUP METHODS

@@ -43,11 +43,11 @@ public class LearnTestUtils {
 			@Override
 			public boolean matches(Object o) {
 				Reinforcement r = (Reinforcement) o;
-				final boolean matches = expectedReinforementText.equals(r.getName()) &&
+				final boolean matches = expectedReinforementText.equals(r.getMessageText()) &&
 						expectedTopicName.equals(r.getTopic().getName());
 				if(!matches) {
 					System.out.println("LearnTestUtils.reinforcementWithTextAndTopic(...).new ArgumentMatcher() {...}.matches()");
-					System.out.println("\tr.name:  " + r.getName());
+					System.out.println("\tr.name:  " + r.getMessageText());
 					System.out.println("\tr.topic: " + r.getTopic().getName());
 				}
 				return matches;
