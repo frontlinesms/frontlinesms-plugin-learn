@@ -2,8 +2,15 @@
 	<combobox name="cbTopic" action="validate" text="i18n.plugins.learn.topic.choose" editable="false"/>
 	<textfield name="tfQuestion" action="validate"/>
 	
-	<checkbox group="rbType" name="rbType_binary" selected="true"/>
-	<checkbox group="rbType" name="rbType_multichoice"/>
+	<checkbox group="rbType" name="rbType_binary" selected="true" action="validate"/>
+	<checkbox group="rbType" name="rbType_multichoice" action="validate"/>
+	<panel name="pnMultichoice">
+		<textfield name="tfMultichoice1" action="validate"/>
+		<textfield name="tfMultichoice2" action="validate"/>
+		<textfield name="tfMultichoice3" action="validate"/>
+	</panel>
+	
+	<textarea name="taMessage" editable="false"/>
 
 	<panel colspan="2" columns="2" gap="8">
 		<button name="btSave" text="i18n.common.actions.save" icon="/icons/tick.png" action="save"/>

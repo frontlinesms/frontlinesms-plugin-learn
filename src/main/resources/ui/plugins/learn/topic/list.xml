@@ -4,5 +4,6 @@
 		
 		<button name="btNewTopic" action="newTopic" text="i18n.plugins.learn.topic.new"/>
 		<button name="btNewReinforcement" action="newReinforcement" text="i18n.plugins.learn.reinforcement.new"/>
+		<button name="btNewQuestion" action="newQuestion" text="i18n.plugins.learn.question.new"/>
 	</panel>
 </tab>

@@ -7,7 +7,7 @@ import static org.mockito.Mockito.*;
 
 import static net.frontlinesms.plugins.learn.LearnTestUtils.*;
 
-public class NewReinforcementDialogHandlerTest extends TopicItemHandlerTest<NewReinforcementDialogHandler> {
+public class NewReinforcementDialogHandlerTest extends TopicItemDialogHandlerTest<NewReinforcementDialogHandler> {
 	@MockBean private ReinforcementDao dao;
 	
 //> SETUP METHODS
@@ -23,8 +23,7 @@ public class NewReinforcementDialogHandlerTest extends TopicItemHandlerTest<NewR
 	
 	public void testTextValidation() {
 		// given
-		mockTopics("Psychology", "Physiognomy");
-		$("cbTopic").setSelected("Physiognomy");
+		$("cbTopic").setSelected("Psychology");
 		
 		// when no text is entered		
 		// then save is disabled
@@ -38,9 +37,6 @@ public class NewReinforcementDialogHandlerTest extends TopicItemHandlerTest<NewR
 	}
 	
 	public void testSaveButton() {
-		// given
-		mockTopics("Music");
-		
 		// when
 		$("cbTopic").setSelected("Music");
 		$("taText").setText("Remember: music can soothe, but it can also excite!");

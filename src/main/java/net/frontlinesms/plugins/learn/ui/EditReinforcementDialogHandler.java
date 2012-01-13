@@ -38,11 +38,7 @@ public class EditReinforcementDialogHandler extends TopicItemDialogHandler<Reinf
 			return false;
 		}
 		
-		String topicName = ui.getText(find(CB_TOPIC));
-		if(topicName.equals("i18n.plugins.learn.topic.choose") ||
-				topicName.equals(InternationalisationUtils.getI18nString("i18n.plugins.learn.topic.choose"))) {
-			return false;
-		}
+		if(!isTopicValid()) return false;
 
 		return true;
 	}

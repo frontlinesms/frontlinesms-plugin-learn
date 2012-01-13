@@ -23,7 +23,7 @@ public class EditQuestionDialogHandler extends TopicItemDialogHandler<Question> 
 	
 //> UI EVENT METHODS
 	public void save() {
-		// TODO update item!
+		topicItem.setMessageText(generateMessageText());
 		
 		dao.save(topicItem);
 		
@@ -31,8 +31,37 @@ public class EditQuestionDialogHandler extends TopicItemDialogHandler<Question> 
 	}
 	
 //> UI HELPER METHODS
+	private String generateMessageText() {
+		return getText("tfQuestion") + "\n" +
+				(isMultichoice()? "A) " + getText("tfMultichoice1") + "\n" +
+						"B) " + getText("tfMultichoice2") + "\n" +
+						"C) " + getText("tfMultichoice3") + "\n": "") +
+				"Reply " + (isMultichoice()? "${id}A, ${id}B or ${id}C": "1TRUE or 1FALSE");
+	}
+	
+	private String getText(String componentName) {
+		return ui.getText(find(componentName));
+	}
+	
+	private boolean isMultichoice() {
+		return ui.isSelected(find("rbType_multichoice"));
+	}
+	
 	boolean doValidate() {
-		if(ui.getText(find("tfQuestion")).length() == 0) {
+		ui.setText(find("taMessage"), generateMessageText().replace("${id}", "1"));
+		
+		ui.setChildrenEditable(find("pnMultichoice"), isMultichoice());
+		
+		if(!isTopicValid()) return false;
+		
+		if(getText("tfQuestion").length() == 0) {
+			return false;
+		}
+		
+		if(isMultichoice() &&
+				(getText("tfMultichoice1").length() == 0 ||
+						getText("tfMultichoice2").length() == 0 ||
+						getText("tfMultichoice3").length() == 0)) {
 			return false;
 		}
 		

@@ -1,14 +1,33 @@
 package net.frontlinesms.plugins.learn;
 
 import static org.mockito.Matchers.argThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+import java.util.ArrayList;
+
 import net.frontlinesms.plugins.learn.data.domain.Question;
 import net.frontlinesms.plugins.learn.data.domain.Reinforcement;
 import net.frontlinesms.plugins.learn.data.domain.Topic;
+import net.frontlinesms.plugins.learn.data.repository.TopicDao;
 
 import org.mockito.ArgumentMatcher;
 
 public class LearnTestUtils {
 //> TEST HELPER METHODS
+	public static Topic[] mockTopics(TopicDao topicDao, String... names) {
+		ArrayList<Topic> topics = new ArrayList<Topic>();
+		for(String name : names) {
+			Topic t = mock(Topic.class);
+			when(t.getName()).thenReturn(name);
+			when(topicDao.findByName(name)).thenReturn(t);
+			topics.add(t);
+		}
+		when(topicDao.list()).thenReturn(topics);
+		
+		return topics.toArray(new Topic[topics.size()]);
+	}
+	
 	public static Topic topicWithName(final String expectedName) {
 		return argThat(new ArgumentMatcher<Topic>() {
 			@Override

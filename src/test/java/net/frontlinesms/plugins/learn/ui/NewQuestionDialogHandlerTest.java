@@ -11,9 +11,9 @@ import static java.util.Arrays.asList;
 import static net.frontlinesms.plugins.learn.LearnTestUtils.*;
 import static org.mockito.Mockito.verify;
 
-public class NewQuestionDialogHandlerTest extends TopicItemHandlerTest<NewQuestionDialogHandler> {
+public class NewQuestionDialogHandlerTest extends TopicItemDialogHandlerTest<NewQuestionDialogHandler> {
 //> STATIC CONSTANTS
-	private static final List<String> ALL_FIELD_NAMES = asList(new String[]{"tfQuestion", "rbType"});
+	private static final List<String> ALL_FIELD_NAMES = asList(new String[]{"tfQuestion", "rbType", "cbTopic"});
 	
 //> INSTANCE VARIABLES
 	@MockBean private QuestionDao dao;
@@ -41,7 +41,19 @@ public class NewQuestionDialogHandlerTest extends TopicItemHandlerTest<NewQuesti
 
 	/** Set a valid value for a field */
 	private void setValidValue(String fieldName) {
-		TODO("Implement.");
+		if(fieldName.equals("tfQuestion")) {
+			$("tfQuestion").setText("What is your fave colour?");
+		} else if(fieldName.equals("rbType")) {
+			if($("rbType_binary").isChecked()) {
+				// already set to valid value
+			} else {
+				$("tfMultichoice1").setText("Puce");
+				$("tfMultichoice2").setText("Green");
+				$("tfMultichoice3").setText("All of the above");
+			}
+		} else if(fieldName.equals("cbTopic")) {
+			$("cbTopic").setSelected("Music");
+		} else TODO("Implement valid value setting for: " + fieldName);
 	}
 	
 	private void setValidValues(Collection<String> validFieldNames) {
@@ -65,7 +77,7 @@ public class NewQuestionDialogHandlerTest extends TopicItemHandlerTest<NewQuesti
 	
 	public void testQuestionTextValidation() {
 		// given
-		// TODO setValidValues(all other fields);
+		setValidValuesExcept("tfQuestion");
 		
 		// then
 		assertFalse($("btSave").isEnabled());
@@ -87,11 +99,31 @@ public class NewQuestionDialogHandlerTest extends TopicItemHandlerTest<NewQuesti
 		assertTrue($("btSave").isEnabled());
 	}
 	
+	public void testMultichoiceTextfieldsOnlyEnabledWhenMultichoiceSelected() {
+		// when
+		$("rbType_binary").select();
+		
+		// then
+		assertFalse($("tfMultichoice1").isEditable());
+		assertFalse($("tfMultichoice2").isEditable());
+		assertFalse($("tfMultichoice3").isEditable());
+		
+		// when
+		$("rbType_multichoice").select();
+		
+		// then
+		assertTrue($("tfMultichoice1").isEditable());
+		assertTrue($("tfMultichoice2").isEditable());
+		assertTrue($("tfMultichoice3").isEditable());
+	}
+	
 	public void testTypeMultichoiceValidation_mustEnterThreeAnswers() {
 		// given
+		setValidValuesExcept("rbType");
 		ThinletComponent a = $("tfMultichoice1");
 		ThinletComponent b = $("tfMultichoice2");
 		ThinletComponent c = $("tfMultichoice3");
+		$("rbType_multichoice").select();
 		
 		// then
 		assertFalse($("btSave").isEnabled());
@@ -154,6 +186,7 @@ public class NewQuestionDialogHandlerTest extends TopicItemHandlerTest<NewQuesti
 	
 	public void testSaveButton() {
 		// given
+		$("rbType_multichoice").select();
 		setValidValues(ALL_FIELD_NAMES);
 		
 		// when 
@@ -162,12 +195,14 @@ public class NewQuestionDialogHandlerTest extends TopicItemHandlerTest<NewQuesti
 		// then
 		assertFalse($().isVisible());
 		verify(dao).save(questionWithMessage("What is your fave colour?\n" +
-				"A) Puce\n",
+				"A) Puce\n" +
 				"B) Green\n" +
 				"C) All of the above\n" +
-				"Reply ${id}A, ${id}B, ${id}C"));
+				"Reply ${id}A, ${id}B or ${id}C"));
 	}
 	
 	@Override
-	protected void fillFieldsExceptTopic() {}
+	protected void fillFieldsExceptTopic() {
+		setValidValuesExcept("cbTopic");
+	}
 }

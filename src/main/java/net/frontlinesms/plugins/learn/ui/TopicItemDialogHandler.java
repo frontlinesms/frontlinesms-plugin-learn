@@ -6,6 +6,7 @@ import net.frontlinesms.plugins.learn.data.domain.TopicItem;
 import net.frontlinesms.plugins.learn.data.repository.TopicDao;
 import net.frontlinesms.ui.FrontlineUI;
 import net.frontlinesms.ui.ThinletUiEventHandler;
+import net.frontlinesms.ui.i18n.InternationalisationUtils;
 
 public abstract class TopicItemDialogHandler<E extends TopicItem> implements ThinletUiEventHandler {
 	static final String CB_TOPIC = "cbTopic";
@@ -63,4 +64,10 @@ public abstract class TopicItemDialogHandler<E extends TopicItem> implements Thi
 	}
 	
 	abstract boolean doValidate();
+	
+	protected boolean isTopicValid() {
+		String topicName = ui.getText(find(CB_TOPIC));
+		return !topicName.equals("i18n.plugins.learn.topic.choose") &&
+				!topicName.equals(InternationalisationUtils.getI18nString("i18n.plugins.learn.topic.choose"));
+	}
 }

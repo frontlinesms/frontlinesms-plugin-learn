@@ -14,6 +14,7 @@
 	
 	<bean id="topicDao" parent="baseHibernateDao" class="net.frontlinesms.plugins.learn.data.repository.TopicDao"/>
 	<bean id="reinforcementDao" parent="baseHibernateDao" class="net.frontlinesms.plugins.learn.data.repository.ReinforcementDao"/>
+	<bean id="questionDao" parent="baseHibernateDao" class="net.frontlinesms.plugins.learn.data.repository.QuestionDao"/>
 	
     <bean id="baseHibernateDao" abstract="true" class="net.frontlinesms.data.repository.hibernate">
 		<property name="sessionFactory" ref="sessionFactory"/>

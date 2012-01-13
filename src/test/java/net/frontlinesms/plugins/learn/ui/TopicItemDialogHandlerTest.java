@@ -1,8 +1,5 @@
 package net.frontlinesms.plugins.learn.ui;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
 import java.util.ArrayList;
 
 import net.frontlinesms.plugins.learn.data.domain.Topic;
@@ -11,14 +8,25 @@ import net.frontlinesms.test.spring.MockBean;
 import net.frontlinesms.test.ui.ThinletEventHandlerTest;
 import net.frontlinesms.ui.ThinletUiEventHandler;
 
-// TODO rename TopicItemDialogHandlerTest
-public abstract class TopicItemHandlerTest<E extends TopicItemDialogHandler> extends ThinletEventHandlerTest<E> {
+import static org.mockito.Mockito.*;
+import static net.frontlinesms.plugins.learn.LearnTestUtils.*;
+
+public abstract class TopicItemDialogHandlerTest<E extends TopicItemDialogHandler> extends ThinletEventHandlerTest<E> {
 	@MockBean protected TopicDao topicDao;
+	protected Topic[] mockedTopics;
 
 //> SETUP METHODS
 	@Override
 	protected Object getRootComponent() {
 		return h.getDialog();
+	}
+	
+	@Override
+	protected void setUp() throws Exception {
+		super.setUp();
+		
+		mockedTopics = mockTopics(topicDao, "Music", "Psychology");
+		initUiForTests();
 	}
 	
 //> TEST METHODS
@@ -31,14 +39,11 @@ public abstract class TopicItemHandlerTest<E extends TopicItemDialogHandler> ext
 	}
 
 	public void testSettingTopicExternally() {
-		// given
-		Topic[] t = mockTopics("Fascinating Topic 1", "Fascinating Topic 2");
-		
 		// when
-		h.setTopic(t[0]);
+		h.setTopic(mockedTopics[1]);
 		
 		// then
-		assertEquals("Fascinating Topic 1", $("cbTopic").getText());
+		assertEquals("Psychology", $("cbTopic").getText());
 	}
 	
 	public void testTopicNotEditable() {
@@ -47,7 +52,6 @@ public abstract class TopicItemHandlerTest<E extends TopicItemDialogHandler> ext
 	
 	public void testTopicValidation() {
 		// given
-		mockTopics("Psychology", "Physiognomy");
 		fillFieldsExceptTopic();
 		
 		// when no topic is selected		
@@ -55,7 +59,7 @@ public abstract class TopicItemHandlerTest<E extends TopicItemDialogHandler> ext
 		assertFalse($("btSave").isEnabled());
 		
 		// when topic is selected and text is entered
-		$("cbTopic").setSelected("Physiognomy");
+		$("cbTopic").setSelected("Psychology");
 		
 		// then save is enabled
 		assertTrue($("btSave").isEnabled());
@@ -87,19 +91,4 @@ public abstract class TopicItemHandlerTest<E extends TopicItemDialogHandler> ext
 	
 //> HELPER METHODS
 	protected abstract void fillFieldsExceptTopic();
-	
-	protected Topic[] mockTopics(String... names) {
-		ArrayList<Topic> topics = new ArrayList<Topic>();
-		for(String name : names) {
-			Topic t = mock(Topic.class);
-			when(t.getName()).thenReturn(name);
-			when(topicDao.findByName(name)).thenReturn(t);
-			topics.add(t);
-		}
-		when(topicDao.list()).thenReturn(topics);
-		
-		initUiForTests();
-		
-		return topics.toArray(new Topic[topics.size()]);
-	}
 }

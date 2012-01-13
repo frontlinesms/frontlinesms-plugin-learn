@@ -2,6 +2,7 @@ package net.frontlinesms.plugins.learn.ui;
 
 import static org.mockito.Mockito.*;
 import static java.util.Arrays.asList;
+import static net.frontlinesms.plugins.learn.LearnTestUtils.*;
 
 import net.frontlinesms.data.events.EntityDeletedNotification;
 import net.frontlinesms.data.events.EntitySavedNotification;
@@ -9,7 +10,6 @@ import net.frontlinesms.events.EventBus;
 import net.frontlinesms.plugins.learn.data.domain.Topic;
 import net.frontlinesms.plugins.learn.data.repository.TopicDao;
 import net.frontlinesms.test.spring.MockBean;
-import net.frontlinesms.test.ui.ThinletComponent;
 import net.frontlinesms.test.ui.ThinletEventHandlerTest;
 
 public class TopicTabHandlerTest extends ThinletEventHandlerTest<TopicTabHandler> {
@@ -70,21 +70,41 @@ public class TopicTabHandlerTest extends ThinletEventHandlerTest<TopicTabHandler
 		assertEquals(0, $("trTopics").getChildCount());
 	}
 
-	public void testNewTopicButton() {
-		// given
-		ThinletComponent button = $("btNewTopic");
-		
+	public void testNewTopicButton() {		
 		// when
-		button.click();
+		$("btNewTopic").click();
 		
 		// then
 		assertEquals("i18n.plugins.learn.topic.new", $("dgEditTopic").getText());
 	}
 	
 	public void testNewReinforcementButton() {
+		// given
+		mockTopics(topicDao, "Random Topic 1", "Random Topic 2");
+		initUiForTests();
+		
 		// when
 		$("btNewReinforcement").click();
 		// then
 		assertEquals("i18n.plugins.learn.reinforcement.new", $("dgEditReinforcement").getText());
+	}
+	
+	public void testNewReinforcementButtonDisabledWhenNoTopics() {
+		assertFalse($("btNewReinforcement").isEnabled());
+	}
+	
+	public void testNewQuestionButton() {
+		// given
+		mockTopics(topicDao, "Random Topic 1", "Random Topic 2");
+		initUiForTests();
+
+		// when
+		$("btNewQuestion").click();
+		// then
+		assertEquals("i18n.plugins.learn.question.new", $("dgEditQuestion").getText());
+	}
+	
+	public void testNewQuestionButtonDisabledWhenNoTopics() {
+		assertFalse($("btNewQuestion").isEnabled());
 	}
 }

@@ -11,9 +11,8 @@ import net.frontlinesms.data.events.EntityDeleteWarning;
 import net.frontlinesms.events.EventBus;
 import net.frontlinesms.events.EventObserver;
 import net.frontlinesms.events.FrontlineEventNotification;
-import net.frontlinesms.plugins.learn.data.domain.Topic;
-import net.frontlinesms.plugins.learn.data.repository.ReinforcementDao;
-import net.frontlinesms.plugins.learn.data.repository.TopicDao;
+import net.frontlinesms.plugins.learn.data.domain.*;
+import net.frontlinesms.plugins.learn.data.repository.*;
 import net.frontlinesms.ui.FrontlineUI;
 import net.frontlinesms.ui.ThinletUiEventHandler;
 import net.frontlinesms.ui.events.FrontlineUiUpdateJob;
@@ -23,12 +22,14 @@ public class TopicTabHandler implements ThinletUiEventHandler, EventObserver {
 
 	private final TopicDao dao;
 	private final ReinforcementDao reinforcementDao;
+	private final QuestionDao questionDao;
 	private final FrontlineUI ui;
 	private final Object tab;
 
 	public TopicTabHandler(FrontlineUI ui, ApplicationContext ctx) {
 		this.dao = (TopicDao) ctx.getBean("topicDao");
 		this.reinforcementDao = (ReinforcementDao) ctx.getBean("reinforcementDao");
+		this.questionDao = (QuestionDao) ctx.getBean("questionDao");
 		this.ui = ui;
 		this.tab = ui.loadComponentFromFile(TAB_LAYOUT, this);
 		
@@ -49,6 +50,10 @@ public class TopicTabHandler implements ThinletUiEventHandler, EventObserver {
 		for(Topic t : topics) {
 			ui.add(tree, createNode(t));
 		}
+		
+		boolean enableTopicItemCreation = topics.size() > 0;
+		ui.setEnabled(find("btNewReinforcement"), enableTopicItemCreation);
+		ui.setEnabled(find("btNewQuestion"), enableTopicItemCreation);
 	}
 	
 	private void threadSafeRefresh() {
@@ -64,6 +69,10 @@ public class TopicTabHandler implements ThinletUiEventHandler, EventObserver {
 	
 	public void newReinforcement() {
 		ui.add(new NewReinforcementDialogHandler(ui, reinforcementDao, dao).getDialog());
+	}
+	
+	public void newQuestion() {
+		ui.add(new NewQuestionDialogHandler(ui, questionDao, dao).getDialog());
 	}
 	
 //> UI HELPER METHODS
