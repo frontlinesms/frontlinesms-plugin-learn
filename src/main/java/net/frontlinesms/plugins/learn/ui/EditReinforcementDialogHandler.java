@@ -30,7 +30,9 @@ public class EditReinforcementDialogHandler extends TopicItemDialogHandler<Reinf
 	public void save() {
 		topicItem.setMessageText(ui.getText(find(TA_TEXT)));
 		topicItem.setTopic(topicDao.findByName(ui.getText(find(CB_TOPIC))));
-		dao.save(topicItem);
+		if(topicItem.getId() == 0)
+			dao.save(topicItem);
+		else dao.update(topicItem);
 		
 		close();
 	}

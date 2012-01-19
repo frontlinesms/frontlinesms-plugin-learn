@@ -52,7 +52,7 @@ public class EditReinforcementDialogHandlerTest extends TopicItemDialogHandlerTe
 		$("btSave").click();
 		
 		// then
-		verify(dao).save(reinforcementWithIdAndTextAndTopic(77,
+		verify(dao).update(reinforcementWithIdAndTextAndTopic(77,
 						"This is not about birds.",
 						"Ancient History"));
 	}

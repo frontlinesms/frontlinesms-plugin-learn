@@ -12,11 +12,12 @@
 	<context:annotation-config />
 	<tx:annotation-driven />
 	
-	<bean id="topicDao" parent="baseHibernateDao" class="net.frontlinesms.plugins.learn.data.repository.TopicDao"/>
-	<bean id="reinforcementDao" parent="baseHibernateDao" class="net.frontlinesms.plugins.learn.data.repository.ReinforcementDao"/>
 	<bean id="questionDao" parent="baseHibernateDao" class="net.frontlinesms.plugins.learn.data.repository.QuestionDao"/>
+	<bean id="reinforcementDao" parent="baseHibernateDao" class="net.frontlinesms.plugins.learn.data.repository.ReinforcementDao"/>
+	<bean id="topicItemDao" parent="baseHibernateDao" class="net.frontlinesms.plugins.learn.data.repository.TopicItemDao"/>
+	<bean id="topicDao" parent="baseHibernateDao" class="net.frontlinesms.plugins.learn.data.repository.TopicDao"/>
 	
-    <bean id="baseHibernateDao" abstract="true" class="net.frontlinesms.data.repository.hibernate">
+	<bean id="baseHibernateDao" abstract="true" class="net.frontlinesms.data.repository.hibernate">
 		<property name="sessionFactory" ref="sessionFactory"/>
 		<property name="eventBus" ref="eventBus"/>
 	</bean>

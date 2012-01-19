@@ -103,6 +103,7 @@ public class TopicTabHandler implements ThinletUiEventHandler, EventObserver {
 	
 	private Object createNode(Topic t) {
 		Object n = ui.createNode(t.getName(), t);
+		ui.add(n, ui.createNode("dummy-node", null));
 		ui.setExpanded(n, false);
 		return n;
 	}
