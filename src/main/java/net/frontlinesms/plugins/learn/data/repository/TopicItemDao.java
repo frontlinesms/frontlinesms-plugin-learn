@@ -10,7 +10,7 @@ import net.frontlinesms.plugins.learn.data.domain.Topic;
 import net.frontlinesms.plugins.learn.data.domain.TopicItem;
 
 public class TopicItemDao extends BaseHibernateDao<TopicItem> {
-	protected TopicItemDao(Class<TopicItem> clazz) {
+	protected TopicItemDao() {
 		super(TopicItem.class);
 	}
 
