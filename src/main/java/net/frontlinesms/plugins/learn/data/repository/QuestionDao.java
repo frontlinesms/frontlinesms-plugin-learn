@@ -8,12 +8,16 @@ public class QuestionDao extends BaseHibernateDao<Question> {
 		super(Question.class);
 	}
 	
-	public void save(Question r) {
-		super.saveWithoutDuplicateHandling(r);
+	public void save(Question q) {
+		super.saveWithoutDuplicateHandling(q);
 	}
 	
-	public void delete(Question r) {
-		super.delete(r);
+	public void update(Question q) {
+		super.updateWithoutDuplicateHandling(q);
+	}
+	
+	public void delete(Question q) {
+		super.delete(q);
 	}
 	
 	public int count() {

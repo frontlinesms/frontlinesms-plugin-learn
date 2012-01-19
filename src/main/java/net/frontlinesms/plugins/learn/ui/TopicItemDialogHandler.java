@@ -47,6 +47,10 @@ public abstract class TopicItemDialogHandler<E extends TopicItem> implements Thi
 		return dialog;
 	}
 	
+	protected Topic getSelectedTopic() {
+		return topicDao.findByName(ui.getText(find(CB_TOPIC)));
+	}
+	
 //> UI EVENT METHODS
 	public abstract void save();
 	

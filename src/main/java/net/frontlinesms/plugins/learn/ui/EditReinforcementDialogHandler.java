@@ -16,7 +16,6 @@ public class EditReinforcementDialogHandler extends TopicItemDialogHandler<Reinf
 		super(ui, topicDao, r);
 		this.dao = dao;
 		
-		if(r.getTopic() != null) setTopic(r.getTopic());
 		ui.setText(find("taText"), r.getMessageText());
 		
 		validate();
@@ -29,7 +28,7 @@ public class EditReinforcementDialogHandler extends TopicItemDialogHandler<Reinf
 //> UI EVENT METHODS
 	public void save() {
 		topicItem.setMessageText(ui.getText(find(TA_TEXT)));
-		topicItem.setTopic(topicDao.findByName(ui.getText(find(CB_TOPIC))));
+		topicItem.setTopic(getSelectedTopic());
 		if(topicItem.getId() == 0)
 			dao.save(topicItem);
 		else dao.update(topicItem);

@@ -32,7 +32,7 @@ public class EditReinforcementDialogHandlerTest extends TopicItemDialogHandlerTe
 		assertEquals("Science & Nature", $("cbTopic").getText());
 	}
 	
-	public void testQuestionInitialisation() {
+	public void testMessageTextInitialisation() {
 		assertEquals("The African Pied Wagtail should not be confused with the British Pied Wagtail, which is a subspecies of the White Wagtail.",
 				$("taText").getText());
 	}

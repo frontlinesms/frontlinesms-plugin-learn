@@ -10,6 +10,7 @@ import java.util.List;
 import net.frontlinesms.plugins.learn.data.domain.*;
 import net.frontlinesms.plugins.learn.data.repository.*;
 
+import org.hibernate.hql.ast.tree.ExpectedTypeAwareNode;
 import org.mockito.ArgumentMatcher;
 
 public class LearnTestUtils {
@@ -68,6 +69,37 @@ public class LearnTestUtils {
 					System.out.println("\tr.id:  " + r.getId());
 					System.out.println("\tr.name:  " + r.getMessageText());
 					System.out.println("\tr.topic: " + r.getTopic().getName());
+				}
+				return matches;
+			}
+		});
+	}
+	
+	public static Question questionWithIdAndTextAndTypeAndTopicAndAnswersAndMessageText(final long expectedId,
+			final String expectedQuestionText, final Question.Type expectedType, final String expectedTopicName,
+			final String expectedAnswerA, final String expectedAnswerB, final String expectedAnswerC,
+			final String expectedMessageText) {
+		return argThat(new ArgumentMatcher<Question>() {
+			@Override
+			public boolean matches(Object o) {
+				Question q = (Question) o;
+				final boolean matches = expectedId == q.getId() &&
+						expectedQuestionText.equals(q.getQuestionText()) &&
+						expectedTopicName.equals(q.getTopic().getName()) &&
+						expectedAnswerA.equals(q.getAnswers()[0]) &&
+						expectedAnswerB.equals(q.getAnswers()[1]) &&
+						expectedAnswerC.equals(q.getAnswers()[2]) &&
+						expectedMessageText.equals(q.getMessageText());
+				if(!matches) {
+					System.out.println("LearnTestUtils.questionWithIdAndTextAndTopicAndAnswersAndMessageText(...).new ArgumentMatcher() {...}.matches()");
+					System.out.println("\tq.id: " + q.getId() + " vs " + expectedId);
+					System.out.println("\tq.type: " + q.getType() + " vs " + expectedType);
+					System.out.println("\tq.questionText: " + q.getQuestionText() + " vs " + expectedQuestionText);
+					System.out.println("\tq.topicName: " + q.getTopic().getName() + " vs " + expectedTopicName);
+					System.out.println("\tq.answerA: " + q.getAnswers()[0] + " vs " + expectedAnswerA);
+					System.out.println("\tq.answerB: " + q.getAnswers()[1] + " vs " + expectedAnswerB);
+					System.out.println("\tq.answerC: " + q.getAnswers()[2] + " vs " + expectedAnswerC);
+					System.out.println("\tq.messageText: " + q.getMessageText() + " vs " + expectedMessageText);
 				}
 				return matches;
 			}
