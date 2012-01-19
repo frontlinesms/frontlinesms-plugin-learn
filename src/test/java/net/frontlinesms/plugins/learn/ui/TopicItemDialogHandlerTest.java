@@ -1,17 +1,13 @@
 package net.frontlinesms.plugins.learn.ui;
 
-import java.util.ArrayList;
-
 import net.frontlinesms.plugins.learn.data.domain.Topic;
 import net.frontlinesms.plugins.learn.data.repository.TopicDao;
 import net.frontlinesms.test.spring.MockBean;
 import net.frontlinesms.test.ui.ThinletEventHandlerTest;
-import net.frontlinesms.ui.ThinletUiEventHandler;
 
-import static org.mockito.Mockito.*;
 import static net.frontlinesms.plugins.learn.LearnTestUtils.*;
 
-public abstract class TopicItemDialogHandlerTest<E extends TopicItemDialogHandler> extends ThinletEventHandlerTest<E> {
+public abstract class TopicItemDialogHandlerTest<E extends TopicItemDialogHandler<?>> extends ThinletEventHandlerTest<E> {
 	@MockBean protected TopicDao topicDao;
 	protected Topic[] mockedTopics;
 

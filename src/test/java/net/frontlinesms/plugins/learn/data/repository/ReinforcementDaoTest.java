@@ -12,7 +12,7 @@ public class ReinforcementDaoTest extends HibernateTestCase {
 	public void testSave() throws Exception {
 		// given a reinforcement exists in memory
 		Reinforcement r = new Reinforcement();
-		r.setName("Test Reinforcement 1");
+		r.setMessageText("Test Reinforcement 1");
 		assertEquals(0, r.getId());
 		assertEquals(0, dao.count());
 
@@ -27,7 +27,7 @@ public class ReinforcementDaoTest extends HibernateTestCase {
 	public void testDelete() throws Exception {
 		// given a topic is already saved
 		Reinforcement t = new Reinforcement();
-		t.setName("Test topic 2");
+		t.setMessageText("Test topic 2");
 		assertEquals(0, dao.count());
 		dao.save(t);
 		assertEquals(1, dao.count());

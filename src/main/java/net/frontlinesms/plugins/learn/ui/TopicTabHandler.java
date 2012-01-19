@@ -21,6 +21,7 @@ public class TopicTabHandler implements ThinletUiEventHandler, EventObserver {
 	private static final String TAB_LAYOUT = "/ui/plugins/learn/topic/list.xml";
 
 	private final TopicDao dao;
+	private final TopicItemDao topicItemDao;
 	private final ReinforcementDao reinforcementDao;
 	private final QuestionDao questionDao;
 	private final FrontlineUI ui;
@@ -28,6 +29,7 @@ public class TopicTabHandler implements ThinletUiEventHandler, EventObserver {
 
 	public TopicTabHandler(FrontlineUI ui, ApplicationContext ctx) {
 		this.dao = (TopicDao) ctx.getBean("topicDao");
+		this.topicItemDao = (TopicItemDao) ctx.getBean("topicItemDao");
 		this.reinforcementDao = (ReinforcementDao) ctx.getBean("reinforcementDao");
 		this.questionDao = (QuestionDao) ctx.getBean("questionDao");
 		this.ui = ui;
@@ -75,6 +77,25 @@ public class TopicTabHandler implements ThinletUiEventHandler, EventObserver {
 		ui.add(new NewQuestionDialogHandler(ui, questionDao, dao).getDialog());
 	}
 	
+	public void trTopics_expand(Object tree) {
+		Object topicComponent = ui.getSelectedItem(tree);
+		Topic selectedTopic = ui.getAttachedObject(topicComponent, Topic.class);
+		ui.removeAll(topicComponent);
+		for(TopicItem t : topicItemDao.getAllByTopic(selectedTopic)) {
+			ui.add(topicComponent, createNode(t));
+		}
+	}
+	
+	public void trTopics_perform(Object tree) {
+		Object selectedItem = ui.getSelectedItem(tree);
+		if(selectedItem != null) {
+			Object attached = ui.getAttachedObject(selectedItem);
+			if(attached instanceof Reinforcement) {
+				ui.add(new EditReinforcementDialogHandler(ui, reinforcementDao, dao, (Reinforcement) attached).getDialog());
+			} else throw new RuntimeException("Don't know how to handle: " + attached.getClass());
+		}
+	}
+	
 //> UI HELPER METHODS
 	private Object find(String componentName) {
 		return Thinlet.find(tab, componentName);
@@ -82,6 +103,12 @@ public class TopicTabHandler implements ThinletUiEventHandler, EventObserver {
 	
 	private Object createNode(Topic t) {
 		Object n = ui.createNode(t.getName(), t);
+		ui.setExpanded(n, false);
+		return n;
+	}
+	
+	private Object createNode(TopicItem t) {
+		Object n = ui.createNode(t.getMessageText(), t);
 		return n;
 	}
 	

@@ -1,5 +1,8 @@
 package net.frontlinesms.plugins.learn.ui;
 
+import static net.frontlinesms.plugins.learn.LearnTestUtils.*;
+import static org.mockito.Mockito.*;
+
 import net.frontlinesms.plugins.learn.data.domain.Reinforcement;
 import net.frontlinesms.plugins.learn.data.domain.Topic;
 import net.frontlinesms.plugins.learn.data.repository.ReinforcementDao;
@@ -11,11 +14,12 @@ public class EditReinforcementDialogHandlerTest extends TopicItemDialogHandlerTe
 //> SETUP METHODS
 	@Override
 	protected EditReinforcementDialogHandler initHandler() {
+		Topic[] topics = mockTopics(topicDao, "Science & Nature", "Ancient History");
+
 		Reinforcement r = new Reinforcement();
-		Topic t = new Topic();
-		t.setName("Science & Nature");
-		r.setTopic(t);
-		r.setName("The African Pied Wagtail should not be confused with the British Pied Wagtail, which is a subspecies of the White Wagtail.");
+		r.setId(77);
+		r.setTopic(topics[0]);
+		r.setMessageText("The African Pied Wagtail should not be confused with the British Pied Wagtail, which is a subspecies of the White Wagtail.");
 		return new EditReinforcementDialogHandler(ui, dao, topicDao, r);
 	}
 	
@@ -40,7 +44,16 @@ public class EditReinforcementDialogHandlerTest extends TopicItemDialogHandlerTe
 	
 	@Override
 	public void testSaveButton() {
-		// TODO Auto-generated method stub
+		// given
+		$("taText").setText("This is not about birds.");
+		$("cbTopic").setSelected("Ancient History");
 		
+		// when
+		$("btSave").click();
+		
+		// then
+		verify(dao).save(reinforcementWithIdAndTextAndTopic(77,
+						"This is not about birds.",
+						"Ancient History"));
 	}
 }

@@ -8,6 +8,7 @@ import net.frontlinesms.test.ui.ThinletEventHandlerTest;
 import static org.mockito.Mockito.*;
 
 public class LearnPluginTabHandlerTest extends ThinletEventHandlerTest<LearnPluginTabHandler> {
+	@SuppressWarnings("unused")
 	@MockBean private TopicDao topicDao;
 	@MockBean private EventBus eventBus;
 

@@ -187,6 +187,7 @@ public class NewQuestionDialogHandlerTest extends NewTopicItemDialogHandlerTest<
 	public void testSaveButton() {
 		// given
 		$("rbType_multichoice").select();
+		assertTrue($("rbType_multichoice").isChecked());
 		setValidValues(ALL_FIELD_NAMES);
 		
 		// when 

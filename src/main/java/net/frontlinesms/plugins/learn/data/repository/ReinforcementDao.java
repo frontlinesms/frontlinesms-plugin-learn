@@ -12,6 +12,10 @@ public class ReinforcementDao extends BaseHibernateDao<Reinforcement> {
 		super.saveWithoutDuplicateHandling(r);
 	}
 	
+	public void update(Reinforcement r) {
+		super.updateWithoutDuplicateHandling(r);
+	}
+	
 	public void delete(Reinforcement r) {
 		super.delete(r);
 	}

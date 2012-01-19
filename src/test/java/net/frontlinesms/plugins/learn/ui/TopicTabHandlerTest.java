@@ -7,14 +7,17 @@ import static net.frontlinesms.plugins.learn.LearnTestUtils.*;
 import net.frontlinesms.data.events.EntityDeletedNotification;
 import net.frontlinesms.data.events.EntitySavedNotification;
 import net.frontlinesms.events.EventBus;
-import net.frontlinesms.plugins.learn.data.domain.Topic;
-import net.frontlinesms.plugins.learn.data.repository.TopicDao;
+import net.frontlinesms.plugins.learn.data.domain.*;
+import net.frontlinesms.plugins.learn.data.repository.*;
 import net.frontlinesms.test.spring.MockBean;
+import net.frontlinesms.test.ui.ThinletComponent;
 import net.frontlinesms.test.ui.ThinletEventHandlerTest;
 
 public class TopicTabHandlerTest extends ThinletEventHandlerTest<TopicTabHandler> {
+	@SuppressWarnings("unused")
 	@MockBean private EventBus eventBus;
 	@MockBean private TopicDao topicDao;
+	@MockBean private TopicItemDao topicItemDao;
 
 //> SETUP METHODS
 	@Override
@@ -32,6 +35,21 @@ public class TopicTabHandlerTest extends ThinletEventHandlerTest<TopicTabHandler
 		$("trTopics").exists();
 	}
 	
+	public void testLazyGenerationOfTopicItemLists() throws Exception {
+		// given
+		mockTopics(topicDao, "Food", "Drink");
+		initUiForTests();
+		verify(topicItemDao, never()).getAllByTopic(any(Topic.class));
+		
+		// when
+		ThinletComponent drinkTopicNode = $("trTopics").getRootNode().withText("Drink");
+		assertFalse(drinkTopicNode.isExpanded());
+		drinkTopicNode.expand();
+		
+		// then
+		verify(topicItemDao).getAllByTopic(topicWithName("Drink"));
+	}
+	
 	@SuppressWarnings("unchecked")
 	public void testTopicListUpdatesOnNewTopicAndDeletion() {
 		// given
@@ -43,31 +61,31 @@ public class TopicTabHandlerTest extends ThinletEventHandlerTest<TopicTabHandler
 				emptyList(Topic.class));
 		
 		// then on load there are no topics in the list
-		assertEquals(0, $("trTopics").getChildCount());
+		assertEquals(0, $("trTopics").getRootNode().count());
 		
 		// when
 		h.notify(new EntitySavedNotification<Topic>(mockTopic1));
 		// then
 		waitForUiEvents();
-		assertEquals(1, $("trTopics").getChildCount());
+		assertEquals(1, $("trTopics").getRootNode().count());
 		
 		// when
 		h.notify(new EntitySavedNotification<Topic>(mockTopic2));
 		// then
 		waitForUiEvents();
-		assertEquals(2, $("trTopics").getChildCount());
+		assertEquals(2, $("trTopics").getRootNode().count());
 		
 		// when
 		h.notify(new EntityDeletedNotification<Topic>(mockTopic1));
 		// then
 		waitForUiEvents();
-		assertEquals(1, $("trTopics").getChildCount());
+		assertEquals(1, $("trTopics").getRootNode().count());
 		
 		// when
 		h.notify(new EntityDeletedNotification<Topic>(mockTopic2));
 		// then
 		waitForUiEvents();
-		assertEquals(0, $("trTopics").getChildCount());
+		assertEquals(0, $("trTopics").getRootNode().count());
 	}
 
 	public void testNewTopicButton() {		
@@ -91,6 +109,24 @@ public class TopicTabHandlerTest extends ThinletEventHandlerTest<TopicTabHandler
 	
 	public void testNewReinforcementButtonDisabledWhenNoTopics() {
 		assertFalse($("btNewReinforcement").isEnabled());
+	}
+	
+	public void testEditReinforcementTrigger() {
+		// given
+		mockReinforcement(topicDao, "People & Places", topicItemDao, "Albert Einstein worked in a patent office for a bit.");
+		initUiForTests();
+		
+		// when
+		ThinletComponent topicComponent = $("trTopics").getRootNode().withText("People & Places");
+		topicComponent.expand();
+		topicComponent.getSubNode().withText("Albert Einstein worked in a patent office for a bit.").select();
+		topicComponent.getSubNode().withText("Albert Einstein worked in a patent office for a bit.").doubleClick();
+		
+		// then
+		assertTrue($("dgEditReinforcement").isVisible());
+		assertEquals("People & Places", $("dgEditReinforcement").find("cbTopic").getText());
+		assertEquals("Albert Einstein worked in a patent office for a bit.",
+				$("taText").getText());
 	}
 	
 	public void testNewQuestionButton() {

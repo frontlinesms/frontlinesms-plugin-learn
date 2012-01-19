@@ -1,7 +1,8 @@
 <tab name="tbManageTopics" text="i18n.plugins.learn.topic.tab.title">
 	<panel text="i18n.plugins.learn.topic" columns="1" weightx="1" weighty="1" gap="8">
-		<tree name="trTopics" weightx="1" weighty="1"/>
-		
+		<tree name="trTopics" weightx="1" weighty="1"
+				expand="trTopics_expand(this)"
+				perform="trTopics_perform(this)"/>
 		<button name="btNewTopic" action="newTopic" text="i18n.plugins.learn.topic.new"/>
 		<button name="btNewReinforcement" action="newReinforcement" text="i18n.plugins.learn.reinforcement.new"/>
 		<button name="btNewQuestion" action="newQuestion" text="i18n.plugins.learn.question.new"/>
