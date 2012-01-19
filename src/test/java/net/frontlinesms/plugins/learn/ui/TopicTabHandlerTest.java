@@ -143,21 +143,4 @@ public class TopicTabHandlerTest extends ThinletEventHandlerTest<TopicTabHandler
 	public void testNewQuestionButtonDisabledWhenNoTopics() {
 		assertFalse($("btNewQuestion").isEnabled());
 	}
-	
-	public void testRefreshWhenNewTopicCreated() {
-		// when
-		TODO("trigger a topic saved notification");
-		
-		// then
-		TODO("dao.getAllTopics() was called");
-	}
-	
-	public void testRefreshWhenTopicItemSaved() {
-		// when
-		TODO("trigger a save of a topic item");
-		
-		// then
-		TODO("old nodes relating to this are removed");
-		TODO("new node is added to the relevant topic");
-	}
 }

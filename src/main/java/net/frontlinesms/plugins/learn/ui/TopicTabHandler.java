@@ -114,15 +114,16 @@ public class TopicTabHandler implements ThinletUiEventHandler, EventObserver {
 	}
 	
 //> INTERNAL EVENT HANDLING
-	public void notify(FrontlineEventNotification notification) {
-		if(isTopicNotification(notification)) {
+	public void notify(final FrontlineEventNotification notification) {
+		if(isDbNotification(Topic.class, notification) ||
+				isDbNotification(TopicItem.class, notification)) {
 			threadSafeRefresh();
 		}
 	}
 	
-	private boolean isTopicNotification(FrontlineEventNotification n) {
+	private boolean isDbNotification(Class<?> c, FrontlineEventNotification n) {
 		return n instanceof DatabaseEntityNotification<?> &&
 				!(n instanceof EntityDeleteWarning<?>) &&
-				((DatabaseEntityNotification<?>) n).getDatabaseEntity() instanceof Topic;
+				c.isInstance(((DatabaseEntityNotification<?>) n).getDatabaseEntity());
 	}
 }
