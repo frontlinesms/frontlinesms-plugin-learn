@@ -1,17 +1,7 @@
 package net.frontlinesms.plugins.learn.ui.assessment;
 
-import static org.mockito.Mockito.*;
-import static java.util.Arrays.asList;
-import static net.frontlinesms.plugins.learn.LearnTestUtils.*;
-
-import net.frontlinesms.data.events.EntityDeletedNotification;
-import net.frontlinesms.data.events.EntitySavedNotification;
-import net.frontlinesms.events.EventBus;
-import net.frontlinesms.plugins.learn.data.domain.*;
 import net.frontlinesms.plugins.learn.data.repository.*;
-import net.frontlinesms.plugins.learn.ui.topic.TopicTabHandler;
 import net.frontlinesms.test.spring.MockBean;
-import net.frontlinesms.test.ui.ThinletComponent;
 import net.frontlinesms.test.ui.ThinletEventHandlerTest;
 
 public class AssessmentTabHandlerTest extends ThinletEventHandlerTest<AssessmentTabHandler> {

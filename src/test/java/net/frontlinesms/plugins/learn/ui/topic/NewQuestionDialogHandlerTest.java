@@ -1,14 +1,10 @@
 package net.frontlinesms.plugins.learn.ui.topic;
 
-import java.util.Collection;
-import java.util.List;
-
 import net.frontlinesms.plugins.learn.data.repository.QuestionDao;
 import net.frontlinesms.plugins.learn.ui.topic.NewQuestionDialogHandler;
 import net.frontlinesms.test.spring.MockBean;
 import net.frontlinesms.test.ui.ThinletComponent;
 
-import static java.util.Arrays.asList;
 import static net.frontlinesms.plugins.learn.LearnTestUtils.*;
 import static org.mockito.Mockito.verify;
 
@@ -48,16 +44,6 @@ public class NewQuestionDialogHandlerTest extends NewTopicChoosingDialogHandlerT
 		} else if(fieldName.equals("cbTopic")) {
 			$("cbTopic").setSelected("Music");
 		} else TODO("Implement valid value setting for: " + fieldName);
-	}
-	
-	private void setValidValues(Collection<String> validFieldNames) {
-		setValidValues(validFieldNames.toArray(new String[0]));
-	}
-	
-	private void setValidValues(String... validFieldNames) {
-		for(String fieldName : validFieldNames) {
-			setValidValue(fieldName);
-		}
 	}
 	
 //> TEST METHODS
