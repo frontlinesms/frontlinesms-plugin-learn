@@ -6,7 +6,7 @@ import net.frontlinesms.plugins.learn.data.repository.QuestionDao;
 import net.frontlinesms.plugins.learn.data.repository.TopicDao;
 import net.frontlinesms.ui.FrontlineUI;
 
-public class EditQuestionDialogHandler extends TopicItemDialogHandler<Question> {
+public class EditQuestionDialogHandler extends TopicChoosingDialogHandler<Question> {
 	private static final String LAYOUT_FILE = "/ui/plugins/learn/question/edit.xml";
 	
 	private final QuestionDao dao;
@@ -39,15 +39,15 @@ public class EditQuestionDialogHandler extends TopicItemDialogHandler<Question> 
 	
 //> UI EVENT METHODS
 	public void save() {
-		topicItem.setQuestionText(getText("tfQuestion"));
-		topicItem.setType(ui.isSelected(find("rbType_binary"))? Type.BINARY: Type.MULTIPLE_CHOICE);
-		topicItem.setAnswers(getText("tfMultichoice1"), getText("tfMultichoice2"), getText("tfMultichoice3"));
-		topicItem.setTopic(getSelectedTopic());
-		topicItem.setMessageText(generateMessageText());
+		editItem.setQuestionText(getText("tfQuestion"));
+		editItem.setType(ui.isSelected(find("rbType_binary"))? Type.BINARY: Type.MULTIPLE_CHOICE);
+		editItem.setAnswers(getText("tfMultichoice1"), getText("tfMultichoice2"), getText("tfMultichoice3"));
+		editItem.setTopic(getSelectedTopic());
+		editItem.setMessageText(generateMessageText());
 		
-		if(topicItem.getId() > 0)
-			dao.update(topicItem);
-		else dao.save(topicItem);
+		if(editItem.getId() > 0)
+			dao.update(editItem);
+		else dao.save(editItem);
 		
 		close();
 	}
@@ -70,7 +70,7 @@ public class EditQuestionDialogHandler extends TopicItemDialogHandler<Question> 
 	}
 	
 	@Override
-	boolean doValidate() {
+	public boolean doValidate() {
 		ui.setText(find("taMessage"), generateMessageText().replace("${id}", "1"));
 		
 		ui.setChildrenEditable(find("pnMultichoice"), isMultichoice());

@@ -15,6 +15,10 @@ import net.frontlinesms.test.ui.ThinletComponent;
 import net.frontlinesms.test.ui.ThinletEventHandlerTest;
 
 public class AssessmentTabHandlerTest extends ThinletEventHandlerTest<AssessmentTabHandler> {
+	@SuppressWarnings("unused")
+	@MockBean private TopicDao topicDao;
+	@SuppressWarnings("unused")
+	@MockBean private AssessmentDao assessmentDao;
 
 //> SETUP METHODS
 	@Override
@@ -33,6 +37,6 @@ public class AssessmentTabHandlerTest extends ThinletEventHandlerTest<Assessment
 		$("btNewAssessment").click();
 		
 		// then
-		assertEquals("i18n.plugins.learn.assessment.new", $("dgEditAssessment").getText());
+		assertEquals("plugins.learn.assessment.new", $("dgEditAssessment").getText());
 	}
 }

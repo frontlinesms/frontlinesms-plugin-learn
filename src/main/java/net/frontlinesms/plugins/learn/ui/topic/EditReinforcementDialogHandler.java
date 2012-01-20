@@ -5,7 +5,7 @@ import net.frontlinesms.plugins.learn.data.repository.ReinforcementDao;
 import net.frontlinesms.plugins.learn.data.repository.TopicDao;
 import net.frontlinesms.ui.FrontlineUI;
 
-public class EditReinforcementDialogHandler extends TopicItemDialogHandler<Reinforcement> {
+public class EditReinforcementDialogHandler extends TopicChoosingDialogHandler<Reinforcement> {
 	private static final String LAYOUT_FILE = "/ui/plugins/learn/reinforcement/edit.xml";
 	private static final String TA_TEXT = "taText";
 	
@@ -27,17 +27,17 @@ public class EditReinforcementDialogHandler extends TopicItemDialogHandler<Reinf
 	
 //> UI EVENT METHODS
 	public void save() {
-		topicItem.setMessageText(ui.getText(find(TA_TEXT)));
-		topicItem.setTopic(getSelectedTopic());
-		if(topicItem.getId() == 0)
-			dao.save(topicItem);
-		else dao.update(topicItem);
+		editItem.setMessageText(ui.getText(find(TA_TEXT)));
+		editItem.setTopic(getSelectedTopic());
+		if(editItem.getId() == 0)
+			dao.save(editItem);
+		else dao.update(editItem);
 		
 		close();
 	}
 	
 //> UI HELPER METHODS
-	boolean doValidate() {
+	public boolean doValidate() {
 		if(ui.getText(find(TA_TEXT)).length() == 0) {
 			return false;
 		}

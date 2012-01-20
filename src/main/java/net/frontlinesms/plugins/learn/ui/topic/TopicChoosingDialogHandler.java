@@ -1,26 +1,26 @@
 package net.frontlinesms.plugins.learn.ui.topic;
 
 import thinlet.Thinlet;
+import net.frontlinesms.plugins.learn.data.domain.HasTopic;
 import net.frontlinesms.plugins.learn.data.domain.Topic;
-import net.frontlinesms.plugins.learn.data.domain.TopicItem;
 import net.frontlinesms.plugins.learn.data.repository.TopicDao;
 import net.frontlinesms.ui.FrontlineUI;
 import net.frontlinesms.ui.ThinletUiEventHandler;
 import net.frontlinesms.ui.i18n.InternationalisationUtils;
 
-public abstract class TopicItemDialogHandler<E extends TopicItem> implements ThinletUiEventHandler {
+public abstract class TopicChoosingDialogHandler<E extends HasTopic> implements ThinletUiEventHandler {
 	static final String CB_TOPIC = "cbTopic";
 
 	final FrontlineUI ui;
 	final TopicDao topicDao;
 	private final Object dialog;
-	final E topicItem;
+	final E editItem;
 
 //> INIT METHODS
-	public TopicItemDialogHandler(FrontlineUI ui, TopicDao topicDao, E topicItem) {
+	public TopicChoosingDialogHandler(FrontlineUI ui, TopicDao topicDao, E topicItem) {
 		this.topicDao = topicDao;
 		this.ui = ui;
-		this.topicItem = topicItem;
+		this.editItem = topicItem;
 		dialog = ui.loadComponentFromFile(getLayoutFile(), this);
 		
 		// init list of topics
@@ -34,7 +34,7 @@ public abstract class TopicItemDialogHandler<E extends TopicItem> implements Thi
 		}
 	}
 	
-	abstract String getLayoutFile();
+	public abstract String getLayoutFile();
 	
 //> ACCESSORS
 	/** Set the topic that the reinforcement refers to. */
@@ -67,7 +67,7 @@ public abstract class TopicItemDialogHandler<E extends TopicItem> implements Thi
 		return Thinlet.find(dialog, componentName);
 	}
 	
-	abstract boolean doValidate();
+	public abstract boolean doValidate();
 	
 	protected boolean isTopicValid() {
 		String topicName = ui.getText(find(CB_TOPIC));

@@ -3,7 +3,7 @@ package net.frontlinesms.plugins.learn.data.domain;
 import javax.persistence.*;
 
 @Entity
-public abstract class TopicItem {
+public abstract class TopicItem implements HasTopic {
 	/** Unique id for this entity.  This is for hibernate usage. */
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(unique=true,nullable=false,updatable=false)

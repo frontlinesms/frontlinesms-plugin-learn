@@ -1,0 +1,5 @@
+<tab name="tbAssessments" text="i18n.plugins.learn.assessment.tab.title">
+	<panel columns="1" weightx="1" weighty="1" gap="8" left="8" right="8" top="8" bottom="8">
+		<button name="btNewAssessment" action="newAssessment" text="i18n.plugins.learn.assessment.new" icon="/icons/plugins/learn/add.png"/>
+	</panel>
+</tab>

@@ -1,8 +1,8 @@
 package net.frontlinesms.plugins.learn.ui.topic;
 
-import net.frontlinesms.plugins.learn.ui.topic.TopicItemDialogHandler;
+import net.frontlinesms.plugins.learn.ui.topic.TopicChoosingDialogHandler;
 
-public abstract class NewTopicItemDialogHandlerTest<E extends TopicItemDialogHandler<?>> extends TopicItemDialogHandlerTest<E> {
+public abstract class NewTopicItemDialogHandlerTest<E extends TopicChoosingDialogHandler<?>> extends TopicItemDialogHandlerTest<E> {
 	public void testTopicNotInitiallySet() {
 		// when topic has not been set
 		// then topic is "no topic set"
