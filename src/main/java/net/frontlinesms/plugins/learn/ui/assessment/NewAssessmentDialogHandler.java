@@ -3,7 +3,6 @@ package net.frontlinesms.plugins.learn.ui.assessment;
 import net.frontlinesms.data.repository.GroupDao;
 import net.frontlinesms.plugins.learn.data.domain.Assessment;
 import net.frontlinesms.plugins.learn.data.repository.AssessmentDao;
-import net.frontlinesms.plugins.learn.data.repository.AssessmentMessageDao;
 import net.frontlinesms.plugins.learn.data.repository.TopicDao;
 import net.frontlinesms.plugins.learn.data.repository.TopicItemDao;
 import net.frontlinesms.ui.FrontlineUI;

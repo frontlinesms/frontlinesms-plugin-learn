@@ -1,6 +1,5 @@
 package net.frontlinesms.plugins.learn.ui.assessment;
 
-import java.util.Collections;
 import java.util.List;
 
 import net.frontlinesms.data.domain.Group;
