@@ -1,6 +1,7 @@
-package net.frontlinesms.plugins.learn.ui;
+package net.frontlinesms.plugins.learn.ui.topic;
 
 import net.frontlinesms.plugins.learn.data.repository.ReinforcementDao;
+import net.frontlinesms.plugins.learn.ui.topic.NewReinforcementDialogHandler;
 import net.frontlinesms.test.spring.MockBean;
 
 import static org.mockito.Mockito.*;

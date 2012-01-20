@@ -6,7 +6,7 @@ import net.frontlinesms.FrontlineSMS;
 import net.frontlinesms.plugins.BasePluginController;
 import net.frontlinesms.plugins.PluginControllerProperties;
 import net.frontlinesms.plugins.PluginInitialisationException;
-import net.frontlinesms.plugins.learn.ui.LearnPluginTabHandler;
+import net.frontlinesms.plugins.learn.ui.topic.LearnPluginTabHandler;
 import net.frontlinesms.ui.UiGeneratorController;
 
 @PluginControllerProperties(name="Learn (beta)",

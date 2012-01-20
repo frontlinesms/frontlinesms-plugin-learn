@@ -1,7 +1,8 @@
-package net.frontlinesms.plugins.learn.ui;
+package net.frontlinesms.plugins.learn.ui.topic;
 
 import net.frontlinesms.plugins.learn.data.domain.Topic;
 import net.frontlinesms.plugins.learn.data.repository.TopicDao;
+import net.frontlinesms.plugins.learn.ui.topic.TopicItemDialogHandler;
 import net.frontlinesms.test.spring.MockBean;
 import net.frontlinesms.test.ui.ThinletEventHandlerTest;
 

@@ -1,4 +1,4 @@
-package net.frontlinesms.plugins.learn.ui;
+package net.frontlinesms.plugins.learn.ui.topic;
 
 import static org.mockito.Mockito.*;
 import static java.util.Arrays.asList;
@@ -9,6 +9,7 @@ import net.frontlinesms.data.events.EntitySavedNotification;
 import net.frontlinesms.events.EventBus;
 import net.frontlinesms.plugins.learn.data.domain.*;
 import net.frontlinesms.plugins.learn.data.repository.*;
+import net.frontlinesms.plugins.learn.ui.topic.TopicTabHandler;
 import net.frontlinesms.test.spring.MockBean;
 import net.frontlinesms.test.ui.ThinletComponent;
 import net.frontlinesms.test.ui.ThinletEventHandlerTest;

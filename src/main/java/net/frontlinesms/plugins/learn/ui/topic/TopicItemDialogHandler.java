@@ -1,4 +1,4 @@
-package net.frontlinesms.plugins.learn.ui;
+package net.frontlinesms.plugins.learn.ui.topic;
 
 import thinlet.Thinlet;
 import net.frontlinesms.plugins.learn.data.domain.Topic;

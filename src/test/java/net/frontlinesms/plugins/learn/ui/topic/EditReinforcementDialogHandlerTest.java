@@ -1,4 +1,4 @@
-package net.frontlinesms.plugins.learn.ui;
+package net.frontlinesms.plugins.learn.ui.topic;
 
 import static net.frontlinesms.plugins.learn.LearnTestUtils.*;
 import static org.mockito.Mockito.*;
@@ -6,6 +6,7 @@ import static org.mockito.Mockito.*;
 import net.frontlinesms.plugins.learn.data.domain.Reinforcement;
 import net.frontlinesms.plugins.learn.data.domain.Topic;
 import net.frontlinesms.plugins.learn.data.repository.ReinforcementDao;
+import net.frontlinesms.plugins.learn.ui.topic.EditReinforcementDialogHandler;
 import net.frontlinesms.test.spring.MockBean;
 
 public class EditReinforcementDialogHandlerTest extends TopicItemDialogHandlerTest<EditReinforcementDialogHandler> {

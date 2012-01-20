@@ -1,4 +1,4 @@
-package net.frontlinesms.plugins.learn.ui;
+package net.frontlinesms.plugins.learn.ui.topic;
 
 import java.util.List;
 
@@ -66,7 +66,7 @@ public class TopicTabHandler implements ThinletUiEventHandler, EventObserver {
 
 //> UI EVENT HANDLERS
 	public void newTopic() {
-		ui.add(new TopicEditDialogHandler(ui, dao).getDialog());
+		ui.add(new EditTopicDialogHandler(ui, dao).getDialog());
 	}
 	
 	public void newReinforcement() {

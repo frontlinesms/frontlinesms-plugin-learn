@@ -1,9 +1,10 @@
-package net.frontlinesms.plugins.learn.ui;
+package net.frontlinesms.plugins.learn.ui.topic;
 
 import java.util.Collection;
 import java.util.List;
 
 import net.frontlinesms.plugins.learn.data.repository.QuestionDao;
+import net.frontlinesms.plugins.learn.ui.topic.NewQuestionDialogHandler;
 import net.frontlinesms.test.spring.MockBean;
 import net.frontlinesms.test.ui.ThinletComponent;
 

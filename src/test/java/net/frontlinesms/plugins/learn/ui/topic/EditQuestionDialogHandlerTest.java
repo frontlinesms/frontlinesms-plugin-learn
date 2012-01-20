@@ -1,4 +1,4 @@
-package net.frontlinesms.plugins.learn.ui;
+package net.frontlinesms.plugins.learn.ui.topic;
 
 import static net.frontlinesms.plugins.learn.LearnTestUtils.*;
 import static org.mockito.Mockito.*;
@@ -7,6 +7,7 @@ import net.frontlinesms.plugins.learn.data.domain.Question;
 import net.frontlinesms.plugins.learn.data.domain.Question.Type;
 import net.frontlinesms.plugins.learn.data.domain.Topic;
 import net.frontlinesms.plugins.learn.data.repository.QuestionDao;
+import net.frontlinesms.plugins.learn.ui.topic.EditQuestionDialogHandler;
 import net.frontlinesms.test.spring.MockBean;
 
 public class EditQuestionDialogHandlerTest extends TopicItemDialogHandlerTest<EditQuestionDialogHandler> {

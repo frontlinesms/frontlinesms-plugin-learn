@@ -1,4 +1,6 @@
-package net.frontlinesms.plugins.learn.ui;
+package net.frontlinesms.plugins.learn.ui.topic;
+
+import net.frontlinesms.plugins.learn.ui.topic.TopicItemDialogHandler;
 
 public abstract class NewTopicItemDialogHandlerTest<E extends TopicItemDialogHandler<?>> extends TopicItemDialogHandlerTest<E> {
 	public void testTopicNotInitiallySet() {

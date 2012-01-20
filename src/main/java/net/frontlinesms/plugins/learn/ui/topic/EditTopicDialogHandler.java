@@ -1,4 +1,4 @@
-package net.frontlinesms.plugins.learn.ui;
+package net.frontlinesms.plugins.learn.ui.topic;
 
 import thinlet.Thinlet;
 import net.frontlinesms.data.DuplicateKeyException;
@@ -8,7 +8,7 @@ import net.frontlinesms.ui.FrontlineUI;
 import net.frontlinesms.ui.ThinletUiEventHandler;
 import net.frontlinesms.ui.i18n.InternationalisationUtils;
 
-public class TopicEditDialogHandler implements ThinletUiEventHandler {
+public class EditTopicDialogHandler implements ThinletUiEventHandler {
 	private static final String TF_NAME = "tfName";
 	private static final String BT_SAVE = "btSave";
 
@@ -19,11 +19,11 @@ public class TopicEditDialogHandler implements ThinletUiEventHandler {
 	private final FrontlineUI ui;
 	private final Object dialog;
 	
-	public TopicEditDialogHandler(FrontlineUI ui, TopicDao dao) {
+	public EditTopicDialogHandler(FrontlineUI ui, TopicDao dao) {
 		this(ui, dao, null);
 	}
 
-	public TopicEditDialogHandler(FrontlineUI ui, TopicDao dao, Topic t) {
+	public EditTopicDialogHandler(FrontlineUI ui, TopicDao dao, Topic t) {
 		this.dao = dao;
 		
 		String dialogTitle;
