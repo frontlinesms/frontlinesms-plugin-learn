@@ -16,13 +16,13 @@ import net.frontlinesms.ui.handler.contacts.SingleGroupSelecterDialogOwner;
 
 public class EditAssessmentDialogHandler extends TopicChoosingDialogHandler<Assessment> implements SingleGroupSelecterDialogOwner {
 	private final AssessmentDao assessmentDao;
-//	private final GroupDao groupDao;
+	private final GroupDao groupDao;
 	private final TopicItemDao topicItemDao;
 	
-	public EditAssessmentDialogHandler(FrontlineUI ui, AssessmentDao assementDao, /*GroupDao groupDao, */TopicDao topicDao, TopicItemDao topicItemDao, Assessment a) {
+	public EditAssessmentDialogHandler(FrontlineUI ui, AssessmentDao assementDao, GroupDao groupDao, TopicDao topicDao, TopicItemDao topicItemDao, Assessment a) {
 		super(ui, topicDao, a);
 		this.assessmentDao = assementDao;
-//		this.groupDao = groupDao;
+		this.groupDao = groupDao;
 		this.topicItemDao = topicItemDao;
 		
 		validate(null);
@@ -66,7 +66,6 @@ public class EditAssessmentDialogHandler extends TopicChoosingDialogHandler<Asse
 	
 //> UI EVENT METHODS
 	public void editMessage(Object table) {
-		System.out.println("EditAssessmentDialogHandler.editMessage()");
 		Object att = ui.getAttachedObject(ui.getSelectedItem(table));
 		if(att instanceof TopicItem) {
 			ui.add(new NewAssessmentMessageDialogHandler(ui, (TopicItem) att).getDialog());
@@ -74,8 +73,9 @@ public class EditAssessmentDialogHandler extends TopicChoosingDialogHandler<Asse
 	}
 	
 	public void selectGroup() {
-		GroupSelecterDialog selecter = new GroupSelecterDialog(ui, this);
+		GroupSelecterDialog selecter = new GroupSelecterDialog(ui, this, groupDao);
 		selecter.init(new Group(null, null));
+		selecter.show();
 	}
 	
 //> UI HELPER METHODS

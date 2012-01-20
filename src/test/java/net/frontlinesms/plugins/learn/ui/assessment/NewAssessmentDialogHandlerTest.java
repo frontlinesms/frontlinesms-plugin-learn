@@ -1,6 +1,10 @@
 package net.frontlinesms.plugins.learn.ui.assessment;
 
+import java.util.Collections;
+import java.util.List;
+
 import net.frontlinesms.data.domain.Group;
+import net.frontlinesms.data.repository.GroupDao;
 import net.frontlinesms.plugins.learn.data.domain.AssessmentMessage;
 import net.frontlinesms.plugins.learn.data.domain.Topic;
 import net.frontlinesms.plugins.learn.data.domain.TopicItem;
@@ -15,6 +19,7 @@ import static java.util.Arrays.asList;
 
 public class NewAssessmentDialogHandlerTest extends NewTopicChoosingDialogHandlerTest<NewAssessmentDialogHandler> {
 	@MockBean private AssessmentDao assessmentDao;
+	@MockBean private GroupDao groupDao;
 	@MockBean private TopicItemDao topicItemDao;
 
 	@Override
@@ -22,13 +27,16 @@ public class NewAssessmentDialogHandlerTest extends NewTopicChoosingDialogHandle
 		super.setUp();
 		
 		when(topicItemDao.getAllByTopic(any(Topic.class)))
-				.thenReturn(asList(new TopicItem[] {
-						fakeTopicItem("Item 1"), fakeTopicItem("Item 2") }));
+				.thenReturn(asList(
+						fakeTopicItem("Item 1"), fakeTopicItem("Item 2")));
+		
+		List<Group> groups = asList(mockGroup("Jets"), mockGroup("Sharks"));
+		when(groupDao.getChildGroups(null)).thenReturn(groups);
 	}
 	
 	@Override
 	protected NewAssessmentDialogHandler initHandler() {
-		return new NewAssessmentDialogHandler(ui, assessmentDao, topicDao, topicItemDao);
+		return new NewAssessmentDialogHandler(ui, assessmentDao, groupDao, topicDao, topicItemDao);
 	}
 	
 	@Override
