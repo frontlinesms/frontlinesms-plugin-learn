@@ -9,12 +9,12 @@ import net.frontlinesms.ui.ThinletUiEventHandler;
 import net.frontlinesms.ui.i18n.InternationalisationUtils;
 
 public abstract class TopicChoosingDialogHandler<E extends HasTopic> implements ThinletUiEventHandler {
-	static final String CB_TOPIC = "cbTopic";
+	protected static final String CB_TOPIC = "cbTopic";
 
-	final FrontlineUI ui;
-	final TopicDao topicDao;
+	protected final FrontlineUI ui;
+	protected final TopicDao topicDao;
 	private final Object dialog;
-	final E editItem;
+	protected final E editItem;
 
 //> INIT METHODS
 	public TopicChoosingDialogHandler(FrontlineUI ui, TopicDao topicDao, E topicItem) {

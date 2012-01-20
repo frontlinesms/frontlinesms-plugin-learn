@@ -9,7 +9,7 @@ import net.frontlinesms.plugins.learn.data.repository.ReinforcementDao;
 import net.frontlinesms.plugins.learn.ui.topic.EditReinforcementDialogHandler;
 import net.frontlinesms.test.spring.MockBean;
 
-public class EditReinforcementDialogHandlerTest extends TopicItemDialogHandlerTest<EditReinforcementDialogHandler> {
+public class EditReinforcementDialogHandlerTest extends TopicChoosingDialogHandlerTest<EditReinforcementDialogHandler> {
 	@MockBean private ReinforcementDao dao;
 	
 //> SETUP METHODS

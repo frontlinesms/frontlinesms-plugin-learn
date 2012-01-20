@@ -18,7 +18,11 @@ public class EditAssessmentDialogHandler extends TopicChoosingDialogHandler<Asse
 	public String getLayoutFile() { return "/ui/plugins/learn/assessment/edit.xml"; }
 
 	@Override
-	public void save() {}
+	public void save() {
+		editItem.setTopic(getSelectedTopic());
+		
+		assessmentDao.save(editItem);
+	}
 
 	@Override
 	public boolean doValidate() { return false; }

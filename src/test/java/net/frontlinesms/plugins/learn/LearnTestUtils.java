@@ -10,7 +10,6 @@ import java.util.List;
 import net.frontlinesms.plugins.learn.data.domain.*;
 import net.frontlinesms.plugins.learn.data.repository.*;
 
-import org.hibernate.hql.ast.tree.ExpectedTypeAwareNode;
 import org.mockito.ArgumentMatcher;
 
 public class LearnTestUtils {
@@ -39,6 +38,16 @@ public class LearnTestUtils {
 		when(topicDao.list()).thenReturn(topics);
 		
 		return topics.toArray(new Topic[topics.size()]);
+	}
+	
+	public static Assessment assessmentWithTopic(final String expectedTopicName) {
+		return argThat(new ArgumentMatcher<Assessment>() {
+			@Override
+			public boolean matches(Object o) {
+				Assessment a = (Assessment) o;
+				return expectedTopicName.equals(a.getTopic().getName());
+			}
+		});
 	}
 	
 	public static Topic topicWithName(final String expectedName) {

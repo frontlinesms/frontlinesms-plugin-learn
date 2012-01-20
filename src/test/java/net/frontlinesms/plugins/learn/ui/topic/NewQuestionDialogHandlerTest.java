@@ -12,7 +12,7 @@ import static java.util.Arrays.asList;
 import static net.frontlinesms.plugins.learn.LearnTestUtils.*;
 import static org.mockito.Mockito.verify;
 
-public class NewQuestionDialogHandlerTest extends NewTopicItemDialogHandlerTest<NewQuestionDialogHandler> {
+public class NewQuestionDialogHandlerTest extends NewTopicChoosingDialogHandlerTest<NewQuestionDialogHandler> {
 //> STATIC CONSTANTS
 	private static final List<String> ALL_FIELD_NAMES = asList(new String[]{"tfQuestion", "rbType", "cbTopic"});
 	

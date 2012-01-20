@@ -7,4 +7,8 @@ public class AssessmentDao extends BaseHibernateDao<Assessment> {
 	protected AssessmentDao() {
 		super(Assessment.class);
 	}
+	
+	public void save(Assessment a) {
+		super.saveWithoutDuplicateHandling(a);
+	}
 }

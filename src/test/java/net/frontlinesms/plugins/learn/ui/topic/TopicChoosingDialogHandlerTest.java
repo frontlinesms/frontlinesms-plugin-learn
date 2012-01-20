@@ -8,7 +8,7 @@ import net.frontlinesms.test.ui.ThinletEventHandlerTest;
 
 import static net.frontlinesms.plugins.learn.LearnTestUtils.*;
 
-public abstract class TopicItemDialogHandlerTest<E extends TopicChoosingDialogHandler<?>> extends ThinletEventHandlerTest<E> {
+public abstract class TopicChoosingDialogHandlerTest<E extends TopicChoosingDialogHandler<?>> extends ThinletEventHandlerTest<E> {
 	@MockBean protected TopicDao topicDao;
 	protected Topic[] mockedTopics;
 
