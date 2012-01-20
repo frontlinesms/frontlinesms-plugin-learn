@@ -14,7 +14,6 @@ import static org.mockito.Mockito.verify;
 
 public class NewQuestionDialogHandlerTest extends NewTopicChoosingDialogHandlerTest<NewQuestionDialogHandler> {
 //> STATIC CONSTANTS
-	private static final List<String> ALL_FIELD_NAMES = asList(new String[]{"tfQuestion", "rbType", "cbTopic"});
 	
 //> INSTANCE VARIABLES
 	@MockBean private QuestionDao dao;
@@ -30,18 +29,12 @@ public class NewQuestionDialogHandlerTest extends NewTopicChoosingDialogHandlerT
 		return h.getDialog();
 	}
 	
-	/** Set valid values for fields which are irrelevant to the test being set up. */
-	private void setValidValuesExcept(String... invalidFieldNames) {
-		List<String> invalid = asList(invalidFieldNames);
-		for(String fieldName : ALL_FIELD_NAMES) {
-			if(!invalid.contains(fieldName)) {
-				setValidValue(fieldName);
-			}
-		}
+	protected String[] getAllFieldNames() {
+		return new String[]{"tfQuestion", "rbType", "cbTopic"};
 	}
 
 	/** Set a valid value for a field */
-	private void setValidValue(String fieldName) {
+	protected void setValidValue(String fieldName) {
 		if(fieldName.equals("tfQuestion")) {
 			$("tfQuestion").setText("What is your fave colour?");
 		} else if(fieldName.equals("rbType")) {
@@ -189,7 +182,7 @@ public class NewQuestionDialogHandlerTest extends NewTopicChoosingDialogHandlerT
 		// given
 		$("rbType_multichoice").select();
 		assertTrue($("rbType_multichoice").isChecked());
-		setValidValues(ALL_FIELD_NAMES);
+		setAllFieldsValid();
 		
 		// when 
 		$("btSave").click();
@@ -201,10 +194,5 @@ public class NewQuestionDialogHandlerTest extends NewTopicChoosingDialogHandlerT
 				"B) Green\n" +
 				"C) All of the above\n" +
 				"Reply ${id}A, ${id}B or ${id}C"));
-	}
-	
-	@Override
-	protected void fillFieldsExceptTopic() {
-		setValidValuesExcept("cbTopic");
 	}
 }

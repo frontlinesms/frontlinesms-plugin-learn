@@ -18,7 +18,7 @@ public class EditReinforcementDialogHandler extends TopicChoosingDialogHandler<R
 		
 		ui.setText(find("taText"), r.getMessageText());
 		
-		validate();
+		validate(null);
 	}
 	
 	public String getLayoutFile() {
@@ -37,7 +37,8 @@ public class EditReinforcementDialogHandler extends TopicChoosingDialogHandler<R
 	}
 	
 //> UI HELPER METHODS
-	public boolean doValidate() {
+	@Override
+	public boolean doValidate(Object component) {
 		if(ui.getText(find(TA_TEXT)).length() == 0) {
 			return false;
 		}

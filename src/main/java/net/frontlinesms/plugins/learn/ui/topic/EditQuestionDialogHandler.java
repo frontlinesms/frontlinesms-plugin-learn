@@ -27,7 +27,7 @@ public class EditQuestionDialogHandler extends TopicChoosingDialogHandler<Questi
 			ui.setText(find("tfMultichoice3"), a[2]);
 		}
 		
-		validate();
+		validate(null);
 		
 		if(q.getId() > 0)
 			ui.setText(find("taMessage"), q.getMessageText());
@@ -70,7 +70,7 @@ public class EditQuestionDialogHandler extends TopicChoosingDialogHandler<Questi
 	}
 	
 	@Override
-	public boolean doValidate() {
+	public boolean doValidate(Object component) {
 		ui.setText(find("taMessage"), generateMessageText().replace("${id}", "1"));
 		
 		ui.setChildrenEditable(find("pnMultichoice"), isMultichoice());

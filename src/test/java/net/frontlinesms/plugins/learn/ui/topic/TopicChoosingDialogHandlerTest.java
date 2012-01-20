@@ -63,6 +63,10 @@ public abstract class TopicChoosingDialogHandlerTest<E extends TopicChoosingDial
 		assertFalse($().isVisible());
 	}
 	
+	public void testDialogIsModel() {
+		assertTrue($().isModal());
+	}
+	
 	public abstract void testSaveButton();
 	
 //> HELPER METHODS

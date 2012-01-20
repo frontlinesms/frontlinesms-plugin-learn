@@ -58,8 +58,8 @@ public abstract class TopicChoosingDialogHandler<E extends HasTopic> implements 
 		ui.remove(dialog);
 	}
 	
-	public void validate() {
-		ui.setEnabled(find("btSave"), doValidate());
+	public void validate(Object component) {
+		ui.setEnabled(find("btSave"), doValidate(component));
 	}
 	
 //> UI HELPER METHODS
@@ -67,7 +67,7 @@ public abstract class TopicChoosingDialogHandler<E extends HasTopic> implements 
 		return Thinlet.find(dialog, componentName);
 	}
 	
-	public abstract boolean doValidate();
+	public abstract boolean doValidate(Object component);
 	
 	protected boolean isTopicValid() {
 		String topicName = ui.getText(find(CB_TOPIC));

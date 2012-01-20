@@ -17,6 +17,20 @@ public class NewReinforcementDialogHandlerTest extends NewTopicChoosingDialogHan
 		return new NewReinforcementDialogHandler(ui, dao, topicDao);
 	}
 	
+	@Override
+	protected String[] getAllFieldNames() {
+		return new String[]{"cbTopic", "taText"};
+	}
+	
+	@Override
+	protected void setValidValue(String fieldName) {
+		if(fieldName.equals("cbTopic")) {
+			$("cbTopic").setSelected("Psychology");
+		} else if(fieldName.equals("taText")) {
+			$("taText").setText("Negative reinforcement is the best!");
+		}
+	}
+	
 //> TEST METHODS
 	public void testTitle() {
 		assertEquals("plugins.learn.reinforcement.new", $().getText());
@@ -24,34 +38,30 @@ public class NewReinforcementDialogHandlerTest extends NewTopicChoosingDialogHan
 	
 	public void testTextValidation() {
 		// given
-		$("cbTopic").setSelected("Psychology");
+		setValidValuesExcept("taText");
 		
 		// when no text is entered		
 		// then save is disabled
 		assertFalse($("btSave").isEnabled());
 		
 		// when text is entered
-		$("taText").setText("Negative reinforcement is the best!");
+		setValidValue("taText");
 
 		// then save is enabled
 		assertTrue($("btSave").isEnabled());
 	}
 	
 	public void testSaveButton() {
+		// given
+		setAllFieldsValid();
+		
 		// when
-		$("cbTopic").setSelected("Music");
-		$("taText").setText("Remember: music can soothe, but it can also excite!");
 		$("btSave").click();
 		
 		// then
 		assertFalse($("dgEditReinforcement").isVisible());
 		verify(dao).save(reinforcementWithTextAndTopic(
-				"Remember: music can soothe, but it can also excite!",
-				"Music"));
-	}
-	
-	@Override
-	protected void fillFieldsExceptTopic() {
-		$("taText").setText("Negative reinforcement is the best!");
+				"Negative reinforcement is the best!",
+				"Psychology"));
 	}
 }

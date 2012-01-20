@@ -1,9 +1,15 @@
-<dialog name="dgEditAssessment" columns="2" gap="8" close="close" text="i18n.plugins.learn.assessment.edit" left="8" right="8" top="8" bottom="8" modal="true">
+<dialog name="dgEditAssessment" columns="3" gap="8" close="close" text="i18n.plugins.learn.assessment.edit" left="8" right="8" top="8" bottom="8" modal="true">
  	<label text="i18n.plugins.learn.topic"/>
-	<combobox name="cbTopic" action="validate" text="i18n.plugins.learn.topic.choose" editable="false"/>
+	<combobox name="cbTopic" action="validate(this)" text="i18n.plugins.learn.topic.choose" editable="false"/>
+	
+	<label text="i18n.plugins.learn.assessment.group.select"/>
+	<textfield name="tfGroup" editable="false"/>
+	<button name="btSelectGroup" action="selectGroup"/>
 	
 <!--	<label text="i18n.plugins.learn.reinforcement.message" valign="top"/>
 	<textarea name="taText" action="validate"/> -->
+	
+	<table name="tbMessages" perform="editMessage(this)"/>
 
 	<panel colspan="2" columns="2" gap="8" halign="center">
 		<button name="btSave" text="i18n.action.save" icon="/icons/tick.png" action="save"/>

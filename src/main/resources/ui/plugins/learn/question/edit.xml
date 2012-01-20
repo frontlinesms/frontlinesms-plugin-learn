@@ -1,26 +1,26 @@
 <dialog name="dgEditQuestion" columns="2" gap="8" close="close" text="i18n.plugins.learn.question.edit" left="8" right="8" top="8" bottom="8" modal="true">
 	<label text="i18n.plugins.learn.topic"/>
-	<combobox name="cbTopic" action="validate" text="i18n.plugins.learn.topic.choose" editable="false"/>
+	<combobox name="cbTopic" action="validate(this)" text="i18n.plugins.learn.topic.choose" editable="false"/>
 	
 	<label text="i18n.plugins.learn.question.text"/>
-	<textfield name="tfQuestion" action="validate"/>
+	<textfield name="tfQuestion" action="validate(this)"/>
 	
 	<label text="i18n.plugins.learn.question.type" valign="top"/>
 	<panel gap="8" columns="1">
-		<checkbox group="rbType" name="rbType_binary" selected="true" action="validate" text="i18n.plugins.learn.question.type.binary"/>
-		<checkbox group="rbType" name="rbType_multichoice" action="validate" text="i18n.plugins.learn.question.type.multichoice"/>
+		<checkbox group="rbType" name="rbType_binary" selected="true" action="validate(this)" text="i18n.plugins.learn.question.type.binary"/>
+		<checkbox group="rbType" name="rbType_multichoice" action="validate(this)" text="i18n.plugins.learn.question.type.multichoice"/>
 	</panel>
 	
 	<label text="i18n.plugins.learn.type.multichoice.options" valign="top"/>
 	<panel name="pnMultichoice" gap="8" columns="2">
 		<label text="A)"/>
-		<textfield name="tfMultichoice1" action="validate"/>
+		<textfield name="tfMultichoice1" action="validate(this)"/>
 		
 		<label text="B)"/>
-		<textfield name="tfMultichoice2" action="validate"/>
+		<textfield name="tfMultichoice2" action="validate(this)"/>
 		
 		<label text="C)"/>
-		<textfield name="tfMultichoice3" action="validate"/>
+		<textfield name="tfMultichoice3" action="validate(this)"/>
 	</panel>
 	
 	<label text="i18n.plugins.learn.question.message.text" valign="top"/>
