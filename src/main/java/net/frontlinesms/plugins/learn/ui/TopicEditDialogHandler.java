@@ -6,6 +6,7 @@ import net.frontlinesms.plugins.learn.data.domain.Topic;
 import net.frontlinesms.plugins.learn.data.repository.TopicDao;
 import net.frontlinesms.ui.FrontlineUI;
 import net.frontlinesms.ui.ThinletUiEventHandler;
+import net.frontlinesms.ui.i18n.InternationalisationUtils;
 
 public class TopicEditDialogHandler implements ThinletUiEventHandler {
 	private static final String TF_NAME = "tfName";
@@ -28,15 +29,15 @@ public class TopicEditDialogHandler implements ThinletUiEventHandler {
 		String dialogTitle;
 		if(t == null) {
 			this.t = new Topic();
-			dialogTitle = "i18n.plugins.learn.topic.new";
+			dialogTitle = "plugins.learn.topic.new";
 		} else {
 			this.t = t;
-			dialogTitle = "i18n.plugins.learn.topic.edit";
+			dialogTitle = "plugins.learn.topic.edit";
 		}
 		
 		this.ui = ui;
 		dialog = ui.loadComponentFromFile(LAYOUT_FILE, this);
-		ui.setText(dialog, dialogTitle);
+		ui.setText(dialog, InternationalisationUtils.getI18nString(dialogTitle));
 		
 		validate();
 	}

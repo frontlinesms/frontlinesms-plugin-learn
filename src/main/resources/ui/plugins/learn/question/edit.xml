@@ -1,19 +1,33 @@
-<dialog name="dgEditQuestion" columns="2" gap="8" close="close" text="i18n.plugins.learn.question.edit">
+<dialog name="dgEditQuestion" columns="2" gap="8" close="close" text="i18n.plugins.learn.question.edit" left="8" right="8" top="8" bottom="8" modal="true">
+	<label text="i18n.plugins.learn.topic"/>
 	<combobox name="cbTopic" action="validate" text="i18n.plugins.learn.topic.choose" editable="false"/>
+	
+	<label text="i18n.plugins.learn.question.text"/>
 	<textfield name="tfQuestion" action="validate"/>
 	
-	<checkbox group="rbType" name="rbType_binary" selected="true" action="validate"/>
-	<checkbox group="rbType" name="rbType_multichoice" action="validate"/>
-	<panel name="pnMultichoice">
+	<label text="i18n.plugins.learn.question.type" valign="top"/>
+	<panel gap="8" columns="1">
+		<checkbox group="rbType" name="rbType_binary" selected="true" action="validate" text="i18n.plugins.learn.question.type.binary"/>
+		<checkbox group="rbType" name="rbType_multichoice" action="validate" text="i18n.plugins.learn.question.type.multichoice"/>
+	</panel>
+	
+	<label text="i18n.plugins.learn.type.multichoice.options" valign="top"/>
+	<panel name="pnMultichoice" gap="8" columns="2">
+		<label text="A)"/>
 		<textfield name="tfMultichoice1" action="validate"/>
+		
+		<label text="B)"/>
 		<textfield name="tfMultichoice2" action="validate"/>
+		
+		<label text="C)"/>
 		<textfield name="tfMultichoice3" action="validate"/>
 	</panel>
 	
+	<label text="i18n.plugins.learn.question.message.text" valign="top"/>
 	<textarea name="taMessage" editable="false"/>
 
-	<panel colspan="2" columns="2" gap="8">
-		<button name="btSave" text="i18n.common.actions.save" icon="/icons/tick.png" action="save"/>
-		<button name="btCancel" text="i18n.common.actions.cancel" icon="/icons/cross.png" action="close"/>
+	<panel colspan="2" columns="2" gap="8" halign="center">
+		<button name="btSave" text="i18n.action.save" icon="/icons/tick.png" action="save"/>
+		<button name="btCancel" text="i18n.action.cancel" icon="/icons/cross.png" action="close"/>
 	</panel>
 </dialog>

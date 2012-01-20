@@ -1,9 +1,9 @@
-<dialog name="dgEditTopic" columns="2" gap="8" close="close">
-	<label text="i18n.plugins.learn.topic.new"/>
+<dialog name="dgEditTopic" columns="2" gap="8" close="close" left="8" right="8" top="8" bottom="8" width="360" modal="true">
+	<label text="i18n.plugins.learn.topic.name"/>
 	<textfield name="tfName" action="validate"/>
 	
-	<panel colspan="2" columns="2" gap="8">
-		<button name="btSave" text="i18n.common.actions.save" icon="/icons/tick.png" action="save"/>
-		<button name="btCancel" text="i18n.common.actions.cancel" icon="/icons/cross.png" action="close"/>
+	<panel colspan="2" columns="2" gap="8" halign="center">
+		<button name="btSave" text="i18n.action.save" icon="/icons/tick.png" action="save"/>
+		<button name="btCancel" text="i18n.action.cancel" icon="/icons/cross.png" action="close"/>
 	</panel>
 </dialog>
