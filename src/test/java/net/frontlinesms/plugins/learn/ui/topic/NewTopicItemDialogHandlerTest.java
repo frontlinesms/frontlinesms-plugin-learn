@@ -6,7 +6,7 @@ public abstract class NewTopicItemDialogHandlerTest<E extends TopicItemDialogHan
 	public void testTopicNotInitiallySet() {
 		// when topic has not been set
 		// then topic is "no topic set"
-		assertEquals("i18n.plugins.learn.topic.choose", $("cbTopic").getText());
+		assertEquals("plugins.learn.topic.choose", $("cbTopic").getText());
 	}
 	
 	public void testTopicValidation() {

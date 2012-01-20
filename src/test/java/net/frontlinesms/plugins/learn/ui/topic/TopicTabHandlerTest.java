@@ -94,7 +94,7 @@ public class TopicTabHandlerTest extends ThinletEventHandlerTest<TopicTabHandler
 		$("btNewTopic").click();
 		
 		// then
-		assertEquals("i18n.plugins.learn.topic.new", $("dgEditTopic").getText());
+		assertEquals("plugins.learn.topic.new", $("dgEditTopic").getText());
 	}
 	
 	public void testNewReinforcementButton() {
@@ -105,7 +105,7 @@ public class TopicTabHandlerTest extends ThinletEventHandlerTest<TopicTabHandler
 		// when
 		$("btNewReinforcement").click();
 		// then
-		assertEquals("i18n.plugins.learn.reinforcement.new", $("dgEditReinforcement").getText());
+		assertEquals("plugins.learn.reinforcement.new", $("dgEditReinforcement").getText());
 	}
 	
 	public void testNewReinforcementButtonDisabledWhenNoTopics() {
@@ -138,7 +138,7 @@ public class TopicTabHandlerTest extends ThinletEventHandlerTest<TopicTabHandler
 		// when
 		$("btNewQuestion").click();
 		// then
-		assertEquals("i18n.plugins.learn.question.new", $("dgEditQuestion").getText());
+		assertEquals("plugins.learn.question.new", $("dgEditQuestion").getText());
 	}
 	
 	public void testNewQuestionButtonDisabledWhenNoTopics() {

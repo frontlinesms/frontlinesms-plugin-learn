@@ -69,7 +69,7 @@ public class NewQuestionDialogHandlerTest extends NewTopicItemDialogHandlerTest<
 	
 //> TEST METHODS
 	public void testTitle() {
-		assertEquals("i18n.plugins.learn.question.new", $().getText());
+		assertEquals("plugins.learn.question.new", $().getText());
 	}
 	
 	public void testQuestionTextDefaultsEmpty() {

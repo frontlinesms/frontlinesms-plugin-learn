@@ -19,7 +19,7 @@ public class NewReinforcementDialogHandlerTest extends NewTopicItemDialogHandler
 	
 //> TEST METHODS
 	public void testTitle() {
-		assertEquals("i18n.plugins.learn.reinforcement.new", $().getText());
+		assertEquals("plugins.learn.reinforcement.new", $().getText());
 	}
 	
 	public void testTextValidation() {
@@ -52,6 +52,6 @@ public class NewReinforcementDialogHandlerTest extends NewTopicItemDialogHandler
 	
 	@Override
 	protected void fillFieldsExceptTopic() {
-		$("taText").setText("Negative reinforcement is the best!");	
+		$("taText").setText("Negative reinforcement is the best!");
 	}
 }

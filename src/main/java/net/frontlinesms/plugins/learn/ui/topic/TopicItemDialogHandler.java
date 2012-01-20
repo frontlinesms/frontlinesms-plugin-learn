@@ -71,7 +71,6 @@ public abstract class TopicItemDialogHandler<E extends TopicItem> implements Thi
 	
 	protected boolean isTopicValid() {
 		String topicName = ui.getText(find(CB_TOPIC));
-		return !topicName.equals("i18n.plugins.learn.topic.choose") &&
-				!topicName.equals(InternationalisationUtils.getI18nString("i18n.plugins.learn.topic.choose"));
+		return !topicName.equals(InternationalisationUtils.getI18nString("plugins.learn.topic.choose"));
 	}
 }

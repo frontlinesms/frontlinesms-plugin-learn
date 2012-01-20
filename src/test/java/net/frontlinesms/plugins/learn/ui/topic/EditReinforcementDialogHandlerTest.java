@@ -26,7 +26,7 @@ public class EditReinforcementDialogHandlerTest extends TopicItemDialogHandlerTe
 	
 //> TEST METHODS
 	public void testTitle() {
-		assertEquals("i18n.plugins.learn.reinforcement.edit", $().getText());
+		assertEquals("plugins.learn.reinforcement.edit", $().getText());
 	}
 	
 	public void testTopicInitialisation() {

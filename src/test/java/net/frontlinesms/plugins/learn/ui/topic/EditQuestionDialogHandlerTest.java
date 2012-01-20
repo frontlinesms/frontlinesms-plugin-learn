@@ -36,7 +36,7 @@ public class EditQuestionDialogHandlerTest extends TopicItemDialogHandlerTest<Ed
 	
 //> TEST METHODS
 	public void testTitle() {
-		assertEquals("i18n.plugins.learn.question.edit", $().getText());
+		assertEquals("plugins.learn.question.edit", $().getText());
 	}
 	
 	public void testTopicInitialisation() {

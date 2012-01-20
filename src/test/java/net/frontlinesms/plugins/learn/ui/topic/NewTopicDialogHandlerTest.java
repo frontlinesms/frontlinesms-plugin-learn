@@ -27,7 +27,7 @@ public class NewTopicDialogHandlerTest extends ThinletEventHandlerTest<EditTopic
 	
 //> TESTS
 	public void testDialogTitleIsCorrect() throws Exception {
-		assertEquals("i18n.plugins.learn.topic.new", $().getText());
+		assertEquals("plugins.learn.topic.new", $().getText());
 	}
 	
 	public void testNameIsBlank() throws Exception {
