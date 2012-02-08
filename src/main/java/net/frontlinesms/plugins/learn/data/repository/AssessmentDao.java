@@ -11,4 +11,8 @@ public class AssessmentDao extends BaseHibernateDao<Assessment> {
 	public void save(Assessment a) {
 		super.saveWithoutDuplicateHandling(a);
 	}
+	
+	public int count() {
+		return super.countAll();
+	}
 }
