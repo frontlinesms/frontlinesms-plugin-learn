@@ -54,4 +54,12 @@ public class Assessment implements HasTopic {
 	public void setMessages(List<AssessmentMessage> messages) {
 		this.messages = messages;
 	}
+	
+	public long getStartDate() {
+		return 0;
+	}
+	
+	public long getEndDate() {
+		return 0;
+	}
 }

@@ -5,11 +5,14 @@ import static org.mockito.Mockito.*;
 import static java.util.Arrays.asList;
 
 import java.lang.reflect.Method;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.TimeZone;
 
+import net.frontlinesms.data.domain.Group;
 import net.frontlinesms.plugins.learn.data.domain.*;
 import net.frontlinesms.plugins.learn.data.repository.*;
 
@@ -17,6 +20,29 @@ import org.mockito.ArgumentMatcher;
 
 public class LearnTestUtils {
 //> TEST HELPER METHODS
+	public static Assessment mockAssessment(String groupName, String startDate, String endDate) {
+		Assessment a = mock(Assessment.class);
+		Group g = mockGroup(groupName);
+		when(a.getGroup()).thenReturn(g);
+		when(a.getStartDate()).thenReturn(parseDate(startDate));
+		when(a.getEndDate()).thenReturn(parseDate(endDate));
+		return a;
+	}
+	
+	public static long parseDate(String date) {
+		try {
+			return new SimpleDateFormat("d/M/y").parse(date).getTime();
+		} catch (ParseException ex) {
+			throw new RuntimeException(ex);
+		}
+	}
+	
+	public static Group mockGroup(String name) {
+		Group g = mock(Group.class);
+		when(g.getName()).thenReturn(name);
+		return g;
+	}
+	
 	public static Reinforcement mockReinforcement(TopicDao topicDao, String topicName, TopicItemDao topicItemDao, String messageText) {
 		Topic t = mockTopics(topicDao, topicName)[0];
 		
