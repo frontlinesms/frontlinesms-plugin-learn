@@ -1,6 +1,20 @@
 <dialog name="dgEditAssessmentMessage" columns="2" gap="8" close="close" text="i18n.plugins.learn.assessment.message.edit" left="8" right="8" top="8" bottom="8" modal="true">
-<!--	<panel colspan="2" columns="2" gap="8" halign="center">
+	<label text="i18n.plugins.learn.message.summary"/>
+	<textarea name="taSummary" editable="false"/>
+	
+	<label text="i18n.plugins.learn.repeat"/>
+	<combobox name="cbRepeat" editable="false" text="i18n.plugins.learn.repeat.once">
+		<choice text="i18n.plugins.learn.repeat.once"/>
+		<choice text="i18n.plugins.learn.repeat.daily"/>
+		<choice text="i18n.plugins.learn.repeat.weekly"/>
+		<choice text="i18n.plugins.learn.repeat.monthly"/>
+	</combobox>
+	
+	<panel name="pnEndDate">
+	</panel>
+	
+	<panel colspan="2" columns="2" gap="8" halign="center">
 		<button name="btSave" text="i18n.action.save" icon="/icons/tick.png" action="save"/>
 		<button name="btCancel" text="i18n.action.cancel" icon="/icons/cross.png" action="close"/>
-	</panel> -->
+	</panel>
 </dialog>

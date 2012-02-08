@@ -1,5 +1,7 @@
 package net.frontlinesms.plugins.learn.data.repository;
 
-public class AssessmentMessageDao {
+import net.frontlinesms.plugins.learn.data.domain.AssessmentMessage;
 
+public class AssessmentMessageDao {
+	public void save(AssessmentMessage m) {}
 }

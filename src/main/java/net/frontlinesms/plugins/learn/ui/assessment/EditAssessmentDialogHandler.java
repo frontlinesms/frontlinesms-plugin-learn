@@ -8,13 +8,14 @@ import net.frontlinesms.plugins.learn.data.domain.TopicItem;
 import net.frontlinesms.plugins.learn.data.repository.AssessmentDao;
 import net.frontlinesms.plugins.learn.data.repository.TopicDao;
 import net.frontlinesms.plugins.learn.data.repository.TopicItemDao;
+import net.frontlinesms.plugins.learn.ui.assessment.message.EditAssessmentMessageDialogOwner;
 import net.frontlinesms.plugins.learn.ui.assessment.message.NewAssessmentMessageDialogHandler;
 import net.frontlinesms.plugins.learn.ui.topic.TopicChoosingDialogHandler;
 import net.frontlinesms.ui.FrontlineUI;
 import net.frontlinesms.ui.handler.contacts.GroupSelecterDialog;
 import net.frontlinesms.ui.handler.contacts.SingleGroupSelecterDialogOwner;
 
-public class EditAssessmentDialogHandler extends TopicChoosingDialogHandler<Assessment> implements SingleGroupSelecterDialogOwner {
+public class EditAssessmentDialogHandler extends TopicChoosingDialogHandler<Assessment> implements SingleGroupSelecterDialogOwner, EditAssessmentMessageDialogOwner {
 	private final AssessmentDao assessmentDao;
 	private final GroupDao groupDao;
 	private final TopicItemDao topicItemDao;
@@ -68,7 +69,7 @@ public class EditAssessmentDialogHandler extends TopicChoosingDialogHandler<Asse
 	public void editMessage(Object table) {
 		Object att = ui.getAttachedObject(ui.getSelectedItem(table));
 		if(att instanceof TopicItem) {
-			ui.add(new NewAssessmentMessageDialogHandler(ui, (TopicItem) att).getDialog());
+			ui.add(new NewAssessmentMessageDialogHandler(ui, this, (TopicItem) att).getDialog());
 		} else throw new RuntimeException();
 	}
 	
@@ -88,4 +89,7 @@ public class EditAssessmentDialogHandler extends TopicChoosingDialogHandler<Asse
 		editItem.setGroup(g);
 		ui.setText(find("tfGroup"), g.getName());
 	}
+	
+//> ASSESSMENT MESSAGE NOTIFICATION METHODS
+	public void notifyAssessmentMessageSaved(AssessmentMessage assessment) {}
 }

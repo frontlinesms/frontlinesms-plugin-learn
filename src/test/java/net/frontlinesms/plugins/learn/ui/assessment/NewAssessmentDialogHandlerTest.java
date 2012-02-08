@@ -132,8 +132,7 @@ public class NewAssessmentDialogHandlerTest extends NewTopicChoosingDialogHandle
 		$("btSave").click();
 		
 		// then
-		verify(assessmentDao).save(assessmentWithTopic("Music"));
-		TODO("Add check for group and assessments to verification.");
+		verify(assessmentDao).save(assessmentWithTopicAndGroupAndMessageCount("Music", "Beach Boys", 1));
 	}
 	
 	@Override

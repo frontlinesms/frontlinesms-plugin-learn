@@ -4,8 +4,13 @@ import static org.mockito.Matchers.argThat;
 import static org.mockito.Mockito.*;
 import static java.util.Arrays.asList;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.TimeZone;
+
+import javax.management.RuntimeErrorException;
 
 import net.frontlinesms.plugins.learn.data.domain.*;
 import net.frontlinesms.plugins.learn.data.repository.*;
@@ -40,12 +45,61 @@ public class LearnTestUtils {
 		return topics.toArray(new Topic[topics.size()]);
 	}
 	
+	public static AssessmentMessage assessmentMessageWithTopicItemAndStartDateAndRepeat(
+			final TopicItem expectedTopicItem, final long expectedStartDate,
+			final Frequency expectedFrequency) {
+		return argThat(new ArgumentMatcher<AssessmentMessage>() {
+			@Override
+			public boolean matches(Object o) {
+				AssessmentMessage m = (AssessmentMessage) o;
+				
+				boolean matches = expectedTopicItem == m.getTopicItem() &&
+						expectedStartDate == m.getStartDate() &&
+						null == m.getEndDate() &&
+						expectedFrequency == m.getFrequency();
+				
+				if(!matches) {
+					System.out.println("LearnTestUtils.assessmentMessageWithTopicItemAndStartDateAndRepeat(...).new ArgumentMatcher() {...}.matches()");
+					println(o, "topicItem", expectedTopicItem,
+							"startDate", expectedStartDate,
+							"endDate", null,
+							"frequency", expectedFrequency);
+				}
+				
+				return matches;
+			}
+		});
+	}
+	
 	public static Assessment assessmentWithTopic(final String expectedTopicName) {
 		return argThat(new ArgumentMatcher<Assessment>() {
 			@Override
 			public boolean matches(Object o) {
 				Assessment a = (Assessment) o;
 				return expectedTopicName.equals(a.getTopic().getName());
+			}
+		});
+	}
+	
+	public static Assessment assessmentWithTopicAndGroup(final String expectedTopicName, final String expectedGroupName) {
+		return argThat(new ArgumentMatcher<Assessment>() {
+			@Override
+			public boolean matches(Object o) {
+				Assessment a = (Assessment) o;
+				return expectedTopicName.equals(a.getTopic().getName()) &&
+						expectedGroupName.equals(a.getGroup().getName());
+			}
+		});
+	}
+	
+	public static Assessment assessmentWithTopicAndGroupAndMessageCount(final String expectedTopicName, final String expectedGroupName, final int expectedMessageCount) {
+		return argThat(new ArgumentMatcher<Assessment>() {
+			@Override
+			public boolean matches(Object o) {
+				Assessment a = (Assessment) o;
+				return expectedTopicName.equals(a.getTopic().getName()) &&
+						expectedGroupName.equals(a.getGroup().getName()) &&
+						expectedMessageCount == a.getMessages().size();
 			}
 		});
 	}
@@ -74,10 +128,10 @@ public class LearnTestUtils {
 						expectedReinforementText.equals(r.getMessageText()) &&
 						expectedTopicName.equals(r.getTopic().getName());
 				if(!matches) {
-					System.out.println("LearnTestUtils.reinforcementWithTextAndTopic(...).new ArgumentMatcher() {...}.matches()");
-					System.out.println("\tr.id:  " + r.getId());
-					System.out.println("\tr.name:  " + r.getMessageText());
-					System.out.println("\tr.topic: " + r.getTopic().getName());
+					println("LearnTestUtils.reinforcementWithTextAndTopic(...).new ArgumentMatcher() {...}.matches()");
+					println("\tr.id:  " + r.getId());
+					println("\tr.name:  " + r.getMessageText());
+					println("\tr.topic: " + r.getTopic().getName());
 				}
 				return matches;
 			}
@@ -100,15 +154,15 @@ public class LearnTestUtils {
 						expectedAnswerC.equals(q.getAnswers()[2]) &&
 						expectedMessageText.equals(q.getMessageText());
 				if(!matches) {
-					System.out.println("LearnTestUtils.questionWithIdAndTextAndTopicAndAnswersAndMessageText(...).new ArgumentMatcher() {...}.matches()");
-					System.out.println("\tq.id: " + q.getId() + " vs " + expectedId);
-					System.out.println("\tq.type: " + q.getType() + " vs " + expectedType);
-					System.out.println("\tq.questionText: " + q.getQuestionText() + " vs " + expectedQuestionText);
-					System.out.println("\tq.topicName: " + q.getTopic().getName() + " vs " + expectedTopicName);
-					System.out.println("\tq.answerA: " + q.getAnswers()[0] + " vs " + expectedAnswerA);
-					System.out.println("\tq.answerB: " + q.getAnswers()[1] + " vs " + expectedAnswerB);
-					System.out.println("\tq.answerC: " + q.getAnswers()[2] + " vs " + expectedAnswerC);
-					System.out.println("\tq.messageText: " + q.getMessageText() + " vs " + expectedMessageText);
+					println("LearnTestUtils.questionWithIdAndTextAndTopicAndAnswersAndMessageText(...).new ArgumentMatcher() {...}.matches()");
+					println("\tq.id: " + q.getId() + " vs " + expectedId);
+					println("\tq.type: " + q.getType() + " vs " + expectedType);
+					println("\tq.questionText: " + q.getQuestionText() + " vs " + expectedQuestionText);
+					println("\tq.topicName: " + q.getTopic().getName() + " vs " + expectedTopicName);
+					println("\tq.answerA: " + q.getAnswers()[0] + " vs " + expectedAnswerA);
+					println("\tq.answerB: " + q.getAnswers()[1] + " vs " + expectedAnswerB);
+					println("\tq.answerC: " + q.getAnswers()[2] + " vs " + expectedAnswerC);
+					println("\tq.messageText: " + q.getMessageText() + " vs " + expectedMessageText);
 				}
 				return matches;
 			}
@@ -122,13 +176,47 @@ public class LearnTestUtils {
 				Question q = (Question) o;
 				final boolean matches = expectedMessageText.equals(q.getMessageText());
 				if(!matches) {
-					System.out.println("LearnTestUtils.questionWithMessage(...).new ArgumentMatcher() {...}.matches()");
-					System.out.println("\tq.qText:  " + q.getQuestionText());
-					System.out.println("\tq.type: " + q.getType());
-					System.out.println("\tq.mText: " + q.getMessageText());
+					println("LearnTestUtils.questionWithMessage(...).new ArgumentMatcher() {...}.matches()");
+					println("\tq.qText:  " + q.getQuestionText());
+					println("\tq.type: " + q.getType());
+					println("\tq.mText: " + q.getMessageText());
 				}
 				return matches;
 			}
 		});
+	}
+	
+	public static long today9am() {
+		Calendar c = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+		c.set(Calendar.HOUR_OF_DAY, 9);
+		c.set(Calendar.MINUTE, 0);
+		c.set(Calendar.SECOND, 0);
+		c.set(Calendar.MILLISECOND, 0);
+		return c.getTimeInMillis();
+	}
+	
+	private static void println(Object o, Object...fieldsAndExpectedValues) {
+		for (int i = 0; i < fieldsAndExpectedValues.length; i+=2) {
+			println(o, (String) fieldsAndExpectedValues[i], fieldsAndExpectedValues[i+1]);
+		}
+	}
+	
+	private static void println(Object o, String fieldName, Object expectedValue) {
+		try {
+			String getterName = "get" + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
+			Method getter = o.getClass().getMethod(getterName);
+			Object value = getter.invoke(o);
+			println(1, "o." + fieldName + ": " + value + " vs " + expectedValue);
+		} catch(Exception ex) {
+			throw new RuntimeException(ex);
+		}
+	}
+	
+	private static void println(int tabs, String s) {
+		println("\t" + s);
+	}
+	
+	public static void println(String s) {
+		System.out.println(s);
 	}
 }
