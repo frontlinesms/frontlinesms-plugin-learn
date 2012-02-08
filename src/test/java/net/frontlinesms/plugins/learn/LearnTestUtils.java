@@ -19,6 +19,32 @@ import net.frontlinesms.plugins.learn.data.repository.*;
 import org.mockito.ArgumentMatcher;
 
 public class LearnTestUtils {
+	public static final Long YESTERDAY, TODAY, TOMORROW;
+	
+	static {
+		final long ONE_DAY = 1000L * 60 * 60 * 24;
+		Calendar c = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+		c.set(Calendar.HOUR_OF_DAY, 9);
+		c.set(Calendar.MINUTE, 0);
+		c.set(Calendar.SECOND, 0);
+		c.set(Calendar.MILLISECOND, 0);
+		TODAY = c.getTimeInMillis();
+		
+		c.setTimeInMillis(TODAY - ONE_DAY);
+		c.set(Calendar.HOUR_OF_DAY, 9);
+		c.set(Calendar.MINUTE, 0);
+		c.set(Calendar.SECOND, 0);
+		c.set(Calendar.MILLISECOND, 0);
+		YESTERDAY = c.getTimeInMillis();
+		
+		c.setTimeInMillis(TODAY + ONE_DAY);
+		c.set(Calendar.HOUR_OF_DAY, 9);
+		c.set(Calendar.MINUTE, 0);
+		c.set(Calendar.SECOND, 0);
+		c.set(Calendar.MILLISECOND, 0);
+		TOMORROW = c.getTimeInMillis();
+	}
+	
 //> TEST HELPER METHODS
 	public static Assessment mockAssessment(String groupName, String startDate, String endDate) {
 		Assessment a = mock(Assessment.class);
@@ -27,6 +53,13 @@ public class LearnTestUtils {
 		when(a.getStartDate()).thenReturn(parseDate(startDate));
 		when(a.getEndDate()).thenReturn(parseDate(endDate));
 		return a;
+	}
+	
+	public static AssessmentMessage mockAssessmentMessage(long startDate, long endDate) {
+		AssessmentMessage m = mock(AssessmentMessage.class);
+		when(m.getStartDate()).thenReturn(startDate);
+		when(m.getEndDate()).thenReturn(endDate);
+		return m;
 	}
 	
 	public static long parseDate(String date) {
