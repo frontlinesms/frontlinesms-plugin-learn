@@ -2,6 +2,9 @@ package net.frontlinesms.plugins.learn.data.repository;
 
 import java.util.List;
 
+import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Restrictions;
+
 import net.frontlinesms.data.repository.hibernate.BaseHibernateDao;
 import net.frontlinesms.plugins.learn.data.domain.Assessment;
 import net.frontlinesms.plugins.learn.data.domain.Topic;
@@ -24,6 +27,8 @@ public class AssessmentDao extends BaseHibernateDao<Assessment> {
 	}
 
 	public List<Assessment> findAllByTopic(Topic t) {
-		return null;
+		DetachedCriteria criteria = getCriterion();
+		criteria.add(Restrictions.eq("topic", t));
+		return super.getList(criteria );
 	}
 }
