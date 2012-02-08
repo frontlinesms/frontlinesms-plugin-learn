@@ -3,9 +3,7 @@ package net.frontlinesms.plugins.learn.ui.assessment;
 import org.springframework.context.ApplicationContext;
 
 import net.frontlinesms.data.repository.GroupDao;
-import net.frontlinesms.plugins.learn.data.repository.AssessmentDao;
-import net.frontlinesms.plugins.learn.data.repository.TopicDao;
-import net.frontlinesms.plugins.learn.data.repository.TopicItemDao;
+import net.frontlinesms.plugins.learn.data.repository.*;
 import net.frontlinesms.ui.FrontlineUI;
 import net.frontlinesms.ui.ThinletUiEventHandler;
 
@@ -18,6 +16,7 @@ public class AssessmentTabHandler implements ThinletUiEventHandler {
 	private final GroupDao groupDao;
 	private final TopicItemDao topicItemDao;
 	private final AssessmentDao assessmentDao;
+	private final AssessmentMessageDao assessmentMessageDao;
 	
 	public AssessmentTabHandler(FrontlineUI ui, ApplicationContext ctx) {
 		this.ui = ui;
@@ -26,6 +25,7 @@ public class AssessmentTabHandler implements ThinletUiEventHandler {
 		groupDao = (GroupDao) ctx.getBean("groupDao");
 		topicItemDao = (TopicItemDao) ctx.getBean("topicItemDao");
 		assessmentDao = (AssessmentDao) ctx.getBean("assessmentDao");
+		assessmentMessageDao = (AssessmentMessageDao) ctx.getBean("assessmentMessageDao");
 	}
 	
 	public Object getTab() {
@@ -34,6 +34,6 @@ public class AssessmentTabHandler implements ThinletUiEventHandler {
 	
 //> UI EVENT METHODS
 	public void newAssessment() {
-		ui.add(new NewAssessmentDialogHandler(ui, assessmentDao, groupDao, topicDao, topicItemDao).getDialog());
+		ui.add(new NewAssessmentDialogHandler(ui, assessmentDao, assessmentMessageDao, groupDao, topicDao, topicItemDao).getDialog());
 	}
 }

@@ -1,5 +1,7 @@
 package net.frontlinesms.plugins.learn.ui.assessment.message;
 
+import java.util.Calendar;
+
 import net.frontlinesms.plugins.learn.data.domain.AssessmentMessage;
 import net.frontlinesms.plugins.learn.data.domain.Frequency;
 import net.frontlinesms.plugins.learn.data.domain.TopicItem;
@@ -49,8 +51,8 @@ public class NewAssessmentMessageDialogHandlerTest extends ThinletEventHandlerTe
 		assertEquals("plugins.learn.repeat.once", $("cbRepeat").getText());
 	}
 	
-	public void testStartDateInitialisedToNowish() {
-		assertEquals(TEST_DATE, h.getStartDate());
+	public void testStartDateInitialisedToNowishInLocalTimezone() {
+		assertEquals(TEST_DATE, getTimeLocal("Start"));
 	}
 	
 	public void testEndDateDisabled() {
@@ -99,8 +101,6 @@ public class NewAssessmentMessageDialogHandlerTest extends ThinletEventHandlerTe
 				TEST_DATE, Frequency.ONCE));
 		assertFalse($().isVisible());
 		verify(dialogOwner).notifyAssessmentMessageSaved(any(AssessmentMessage.class));
-		
-		TODO("check callback is made to the dialog owner (normally dgEditAssessment, but in this case a little thing just for the unit test.");
 	}
 	
 //> TEST HELPER METHODS
@@ -109,5 +109,20 @@ public class NewAssessmentMessageDialogHandlerTest extends ThinletEventHandlerTe
 			labels[i] = root + labels[i];
 		}
 		return labels;
+	}
+	
+	private long getTimeLocal(String name) {
+		Calendar c = Calendar.getInstance();
+		c.set(Calendar.MILLISECOND, 0);
+		c.set(getInteger(name + "Year"),
+				getInteger(name + "Month"),
+				getInteger(name + "DayOfMonth"),
+				getInteger(name + "Hour"),
+				getInteger(name + "Minute"), 0);
+		return c.getTimeInMillis();
+	}
+	
+	private int getInteger(String tf) {
+		return Integer.parseInt($("tf" + tf).getText());
 	}
 }

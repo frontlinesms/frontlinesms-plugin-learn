@@ -1,5 +1,7 @@
 package net.frontlinesms.plugins.learn.data.domain;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -9,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 
 import net.frontlinesms.data.domain.Group;
 
@@ -25,8 +28,8 @@ public class Assessment implements HasTopic {
 	@ManyToOne
 	private Group group;
 	
-	@OneToMany
-	private List<AssessmentMessage> messages;
+	@OneToMany @OrderBy("startDate")
+	private List<AssessmentMessage> messages = new ArrayList<AssessmentMessage>();
 	
 	public Topic getTopic() {
 		return topic;
@@ -45,6 +48,10 @@ public class Assessment implements HasTopic {
 	}
 	
 	public List<AssessmentMessage> getMessages() {
-		return messages;
+		return Collections.unmodifiableList(messages);
+	}
+
+	public void setMessages(List<AssessmentMessage> messages) {
+		this.messages = messages;
 	}
 }

@@ -10,8 +10,6 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.TimeZone;
 
-import javax.management.RuntimeErrorException;
-
 import net.frontlinesms.plugins.learn.data.domain.*;
 import net.frontlinesms.plugins.learn.data.repository.*;
 
@@ -97,9 +95,18 @@ public class LearnTestUtils {
 			@Override
 			public boolean matches(Object o) {
 				Assessment a = (Assessment) o;
-				return expectedTopicName.equals(a.getTopic().getName()) &&
+				boolean matches = expectedTopicName.equals(a.getTopic().getName()) &&
 						expectedGroupName.equals(a.getGroup().getName()) &&
 						expectedMessageCount == a.getMessages().size();
+				
+				if(!matches) {
+					System.out.println("LearnTestUtils.assessmentWithTopicAndGroupAndMessageCount(...).new ArgumentMatcher() {...}.matches()");
+					println(o, "topic.name", expectedTopicName,
+							"group.name", expectedGroupName,
+							"messages.size()", expectedMessageCount);
+				}
+				
+				return matches;
 			}
 		});
 	}
@@ -203,9 +210,17 @@ public class LearnTestUtils {
 	
 	private static void println(Object o, String fieldName, Object expectedValue) {
 		try {
-			String getterName = "get" + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
-			Method getter = o.getClass().getMethod(getterName);
-			Object value = getter.invoke(o);
+			Object value = o;
+			for(String exp : fieldName.split("\\.")) {
+				String methodName;
+				if(exp.endsWith("()")) {
+					methodName = exp.substring(0, exp.length() - 2);
+				} else {
+					methodName = "get" + exp.substring(0, 1).toUpperCase() + exp.substring(1);
+				}
+				Method m = value.getClass().getMethod(methodName);
+				value = m.invoke(value);
+			}
 			println(1, "o." + fieldName + ": " + value + " vs " + expectedValue);
 		} catch(Exception ex) {
 			throw new RuntimeException(ex);

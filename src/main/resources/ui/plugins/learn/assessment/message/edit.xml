@@ -2,6 +2,14 @@
 	<label text="i18n.plugins.learn.message.summary"/>
 	<textarea name="taSummary" editable="false"/>
 	
+	<panel name="pnStartDate">
+		<textfield name="tfStartYear"/>
+		<textfield name="tfStartMonth"/>
+		<textfield name="tfStartDayOfMonth"/>
+		<textfield name="tfStartHour"/>
+		<textfield name="tfStartMinute"/>
+	</panel>
+	
 	<label text="i18n.plugins.learn.repeat"/>
 	<combobox name="cbRepeat" editable="false" text="i18n.plugins.learn.repeat.once">
 		<choice text="i18n.plugins.learn.repeat.once"/>
