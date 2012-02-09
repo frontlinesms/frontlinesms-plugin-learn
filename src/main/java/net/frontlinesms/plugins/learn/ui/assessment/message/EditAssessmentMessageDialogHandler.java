@@ -4,7 +4,6 @@ import java.util.Calendar;
 
 import net.frontlinesms.plugins.learn.data.domain.AssessmentMessage;
 import net.frontlinesms.plugins.learn.data.domain.Frequency;
-import net.frontlinesms.plugins.learn.data.repository.AssessmentMessageDao;
 import net.frontlinesms.ui.FrontlineUI;
 import net.frontlinesms.ui.ThinletUiEventHandler;
 
@@ -14,13 +13,11 @@ public class EditAssessmentMessageDialogHandler implements ThinletUiEventHandler
 	private final FrontlineUI ui;
 	private final Object dialog;
 	private final EditAssessmentMessageDialogOwner dialogOwner;
-	private final AssessmentMessageDao dao;
 	private final AssessmentMessage assessmentMessage;
 
-	public EditAssessmentMessageDialogHandler(FrontlineUI ui, EditAssessmentMessageDialogOwner dialogOwner, AssessmentMessageDao dao, AssessmentMessage am) {
+	public EditAssessmentMessageDialogHandler(FrontlineUI ui, EditAssessmentMessageDialogOwner dialogOwner, AssessmentMessage am) {
 		this.ui = ui;
 		dialog = ui.loadComponentFromFile("/ui/plugins/learn/assessment/message/edit.xml", this);
-		this.dao = dao;
 		assessmentMessage = am;
 		this.dialogOwner = dialogOwner;
 		
@@ -54,8 +51,6 @@ public class EditAssessmentMessageDialogHandler implements ThinletUiEventHandler
 				getTextAsInteger("tfStartMinute"), 0);
 		c.set(Calendar.MILLISECOND, 0);
 		assessmentMessage.setStartDate(c.getTimeInMillis());
-		
-		dao.save(assessmentMessage);
 		
 		close();
 		

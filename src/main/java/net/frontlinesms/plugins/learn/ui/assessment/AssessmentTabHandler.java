@@ -21,7 +21,6 @@ public class AssessmentTabHandler implements ThinletUiEventHandler {
 	private final GroupDao groupDao;
 	private final TopicItemDao topicItemDao;
 	private final AssessmentDao assessmentDao;
-	private final AssessmentMessageDao assessmentMessageDao;
 	
 	public AssessmentTabHandler(FrontlineUI ui, ApplicationContext ctx) {
 		this.ui = ui;
@@ -29,7 +28,6 @@ public class AssessmentTabHandler implements ThinletUiEventHandler {
 		groupDao = (GroupDao) ctx.getBean("groupDao");
 		topicItemDao = (TopicItemDao) ctx.getBean("topicItemDao");
 		assessmentDao = (AssessmentDao) ctx.getBean("assessmentDao");
-		assessmentMessageDao = (AssessmentMessageDao) ctx.getBean("assessmentMessageDao");
 
 		tab = ui.loadComponentFromFile(XML_LAYOUT, this);
 		
@@ -47,7 +45,7 @@ public class AssessmentTabHandler implements ThinletUiEventHandler {
 	
 //> UI EVENT METHODS
 	public void newAssessment() {
-		ui.add(new NewAssessmentDialogHandler(ui, assessmentDao, assessmentMessageDao, groupDao, topicDao, topicItemDao).getDialog());
+		ui.add(new NewAssessmentDialogHandler(ui, assessmentDao, groupDao, topicDao, topicItemDao).getDialog());
 	}
 	
 	public void topicChanged(Object cbTopic) {

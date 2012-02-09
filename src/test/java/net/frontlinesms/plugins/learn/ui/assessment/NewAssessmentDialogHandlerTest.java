@@ -40,7 +40,7 @@ public class NewAssessmentDialogHandlerTest extends NewTopicChoosingDialogHandle
 	
 	@Override
 	protected NewAssessmentDialogHandler initHandler() {
-		return new NewAssessmentDialogHandler(ui, assessmentDao, null, groupDao, topicDao, topicItemDao);
+		return new NewAssessmentDialogHandler(ui, assessmentDao, /*null, */groupDao, topicDao, topicItemDao);
 	}
 	
 	@Override
@@ -138,6 +138,7 @@ public class NewAssessmentDialogHandlerTest extends NewTopicChoosingDialogHandle
 		
 		// then
 		verify(assessmentDao).save(assessmentWithTopicAndGroupAndMessageCount("Music", "Beach Boys", 1));
+		assertFalse($().isVisible());
 	}
 	
 	@Override

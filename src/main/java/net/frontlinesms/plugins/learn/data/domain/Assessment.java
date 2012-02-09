@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -18,6 +19,7 @@ import net.frontlinesms.data.domain.Group;
 @Entity
 public class Assessment implements HasTopic {
 	/** Unique id for this entity.  This is for hibernate usage. */
+	@SuppressWarnings("unused")
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(unique=true,nullable=false,updatable=false)
 	private long id;
@@ -25,7 +27,7 @@ public class Assessment implements HasTopic {
 	private Topic topic;
 	@ManyToOne
 	private Group group;
-	@OneToMany @OrderBy("startDate")
+	@OneToMany(cascade=CascadeType.ALL) @OrderBy("startDate")
 	private List<AssessmentMessage> messages = new ArrayList<AssessmentMessage>();
 	private Long startDate;
 	private Long endDate;

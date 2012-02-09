@@ -10,6 +10,7 @@ import javax.persistence.ManyToOne;
 @Entity
 public class AssessmentMessage {
 	/** Unique id for this entity.  This is for hibernate usage. */
+	@SuppressWarnings("unused")
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(unique=true,nullable=false,updatable=false)
 	private long id;

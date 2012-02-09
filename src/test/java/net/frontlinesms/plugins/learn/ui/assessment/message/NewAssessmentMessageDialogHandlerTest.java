@@ -2,10 +2,8 @@ package net.frontlinesms.plugins.learn.ui.assessment.message;
 
 import java.util.Calendar;
 
-import net.frontlinesms.plugins.learn.data.domain.AssessmentMessage;
 import net.frontlinesms.plugins.learn.data.domain.Frequency;
 import net.frontlinesms.plugins.learn.data.domain.TopicItem;
-import net.frontlinesms.plugins.learn.data.repository.AssessmentMessageDao;
 import net.frontlinesms.test.ui.ThinletEventHandlerTest;
 
 import static org.mockito.Mockito.*;
@@ -13,18 +11,17 @@ import static net.frontlinesms.plugins.learn.LearnTestUtils.*;
 
 public class NewAssessmentMessageDialogHandlerTest extends ThinletEventHandlerTest<NewAssessmentMessageDialogHandler> {
 	private long TEST_DATE;
-	private AssessmentMessageDao dao;
+//	private AssessmentMessageDao dao;
 	private TopicItem topicItem;
 	private EditAssessmentMessageDialogOwner dialogOwner;
 	
 	@Override
 	protected NewAssessmentMessageDialogHandler initHandler() {
 		TEST_DATE = today9am();
-		dao = mock(AssessmentMessageDao.class);
 		dialogOwner = mock(EditAssessmentMessageDialogOwner.class);
 		topicItem = mock(TopicItem.class);
 		when(topicItem.getMessageText()).thenReturn("Message text.");
-		NewAssessmentMessageDialogHandler dialogHandler = new NewAssessmentMessageDialogHandler(ui, dialogOwner, dao, topicItem);
+		NewAssessmentMessageDialogHandler dialogHandler = new NewAssessmentMessageDialogHandler(ui, dialogOwner, topicItem);
 		dialogHandler.setStartDate(TEST_DATE);
 		return dialogHandler;
 	}
@@ -97,10 +94,9 @@ public class NewAssessmentMessageDialogHandlerTest extends ThinletEventHandlerTe
 		$("btSave").click();
 		
 		// then
-		verify(dao).save(assessmentMessageWithTopicItemAndStartDateAndRepeat(topicItem,
-				TEST_DATE, Frequency.ONCE));
 		assertFalse($().isVisible());
-		verify(dialogOwner).notifyAssessmentMessageSaved(any(AssessmentMessage.class));
+		verify(dialogOwner).notifyAssessmentMessageSaved(assessmentMessageWithTopicItemAndStartDateAndRepeat(topicItem,
+				TEST_DATE, Frequency.ONCE));
 	}
 	
 //> TEST HELPER METHODS

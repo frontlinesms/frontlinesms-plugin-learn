@@ -4,16 +4,22 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import net.frontlinesms.data.DuplicateKeyException;
+import net.frontlinesms.data.domain.Group;
+import net.frontlinesms.data.repository.GroupDao;
 import net.frontlinesms.junit.HibernateTestCase;
 import net.frontlinesms.plugins.learn.data.domain.Assessment;
+import net.frontlinesms.plugins.learn.data.domain.AssessmentMessage;
+import net.frontlinesms.plugins.learn.data.domain.Reinforcement;
 import net.frontlinesms.plugins.learn.data.domain.Topic;
+import net.frontlinesms.plugins.learn.data.domain.TopicItem;
 
 import static java.util.Arrays.asList;
 
 public class AssessmentDaoTest extends HibernateTestCase {
 	/** dao under test */
 	@Autowired AssessmentDao dao;
+	@Autowired GroupDao groupDao;
+	@Autowired ReinforcementDao reinforcementDao;
 	@Autowired TopicDao topicDao;
 	
 	public void testSave() {
@@ -26,6 +32,23 @@ public class AssessmentDaoTest extends HibernateTestCase {
 		
 		// then
 		assertEquals(1, dao.count());
+	}
+	
+	public void testSaveWithNewMessages() throws Exception {
+		// given
+		Assessment a = new Assessment();
+		Topic t = createTopics("test")[0];
+		a.setMessages(asList(
+				newAssessmentMessage(createReinforcement(t)),
+				newAssessmentMessage(createReinforcement(t))));
+		a.setTopic(t);
+		a.setGroup(createGroup("test-group"));
+		// when
+		dao.save(a);
+		
+		// then
+		assertEquals(1, dao.count());
+		assertEquals(2, dao.list().get(0).getMessages().size());
 	}
 	
 	public void testFindAllByTopic_none() throws Exception {
@@ -85,5 +108,23 @@ public class AssessmentDaoTest extends HibernateTestCase {
 		a.setTopic(t);
 		dao.save(a);
 		return a;
+	}
+	
+	private Reinforcement createReinforcement(Topic t) {
+		Reinforcement i = new Reinforcement();
+		i.setTopic(t);
+		reinforcementDao.save(i);
+		return i;
+	}
+	
+	private Group createGroup(String name) throws Exception {
+		Group g = new Group(new Group(null, null), name);
+		groupDao.saveGroup(g);
+		return g;
+	}
+	
+	private AssessmentMessage newAssessmentMessage(TopicItem t) {
+		AssessmentMessage m = new AssessmentMessage(t);
+		return m;
 	}
 }
