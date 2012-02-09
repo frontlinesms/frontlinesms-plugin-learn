@@ -202,4 +202,39 @@ public class AssessmentTabHandlerTest extends ThinletEventHandlerTest<Assessment
 		// then
 		assertEquals(0, $("tblAssessments").getRowCount());
 	}
+	
+	public void testDoubleClickingOnAnAssessmentShouldOpenEditWindow() {
+		TODO("populate list");
+		TODO("double click");
+		TODO("check that edit window is shown");
+	}
+	
+	public void testEditAssessmentButtonShouldBeDisabledWhenNoAssessmentIsSelected() {
+		TODO("check that button is disabled");
+	}
+	
+	public void testEditAssessmentButtonShouldBeDisabledAfterAssessmentListIsCleared() {
+		// given
+		TODO("select assessment");
+		TODO("check button is enabled");
+		
+		// when
+		TODO("change view-by");
+		
+		// then
+		TODO("check list is empty");
+		TODO("button is disabled");
+	}
+	
+	public void testEditAssesmentButtonShouldOpenEditWindow() {
+		// given
+		TODO("populate list");
+		
+		// when
+		TODO("select assessment");
+		TODO("click button");
+		
+		// then
+		TODO("check that edit window is shown");
+	}
 }

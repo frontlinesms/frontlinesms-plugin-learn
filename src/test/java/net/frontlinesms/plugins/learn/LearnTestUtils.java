@@ -128,14 +128,14 @@ public class LearnTestUtils {
 				
 				boolean matches = expectedTopicItem == m.getTopicItem() &&
 						expectedStartDate == m.getStartDate() &&
-						null == m.getEndDate() &&
+						expectedStartDate == m.getEndDate() &&
 						expectedFrequency == m.getFrequency();
 				
 				if(!matches) {
 					System.out.println("LearnTestUtils.assessmentMessageWithTopicItemAndStartDateAndRepeat(...).new ArgumentMatcher() {...}.matches()");
 					println(o, "topicItem", expectedTopicItem,
 							"startDate", expectedStartDate,
-							"endDate", null,
+							"endDate", expectedStartDate,
 							"frequency", expectedFrequency);
 				}
 				
