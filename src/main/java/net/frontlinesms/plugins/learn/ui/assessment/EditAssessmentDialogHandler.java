@@ -1,6 +1,7 @@
 package net.frontlinesms.plugins.learn.ui.assessment;
 
 import java.util.LinkedList;
+import java.util.List;
 
 import net.frontlinesms.data.domain.Group;
 import net.frontlinesms.data.repository.GroupDao;
@@ -23,13 +24,27 @@ public class EditAssessmentDialogHandler extends TopicChoosingDialogHandler<Asse
 	private final GroupDao groupDao;
 	private final TopicItemDao topicItemDao;
 	
-	public EditAssessmentDialogHandler(FrontlineUI ui, AssessmentDao assementDao, GroupDao groupDao, TopicDao topicDao, TopicItemDao topicItemDao, Assessment a) {
+	public EditAssessmentDialogHandler(FrontlineUI ui, AssessmentDao assessmentDao, GroupDao groupDao, TopicDao topicDao, TopicItemDao topicItemDao, Assessment a) {
 		super(ui, topicDao, a);
-		this.assessmentDao = assementDao;
+		this.assessmentDao = assessmentDao;
 		this.groupDao = groupDao;
 		this.topicItemDao = topicItemDao;
 		
 		validate(null);
+		
+		if(a.getGroup() != null) {
+			groupSelectionCompleted(a.getGroup());
+		}
+		
+		if(a.getTopic() != null) {
+			Object table = find("tbMessages");
+			List<TopicItem> topicItems = topicItemDao.getAllByTopic(a.getTopic());
+			for(TopicItem topicItem : topicItems) {
+				AssessmentMessage m = a.getMessage(topicItem);
+				if(m != null) ui.add(table, createTableRow(m));
+				else ui.add(table, createTableRow(topicItem));
+			}
+		}
 	}
 
 	@Override
@@ -42,7 +57,6 @@ public class EditAssessmentDialogHandler extends TopicChoosingDialogHandler<Asse
 		LinkedList<AssessmentMessage> messages = new LinkedList<AssessmentMessage>();
 		for(Object c : ui.getItems(find("tbMessages"))) {
 			Object attachment = ui.getAttachedObject(c);
-			System.out.println("Attachment: " + attachment);
 			if(attachment instanceof AssessmentMessage)
 				messages.add((AssessmentMessage) attachment);
 		}

@@ -46,6 +46,22 @@ public class LearnTestUtils {
 	}
 	
 //> TEST HELPER METHODS
+	public static AssessmentMessage mockAssessmentWithTopicItem(TopicItem i) {
+		AssessmentMessage m = mock(AssessmentMessage.class);
+		when(m.getTopicItem()).thenReturn(i);
+		when(m.getFrequency()).thenReturn(Frequency.ONCE);
+		return m;
+	}
+	
+	public static TopicItem[] mockTopicItems(int count) {
+		TopicItem[] items = new TopicItem[count];
+		for (int i = 0; i < items.length; i++) {
+			items[i] = mock(TopicItem.class);
+			when(items[i].getMessageText()).thenReturn("mock topic item: " + i);
+		}
+		return items;
+	}
+	
 	public static Assessment mockAssessmentWithGroup(String groupName, String startDate, String endDate) {
 		Assessment a = mock(Assessment.class);
 		Group g = mockGroup(groupName);

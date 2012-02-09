@@ -13,11 +13,12 @@
 			</panel>
 		</panel>
 		
-		<table name="tblAssessments" weightx="1" weighty="1" colspan="2">
+		<table name="tblAssessments" weightx="1" weighty="1" colspan="2" perform="editAssessment" action="assessmentSelectionChanged">
 			<header/>
 		</table>
 		<panel colspan="2">
 			<button name="btNewAssessment" action="newAssessment" text="i18n.plugins.learn.assessment.new" icon="/icons/plugins/learn/add.png" halign="left"/>
+			<button name="btEditAssessment" action="editAssessment" text="i18n.plugins.learn.assessment.edit" enabled="false"/>
 		</panel>
 	</panel>
 </tab>

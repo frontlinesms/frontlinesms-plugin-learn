@@ -57,12 +57,19 @@ public class AssessmentTabHandler implements ThinletUiEventHandler, SingleGroupS
 		ui.add(new NewAssessmentDialogHandler(ui, assessmentDao, groupDao, topicDao, topicItemDao).getDialog());
 	}
 	
+	public void editAssessment() {
+		ui.add(new EditAssessmentDialogHandler(ui, assessmentDao, groupDao, topicDao, topicItemDao, getSelectedAssessment()).getDialog());
+	}
+	
+	public void assessmentSelectionChanged() {
+		ui.setEnabled(find("btEditAssessment"), getSelectedAssessment()!=null);
+	}
+	
 	public void topicChanged(Object cbTopic) {
 		Object selectedItem = ui.getSelectedItem(cbTopic);
 		Topic t = ui.getAttachedObject(selectedItem, Topic.class);
 		
-		Object assessmentsTable = find("tblAssessments");
-		ui.removeAll(assessmentsTable);
+		Object assessmentsTable = clearAssessmentTable();
 		if(t != null) {
 			for(Assessment a : assessmentDao.findAllByTopic(t)) {
 				ui.add(assessmentsTable, createRow(a, true));
@@ -82,6 +89,10 @@ public class AssessmentTabHandler implements ThinletUiEventHandler, SingleGroupS
 	}
 
 //> UI HELPER METHODS
+	private Assessment getSelectedAssessment() {
+		return ui.getAttachedObject(ui.getSelectedItem(find("tblAssessments")), Assessment.class);
+	}
+	
 	private void setViewBy(String viewBy) {
 		boolean topic = viewBy.equals("topic");
 		ui.setVisible(find("cbTopic"), topic);
@@ -94,11 +105,9 @@ public class AssessmentTabHandler implements ThinletUiEventHandler, SingleGroupS
 			}
 		}
 		
-		Object assessmentsTable = find("tblAssessments");
+		Object assessmentsTable = clearAssessmentTable();
 		
-		ui.removeAll(assessmentsTable);
 		Object tableHeader = Thinlet.get(assessmentsTable, Thinlet.HEADER);
-		
 		ui.removeAll(tableHeader);
 		for(String columnTitle : topic? TOPIC_COLUMN_TITLES: CLASS_COLUMN_TITLES) {
 			ui.add(tableHeader, ui.createColumn(
@@ -122,10 +131,16 @@ public class AssessmentTabHandler implements ThinletUiEventHandler, SingleGroupS
 		return row;
 	}
 	
+	private Object clearAssessmentTable() {
+		Object table = find("tblAssessments");
+		ui.removeAll(table);
+		assessmentSelectionChanged();
+		return table;
+	}
+	
 //> GROUP SELECTION METHODS
 	public void groupSelectionCompleted(Group group) {
-		Object assessmentsTable = find("tblAssessments");
-		ui.removeAll(assessmentsTable);
+		Object assessmentsTable = clearAssessmentTable();
 		if(group != null) {
 			for(Assessment a : assessmentDao.findAllByGroup(group)) {
 				ui.add(assessmentsTable, createRow(a, false));

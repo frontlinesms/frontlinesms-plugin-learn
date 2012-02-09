@@ -71,4 +71,13 @@ public class Assessment implements HasTopic {
 		}
 		return lastEndDate==-1? null: lastEndDate;
 	}
+
+	public AssessmentMessage getMessage(TopicItem topicItem) {
+		for(AssessmentMessage m : messages) {
+			if(m.getTopicItem().equals(topicItem)) {
+				return m;
+			}
+		}
+		return null;
+	}
 }

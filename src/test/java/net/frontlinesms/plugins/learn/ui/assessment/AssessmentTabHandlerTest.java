@@ -189,12 +189,7 @@ public class AssessmentTabHandlerTest extends ThinletEventHandlerTest<Assessment
 	
 	public void testListShouldEmptyWhenChangingToByClass() {
 		// given
-		List<Assessment> assessments = asList(
-				mockAssessmentWithGroup("Space mutants", "20/12/11", "13/12/12"),
-				mockAssessmentWithGroup("Biker mice", "3/4/12", "14/4/12"));
-		when(assessmentDao.findAllByTopic(any(Topic.class))).thenReturn(assessments);
-		$("cbTopic").setSelected("Music");
-		assertEquals(2, $("tblAssessments").getRowCount());
+		populateAssessmentListForTopic();
 
 		// when
 		$("cbViewBy_class").select();
@@ -204,37 +199,56 @@ public class AssessmentTabHandlerTest extends ThinletEventHandlerTest<Assessment
 	}
 	
 	public void testDoubleClickingOnAnAssessmentShouldOpenEditWindow() {
-		TODO("populate list");
-		TODO("double click");
-		TODO("check that edit window is shown");
+		// given
+		populateAssessmentListForTopic();
+
+		// when
+		$("tblAssessments").getRow(0).doubleClick();
+
+		// then
+		assertTrue($("dgEditAssessment").isVisible());
 	}
-	
+
 	public void testEditAssessmentButtonShouldBeDisabledWhenNoAssessmentIsSelected() {
-		TODO("check that button is disabled");
+		assertFalse($("btEditAssessment").isEnabled());
 	}
 	
 	public void testEditAssessmentButtonShouldBeDisabledAfterAssessmentListIsCleared() {
 		// given
-		TODO("select assessment");
-		TODO("check button is enabled");
+		populateAssessmentListForTopic();
+
+		// when
+		$("tblAssessments").getRow(0).select();
+		// then
+		assertTrue($("btEditAssessment").isEnabled());
 		
 		// when
-		TODO("change view-by");
+		$("cbViewBy_class").select();
 		
 		// then
-		TODO("check list is empty");
-		TODO("button is disabled");
+		assertEquals(0, $("tblAssessments").getRowCount());
+		assertFalse($("btEditAssessment").isEnabled());
 	}
 	
 	public void testEditAssesmentButtonShouldOpenEditWindow() {
 		// given
-		TODO("populate list");
-		
+		populateAssessmentListForTopic();
+
 		// when
-		TODO("select assessment");
-		TODO("click button");
+		$("tblAssessments").getRow(0).select();
+		$("btEditAssessment").click();
 		
 		// then
-		TODO("check that edit window is shown");
+		assertTrue($("dgEditAssessment").isVisible());
+	}
+	
+//> TEST HELPER METHODS
+	private void populateAssessmentListForTopic() {
+		List<Assessment> assessments = asList(
+				mockAssessmentWithGroup("Space mutants", "20/12/11", "13/12/12"),
+				mockAssessmentWithGroup("Biker mice", "3/4/12", "14/4/12"));
+		when(assessmentDao.findAllByTopic(any(Topic.class))).thenReturn(assessments);
+		$("cbTopic").setSelected("Music");
+		assertEquals(2, $("tblAssessments").getRowCount());
 	}
 }

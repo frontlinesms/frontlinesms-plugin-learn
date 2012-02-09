@@ -9,6 +9,7 @@ import net.frontlinesms.data.repository.GroupDao;
 import net.frontlinesms.junit.HibernateTestCase;
 import net.frontlinesms.plugins.learn.data.domain.Assessment;
 import net.frontlinesms.plugins.learn.data.domain.AssessmentMessage;
+import net.frontlinesms.plugins.learn.data.domain.Frequency;
 import net.frontlinesms.plugins.learn.data.domain.Reinforcement;
 import net.frontlinesms.plugins.learn.data.domain.Topic;
 import net.frontlinesms.plugins.learn.data.domain.TopicItem;
@@ -142,6 +143,7 @@ public class AssessmentDaoTest extends HibernateTestCase {
 		AssessmentMessage m = new AssessmentMessage();
 		m.setStartDate(YESTERDAY);
 		m.setEndDate(TOMORROW);
+		m.setFrequency(Frequency.DAILY);
 		Assessment a = new Assessment();
 		a.setMessages(asList(m));
 		dao.save(a);

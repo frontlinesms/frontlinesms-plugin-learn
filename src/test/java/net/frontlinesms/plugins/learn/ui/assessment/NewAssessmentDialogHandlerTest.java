@@ -167,7 +167,7 @@ public class NewAssessmentDialogHandlerTest extends NewTopicChoosingDialogHandle
 		when(m.getTopicItem()).thenReturn(fakeTopicItems.get(0));
 		when(m.getStartDate()).thenReturn(TODAY);
 		when(m.getFrequency()).thenReturn(Frequency.ONCE);
-		when(m.getEndDate()).thenReturn(null);
+		when(m.getEndDate()).thenReturn(TODAY);
 
 		// when
 		h.notifyAssessmentMessageSaved(m);
@@ -175,7 +175,20 @@ public class NewAssessmentDialogHandlerTest extends NewTopicChoosingDialogHandle
 		// then
 		assertTrue($("btSave").isEnabled());
 	}
+	
+	public void testSettingGroupLastEnablesSaveButton() {
+		// given
+		setValidValuesExcept("tfGroup");
+		assertFalse($("btSave").isEnabled());
+		
+		// when
+		setValidValue("tfGroup");
+		
+		// then
+		assertTrue($("btSave").isEnabled());
+	}
 
+//> TEST HELPER METHODS
 	private TopicItem fakeTopicItem(String messageText) {
 		TopicItem topicItem = new TopicItem() {};
 		topicItem.setMessageText(messageText);
