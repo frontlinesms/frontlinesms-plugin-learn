@@ -2,6 +2,8 @@ package net.frontlinesms.plugins.learn.ui.assessment;
 
 import java.util.List;
 
+import net.frontlinesms.data.domain.Group;
+import net.frontlinesms.data.repository.GroupDao;
 import net.frontlinesms.plugins.learn.data.domain.Assessment;
 import net.frontlinesms.plugins.learn.data.domain.Topic;
 import net.frontlinesms.plugins.learn.data.repository.*;
@@ -16,6 +18,7 @@ import static java.util.Arrays.asList;
 
 public class AssessmentTabHandlerTest extends ThinletEventHandlerTest<AssessmentTabHandler> {
 	@SuppressWarnings("unused")
+	@MockBean private GroupDao groupDao;
 	@MockBean private TopicDao topicDao;
 	@MockBean private AssessmentDao assessmentDao;
 
@@ -41,14 +44,95 @@ public class AssessmentTabHandlerTest extends ThinletEventHandlerTest<Assessment
 		assertEquals("plugins.learn.assessment.new", $("dgEditAssessment").getText());
 	}
 	
+	public void testListByClassTableHeaders() {
+		// given
+		$("cbViewBy_class").select();
+		
+		// then
+		assertEquals("Column titles",
+				array("plugins.learn.topic",
+						"plugins.learn.assessment.start",
+						"plugins.learn.assessment.end"),
+				$("tblAssessments").getColumnText());
+	}
+	
+	public void testListByClassTableContents() {
+		// given
+		List<Assessment> assessments = asList(mockAssessment("Space mutants", "20/12/11", "13/12/12"),
+				mockAssessment("Biker mice", "3/4/12", "14/4/12"));
+		when(assessmentDao.findAllByGroup(any(Group.class))).thenReturn(assessments);
+		
+		// when
+		$("cbViewBy_class").select();
+		h.groupSelectionCompleted(mock(Group.class));
+		
+		// then
+		assertEquals("First row contents.",
+				new String[]{ "Space mutants", "20/12/11", "13/12/12" },
+				$("tblAssessments").getRowText(0));
+		assertEquals("Second row contents.",
+				new String[]{ "Biker mice", "3/4/12", "14/4/12" },
+				$("tblAssessments").getRowText(1));
+	}
+	
+	public void testTopicChoiceVisibleByDefault() {
+		assertTrue($("cbTopic").isVisible());
+	}
+	
+	public void testTopicChoiceHiddenWhenViewingByClass() {
+		// when
+		$("cbViewBy_class").select();
+		// then
+		assertFalse($("cbTopic").isVisible());
+	}
+	
+	public void testTopicChoiceShowAgainWhenViewingByTopicAfterViewingByClass() {
+		// given
+		$("cbViewBy_class").select();
+		assertFalse($("cbTopic").isVisible());
+		
+		// when
+		$("cbViewBy_topic").select();
+		
+		// then
+		assertTrue($("cbTopic").isVisible());
+	}
+	
+	public void testClassSelecterInitialisedEmptyAndNotEditable() {
+		assertEquals("", $("tfClass").getText());
+		assertFalse($("tfClass").isEditable());
+	}
+	
+	public void testGroupSelecterControlsHiddenWhenViewingByTopic() {
+		// given we're viewing by topic by default
+		// then
+		assertFalse($("pnClass").isVisible());
+	}
+	
+	public void testGroupSelecterControlsShownWhenViewingByClass() {
+		// when
+		$("cbViewBy_class").select();
+		// then
+		assertTrue($("pnClass").isVisible());
+	}
+	
+	public void testClassSelecterTriggerButton() {
+		// given
+		$("cbViewBy_class").select();
+		// when
+		$("btSelectClass").click();
+		// then
+		$("dgGroupSelecter").isVisible();
+	}
+	
 	public void testListByTopicTableHeaders() {
 		// given we are already viewing by topic
 		
 		// then
 		assertEquals("Column titles",
-				new String[]{ "plugins.learn.group",
+				array("plugins.learn.group",
 						"plugins.learn.assessment.start",
-						"plugins.learn.assessment.end" },
+						"plugins.learn.assessment.end"),
 				$("tblAssessments").getColumnText());
 	}
 	

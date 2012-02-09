@@ -5,6 +5,7 @@ import java.util.List;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Restrictions;
 
+import net.frontlinesms.data.domain.Group;
 import net.frontlinesms.data.repository.hibernate.BaseHibernateDao;
 import net.frontlinesms.plugins.learn.data.domain.Assessment;
 import net.frontlinesms.plugins.learn.data.domain.Topic;
@@ -30,5 +31,9 @@ public class AssessmentDao extends BaseHibernateDao<Assessment> {
 		DetachedCriteria criteria = getCriterion();
 		criteria.add(Restrictions.eq("topic", t));
 		return super.getList(criteria );
+	}
+	
+	public List<Assessment> findAllByGroup(Group g) {
+		return null;
 	}
 }

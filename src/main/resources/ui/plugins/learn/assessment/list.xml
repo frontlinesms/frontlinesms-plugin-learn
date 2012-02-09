@@ -1,12 +1,16 @@
 <tab name="tbAssessments" text="i18n.plugins.learn.assessment.tab.title">
 	<panel columns="1" weightx="1" weighty="1" gap="8" left="8" right="8" top="8" bottom="8">
+		<checkbox name="cbViewBy_topic" group="cbViewBy" action="setViewBy(this)"/>
 		<combobox name="cbTopic" action="topicChanged(this)"/>
+		
+		<checkbox name="cbViewBy_class" group="cbViewBy" action="setViewBy(this)"/>
+		<panel name="pnClass">
+			<textfield name="tfClass" editable="false"/>
+			<button name="btSelectClass" action="selectGroup"/>
+		</panel>
+		
 		<table name="tblAssessments">
-			<header>
-				<column text="i18n.plugins.learn.group"/>
-				<column text="i18n.plugins.learn.assessment.start"/>
-				<column text="i18n.plugins.learn.assessment.end"/>
-			</header>
+			<header/>
 		</table>
 		<button name="btNewAssessment" action="newAssessment" text="i18n.plugins.learn.assessment.new" icon="/icons/plugins/learn/add.png"/>
 	</panel>

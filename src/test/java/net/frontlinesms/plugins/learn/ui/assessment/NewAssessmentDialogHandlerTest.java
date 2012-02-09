@@ -67,13 +67,13 @@ public class NewAssessmentDialogHandlerTest extends NewTopicChoosingDialogHandle
 		assertEquals("plugins.learn.assessment.new", $().getText());
 	}
 	
+	public void testMessagesInitialisedEmpty() {
+		assertEquals(0, $("tbMessages").getChildCount());
+	}
+	
 	public void testGroupSelecterInitialisedEmptyAndNotEditable() {
 		assertEquals("", $("tfGroup").getText());
 		assertFalse($("tfGroup").isEditable());
-	}
-	
-	public void testMessagesInitialisedEmpty() {
-		assertEquals(0, $("tbMessages").getChildCount());
 	}
 	
 	public void testGroupSelecterTriggerButton() {
@@ -103,7 +103,7 @@ public class NewAssessmentDialogHandlerTest extends NewTopicChoosingDialogHandle
 		assertTrue($("dgEditAssessmentMessage").isVisible());
 	}
 	
-	public void testGroupInitialisation() {
+	public void testGroupValidation() {
 		// given
 		setValidValuesExcept("tfGroup");
 		// then
