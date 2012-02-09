@@ -19,7 +19,7 @@ public class AssessmentTabHandler implements ThinletUiEventHandler, SingleGroupS
 	private static final String XML_LAYOUT = "/ui/plugins/learn/assessment/list.xml";
 
 	private static final String[] TOPIC_COLUMN_TITLES = {
-		"plugins.learn.group",
+		"plugins.learn.assessment.class",
 		"plugins.learn.assessment.start",
 		"plugins.learn.assessment.end"
 	};
@@ -88,6 +88,7 @@ public class AssessmentTabHandler implements ThinletUiEventHandler, SingleGroupS
 		ui.setVisible(find("pnClass"), !topic);
 		if(topic) {
 			Object cbTopic = find("cbTopic");
+			ui.removeAll(cbTopic);
 			for(Topic t : topicDao.list()) {
 				ui.add(cbTopic, ui.createComboboxChoice(t.getName(), t));
 			}
@@ -95,7 +96,9 @@ public class AssessmentTabHandler implements ThinletUiEventHandler, SingleGroupS
 		Object tableHeader = Thinlet.get(find("tblAssessments"), Thinlet.HEADER);
 		ui.removeAll(tableHeader);
 		for(String columnTitle : topic? TOPIC_COLUMN_TITLES: CLASS_COLUMN_TITLES) {
-			ui.add(tableHeader, ui.createColumn(columnTitle, null));
+			ui.add(tableHeader, ui.createColumn(
+					InternationalisationUtils.getI18nString(columnTitle),
+					null));
 		}
 	}
 	

@@ -1,17 +1,23 @@
 <tab name="tbAssessments" text="i18n.plugins.learn.assessment.tab.title">
-	<panel columns="1" weightx="1" weighty="1" gap="8" left="8" right="8" top="8" bottom="8">
-		<checkbox name="cbViewBy_topic" group="cbViewBy" action="setViewBy(this)"/>
-		<combobox name="cbTopic" action="topicChanged(this)"/>
-		
-		<checkbox name="cbViewBy_class" group="cbViewBy" action="setViewBy(this)"/>
-		<panel name="pnClass">
-			<textfield name="tfClass" editable="false"/>
-			<button name="btSelectClass" action="selectGroup"/>
+	<panel columns="2" weightx="1" weighty="1" gap="8" left="8" right="8" top="8" bottom="8">
+		<checkbox text="i18n.plugins.learn.assessment.viewby.topic" name="cbViewBy_topic" group="cbViewBy" action="setViewBy(this)" selected="true"/>
+		<panel>
+			<combobox name="cbTopic" action="topicChanged(this)"/>
 		</panel>
 		
-		<table name="tblAssessments">
+		<checkbox text="i18n.plugins.learn.assessment.viewby.class" name="cbViewBy_class" group="cbViewBy" action="setViewBy(this)"/>
+		<panel>
+			<panel name="pnClass">
+				<textfield name="tfClass" editable="false"/>
+				<button name="btSelectClass" action="selectGroup" icon="/icons/group.png"/>
+			</panel>
+		</panel>
+		
+		<table name="tblAssessments" weightx="1" weighty="1" colspan="2">
 			<header/>
 		</table>
-		<button name="btNewAssessment" action="newAssessment" text="i18n.plugins.learn.assessment.new" icon="/icons/plugins/learn/add.png"/>
+		<panel colspan="2">
+			<button name="btNewAssessment" action="newAssessment" text="i18n.plugins.learn.assessment.new" icon="/icons/plugins/learn/add.png" halign="left"/>
+		</panel>
 	</panel>
 </tab>

@@ -1,17 +1,14 @@
 <dialog name="dgEditAssessment" columns="3" gap="8" close="close" text="i18n.plugins.learn.assessment.edit" left="8" right="8" top="8" bottom="8" modal="true">
  	<label text="i18n.plugins.learn.topic"/>
-	<combobox name="cbTopic" action="validate(this)" text="i18n.plugins.learn.topic.choose" editable="false"/>
+	<combobox name="cbTopic" action="validate(this)" text="i18n.plugins.learn.topic.choose" editable="false" colspan="2"/>
 	
-	<label text="i18n.plugins.learn.assessment.group.select"/>
+	<label text="i18n.plugins.learn.assessment.class"/>
 	<textfield name="tfGroup" editable="false"/>
-	<button name="btSelectGroup" action="selectGroup"/>
+	<button name="btSelectGroup" action="selectGroup" icon="/icons/group.png"/>
 	
-<!--	<label text="i18n.plugins.learn.reinforcement.message" valign="top"/>
-	<textarea name="taText" action="validate"/> -->
-	
-	<table name="tbMessages" perform="editMessage(this)"/>
+	<table name="tbMessages" perform="editMessage(this)" colspan="3"/>
 
-	<panel colspan="2" columns="2" gap="8" halign="center">
+	<panel colspan="3" columns="2" gap="8" halign="center">
 		<button name="btSave" text="i18n.action.save" icon="/icons/tick.png" action="save"/>
 		<button name="btCancel" text="i18n.action.cancel" icon="/icons/cross.png" action="close"/>
 	</panel>

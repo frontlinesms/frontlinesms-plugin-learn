@@ -13,7 +13,6 @@
 	<tx:annotation-driven />
 	
 	<bean id="assessmentDao" parent="baseHibernateDao" class="net.frontlinesms.plugins.learn.data.repository.AssessmentDao"/>
-	<bean id="assessmentMessageDao" parent="baseHibernateDao" class="net.frontlinesms.plugins.learn.data.repository.AssessmentMessageDao"/>
 	<bean id="questionDao" parent="baseHibernateDao" class="net.frontlinesms.plugins.learn.data.repository.QuestionDao"/>
 	<bean id="reinforcementDao" parent="baseHibernateDao" class="net.frontlinesms.plugins.learn.data.repository.ReinforcementDao"/>
 	<bean id="topicItemDao" parent="baseHibernateDao" class="net.frontlinesms.plugins.learn.data.repository.TopicItemDao"/>

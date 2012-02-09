@@ -1,7 +1,8 @@
-<dialog name="dgEditAssessmentMessage" columns="2" gap="8" close="close" text="i18n.plugins.learn.assessment.message.edit" left="8" right="8" top="8" bottom="8" modal="true">
-	<label text="i18n.plugins.learn.message.summary"/>
+<dialog name="dgEditAssessmentMessage" columns="2" gap="8" close="close" text="i18n.plugins.learn.frequency.once" left="8" right="8" top="8" bottom="8" modal="true">
+	<label text="i18n.plugins.learn.message.summary" valign="top"/>
 	<textarea name="taSummary" editable="false"/>
 	
+	<label text="i18n.plugins.learn.message.date.start"/>
 	<panel name="pnStartDate">
 		<textfield name="tfStartYear"/>
 		<textfield name="tfStartMonth"/>
@@ -10,14 +11,15 @@
 		<textfield name="tfStartMinute"/>
 	</panel>
 	
-	<label text="i18n.plugins.learn.repeat"/>
-	<combobox name="cbRepeat" editable="false" text="i18n.plugins.learn.repeat.once">
-		<choice text="i18n.plugins.learn.repeat.once"/>
-		<choice text="i18n.plugins.learn.repeat.daily"/>
-		<choice text="i18n.plugins.learn.repeat.weekly"/>
-		<choice text="i18n.plugins.learn.repeat.monthly"/>
+	<label text="i18n.plugins.learn.message.repeat"/>
+	<combobox name="cbRepeat" editable="false" text="i18n.plugins.learn.frequency.once">
+		<choice text="i18n.plugins.learn.frequency.once"/>
+		<choice text="i18n.plugins.learn.frequency.daily"/>
+		<choice text="i18n.plugins.learn.frequency.weekly"/>
+		<choice text="i18n.plugins.learn.frequency.monthly"/>
 	</combobox>
 	
+	<label text="i18n.plugins.learn.message.date.end"/>
 	<panel name="pnEndDate">
 	</panel>
 	

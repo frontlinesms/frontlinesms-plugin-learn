@@ -11,7 +11,7 @@
 		<checkbox group="rbType" name="rbType_multichoice" action="validate(this)" text="i18n.plugins.learn.question.type.multichoice"/>
 	</panel>
 	
-	<label text="i18n.plugins.learn.type.multichoice.options" valign="top"/>
+	<label text="i18n.plugins.learn.question.type.multichoice.options" valign="top"/>
 	<panel name="pnMultichoice" gap="8" columns="2">
 		<label text="A)"/>
 		<textfield name="tfMultichoice1" action="validate(this)"/>
