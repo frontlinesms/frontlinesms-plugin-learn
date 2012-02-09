@@ -30,10 +30,12 @@ public class AssessmentDao extends BaseHibernateDao<Assessment> {
 	public List<Assessment> findAllByTopic(Topic t) {
 		DetachedCriteria criteria = getCriterion();
 		criteria.add(Restrictions.eq("topic", t));
-		return super.getList(criteria );
+		return super.getList(criteria);
 	}
 	
 	public List<Assessment> findAllByGroup(Group g) {
-		return null;
+		DetachedCriteria criteria = getCriterion();
+		criteria.add(Restrictions.eq("group", g));
+		return super.getList(criteria);
 	}
 }
