@@ -17,6 +17,7 @@ import net.frontlinesms.plugins.learn.ui.topic.TopicChoosingDialogHandler;
 import net.frontlinesms.ui.FrontlineUI;
 import net.frontlinesms.ui.handler.contacts.GroupSelecterDialog;
 import net.frontlinesms.ui.handler.contacts.SingleGroupSelecterDialogOwner;
+import net.frontlinesms.ui.i18n.InternationalisationUtils;
 
 public class EditAssessmentDialogHandler extends TopicChoosingDialogHandler<Assessment> implements SingleGroupSelecterDialogOwner, EditAssessmentMessageDialogOwner {
 	private final AssessmentDao assessmentDao;
@@ -97,6 +98,14 @@ public class EditAssessmentDialogHandler extends TopicChoosingDialogHandler<Asse
 	private Object createTableRow(TopicItem t) {
 		return ui.createTableRow(t, t.getMessageText());
 	}
+
+	private Object createTableRow(AssessmentMessage m) {
+		Long endDate = m.getEndDate();
+		return ui.createTableRow(m, m.getTopicItem().getMessageText(),
+				InternationalisationUtils.formatDate(m.getStartDate()),
+				InternationalisationUtils.getI18nString(m.getFrequency().getI18nKey()),
+				endDate==null?"":InternationalisationUtils.formatDate(endDate));
+	}
 	
 //> GROUP SELECTION METHODS
 	public void groupSelectionCompleted(Group g) {
@@ -105,5 +114,25 @@ public class EditAssessmentDialogHandler extends TopicChoosingDialogHandler<Asse
 	}
 	
 //> ASSESSMENT MESSAGE NOTIFICATION METHODS
-	public void notifyAssessmentMessageSaved(AssessmentMessage assessment) {}
+	public void notifyAssessmentMessageSaved(AssessmentMessage assessmentMessage) {
+		// TODO find the tableitem for the relevant topic item
+		Object table = find("tbMessages");
+		Object[] rows = ui.getItems(table);
+		for (int i = 0; i < rows.length; i++) {
+			Object row = rows[i];
+			Object attachment = ui.getAttachedObject(row);
+			TopicItem ti = null;
+			if(attachment instanceof TopicItem) {
+				ti = (TopicItem) attachment;
+			} else if (attachment instanceof AssessmentMessage) {
+				ti = ((AssessmentMessage) attachment).getTopicItem();
+			}
+			if(ti != null) {
+				ui.remove(row);
+				ui.add(table, createTableRow(assessmentMessage), i);
+			}
+		}
+		
+		validate(table);
+	}
 }

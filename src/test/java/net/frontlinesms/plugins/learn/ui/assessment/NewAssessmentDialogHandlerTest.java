@@ -5,6 +5,7 @@ import java.util.List;
 import net.frontlinesms.data.domain.Group;
 import net.frontlinesms.data.repository.GroupDao;
 import net.frontlinesms.plugins.learn.data.domain.AssessmentMessage;
+import net.frontlinesms.plugins.learn.data.domain.Frequency;
 import net.frontlinesms.plugins.learn.data.domain.Topic;
 import net.frontlinesms.plugins.learn.data.domain.TopicItem;
 import net.frontlinesms.plugins.learn.data.repository.AssessmentDao;
@@ -20,14 +21,18 @@ public class NewAssessmentDialogHandlerTest extends NewTopicChoosingDialogHandle
 	@MockBean private AssessmentDao assessmentDao;
 	@MockBean private GroupDao groupDao;
 	@MockBean private TopicItemDao topicItemDao;
+	
+	private List<TopicItem> fakeTopicItems;
 
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
 		
+		fakeTopicItems = asList(
+				fakeTopicItem("Item 1"), fakeTopicItem("Item 2"));
+		
 		when(topicItemDao.getAllByTopic(any(Topic.class)))
-				.thenReturn(asList(
-						fakeTopicItem("Item 1"), fakeTopicItem("Item 2")));
+				.thenReturn(fakeTopicItems);
 		
 		List<Group> groups = asList(mockGroup("Jets"), mockGroup("Sharks"));
 		when(groupDao.getChildGroups(null)).thenReturn(groups);
@@ -149,6 +154,24 @@ public class NewAssessmentDialogHandlerTest extends NewTopicChoosingDialogHandle
 		setValidValue("tbMessages");
 		
 		// then save is enabled
+		assertTrue($("btSave").isEnabled());
+	}
+	
+	public void testNewAssessmentNotification() {
+		// given
+		setValidValuesExcept("tbMessages");
+		assertFalse($("btSave").isEnabled());
+		
+		AssessmentMessage m = mock(AssessmentMessage.class);
+		when(m.getTopicItem()).thenReturn(fakeTopicItems.get(0));
+		when(m.getStartDate()).thenReturn(TODAY);
+		when(m.getFrequency()).thenReturn(Frequency.ONCE);
+		when(m.getEndDate()).thenReturn(null);
+
+		// when
+		h.notifyAssessmentMessageSaved(m);
+
+		// then
 		assertTrue($("btSave").isEnabled());
 	}
 
