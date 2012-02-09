@@ -29,8 +29,6 @@ public class Assessment implements HasTopic {
 	private Group group;
 	@OneToMany(cascade=CascadeType.ALL) @OrderBy("startDate")
 	private List<AssessmentMessage> messages = new ArrayList<AssessmentMessage>();
-	private Long startDate;
-	private Long endDate;
 	
 	public Topic getTopic() {
 		return topic;
@@ -53,23 +51,23 @@ public class Assessment implements HasTopic {
 	}
 
 	public void setMessages(List<AssessmentMessage> messages) {
-		long firstStartDate = Long.MAX_VALUE;
-		long lastEndDate = -1;
-		for(AssessmentMessage m : messages) {
-			firstStartDate = Math.min(firstStartDate, m.getStartDate());
-			Long endDate = m.getEndDate();
-			if(endDate != null) lastEndDate = Math.max(lastEndDate, endDate);
-		}
-		this.startDate = firstStartDate == Long.MAX_VALUE? null: firstStartDate;
-		this.endDate = lastEndDate == -1? null: lastEndDate;
 		this.messages = messages;
 	}
 	
 	public Long getStartDate() {
-		return startDate;
+		long firstStartDate = Long.MAX_VALUE;
+		for(AssessmentMessage m : messages) {
+			firstStartDate = Math.min(firstStartDate, m.getStartDate());
+		}
+		return firstStartDate==Long.MAX_VALUE? null: firstStartDate;
 	}
 	
 	public Long getEndDate() {
-		return endDate;
+		long lastEndDate = -1;
+		for(AssessmentMessage m : messages) {
+			Long endDate = m.getEndDate();
+			if(endDate != null) lastEndDate = Math.max(lastEndDate, endDate);
+		}
+		return lastEndDate==-1? null: lastEndDate;
 	}
 }
