@@ -7,6 +7,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -27,7 +28,7 @@ public class Assessment implements HasTopic {
 	private Topic topic;
 	@ManyToOne
 	private Group group;
-	@OneToMany(cascade=CascadeType.ALL) @OrderBy("startDate")
+	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER) @OrderBy("startDate")
 	private List<AssessmentMessage> messages = new ArrayList<AssessmentMessage>();
 	
 	public Topic getTopic() {

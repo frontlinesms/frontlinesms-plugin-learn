@@ -58,8 +58,9 @@ public class AssessmentTabHandlerTest extends ThinletEventHandlerTest<Assessment
 	
 	public void testListByClassTableContents() {
 		// given
-		List<Assessment> assessments = asList(mockAssessment("Space mutants", "20/12/11", "13/12/12"),
-				mockAssessment("Biker mice", "3/4/12", "14/4/12"));
+		List<Assessment> assessments = asList(
+				mockAssessmentWithTopic("Topicana", "20/12/11", "13/12/12"),
+				mockAssessmentWithTopic("Umbongo", "3/4/12", "14/4/12"));
 		when(assessmentDao.findAllByGroup(any(Group.class))).thenReturn(assessments);
 		
 		// when
@@ -68,10 +69,10 @@ public class AssessmentTabHandlerTest extends ThinletEventHandlerTest<Assessment
 		
 		// then
 		assertEquals("First row contents.",
-				new String[]{ "Space mutants", "20/12/11", "13/12/12" },
+				new String[]{ "Topicana", "20/12/11", "13/12/12" },
 				$("tblAssessments").getRowText(0));
 		assertEquals("Second row contents.",
-				new String[]{ "Biker mice", "3/4/12", "14/4/12" },
+				new String[]{ "Umbongo", "3/4/12", "14/4/12" },
 				$("tblAssessments").getRowText(1));
 	}
 	
@@ -130,7 +131,7 @@ public class AssessmentTabHandlerTest extends ThinletEventHandlerTest<Assessment
 		
 		// then
 		assertEquals("Column titles",
-				array("plugins.learn.group",
+				array("plugins.learn.assessment.class",
 						"plugins.learn.assessment.start",
 						"plugins.learn.assessment.end"),
 				$("tblAssessments").getColumnText());
@@ -138,8 +139,9 @@ public class AssessmentTabHandlerTest extends ThinletEventHandlerTest<Assessment
 	
 	public void testListByTopicTableContents() {
 		// given we are already viewing by topic
-		List<Assessment> assessments = asList(mockAssessment("Space mutants", "20/12/11", "13/12/12"),
-				mockAssessment("Biker mice", "3/4/12", "14/4/12"));
+		List<Assessment> assessments = asList(
+				mockAssessmentWithGroup("Space mutants", "20/12/11", "13/12/12"),
+				mockAssessmentWithGroup("Biker mice", "3/4/12", "14/4/12"));
 		when(assessmentDao.findAllByTopic(any(Topic.class))).thenReturn(assessments);
 		
 		// when
@@ -152,5 +154,52 @@ public class AssessmentTabHandlerTest extends ThinletEventHandlerTest<Assessment
 		assertEquals("Second row contents.",
 				new String[]{ "Biker mice", "3/4/12", "14/4/12" },
 				$("tblAssessments").getRowText(1));
+	}
+	
+	public void testListByTopicUnscheduledAssessment() {
+		// given we are already viewing by topic
+		List<Assessment> assessments = asList(mockAssessmentWithGroup("unscheduled", null, null));
+		when(assessmentDao.findAllByTopic(any(Topic.class))).thenReturn(assessments);
+		
+		// when
+		$("cbTopic").setSelected("Music");
+		
+		// then
+		assertEquals("First row contents.",
+				new String[]{ "unscheduled", "?", "?" },
+				$("tblAssessments").getRowText(0));
+	}
+	
+	public void testListShouldEmptyWhenChangingToByTopic() {
+		// given
+		$("cbViewBy_class").select();
+		List<Assessment> assessments = asList(
+				mockAssessmentWithTopic("Current affairs", "20/12/11", "13/12/12"),
+				mockAssessmentWithTopic("Currency affairs", "3/4/12", "14/4/12"));
+		when(assessmentDao.findAllByGroup(any(Group.class))).thenReturn(assessments);
+		h.groupSelectionCompleted(mockGroup("random-group"));
+		assertEquals(2, $("tblAssessments").getRowCount());
+
+		// when
+		$("cbViewBy_topic").select();
+		
+		// then
+		assertEquals(0, $("tblAssessments").getRowCount());
+	}
+	
+	public void testListShouldEmptyWhenChangingToByClass() {
+		// given
+		List<Assessment> assessments = asList(
+				mockAssessmentWithGroup("Space mutants", "20/12/11", "13/12/12"),
+				mockAssessmentWithGroup("Biker mice", "3/4/12", "14/4/12"));
+		when(assessmentDao.findAllByTopic(any(Topic.class))).thenReturn(assessments);
+		$("cbTopic").setSelected("Music");
+		assertEquals(2, $("tblAssessments").getRowCount());
+
+		// when
+		$("cbViewBy_class").select();
+		
+		// then
+		assertEquals(0, $("tblAssessments").getRowCount());
 	}
 }

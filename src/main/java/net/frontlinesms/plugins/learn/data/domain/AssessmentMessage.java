@@ -35,16 +35,22 @@ public class AssessmentMessage {
 	public Frequency getFrequency() {
 		return frequency;
 	}
+	public void setFrequency(Frequency frequency) {
+		this.frequency = frequency;
+	}
 	
 	public long getStartDate() {
 		return startDate;
 	}
-	
-	public Long getEndDate() {
-		return endDate;
-	}
-
 	public void setStartDate(long startDate) {
 		this.startDate = startDate;
+	}
+	
+	public long getEndDate() {
+		if(frequency == Frequency.ONCE) return startDate;
+		else return endDate;
+	}
+	public void setEndDate(Long endDate) {
+		this.endDate = endDate;
 	}
 }

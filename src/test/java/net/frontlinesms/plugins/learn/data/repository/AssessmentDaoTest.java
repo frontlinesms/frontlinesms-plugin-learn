@@ -14,6 +14,7 @@ import net.frontlinesms.plugins.learn.data.domain.Topic;
 import net.frontlinesms.plugins.learn.data.domain.TopicItem;
 
 import static java.util.Arrays.asList;
+import static net.frontlinesms.plugins.learn.LearnTestUtils.*;
 
 public class AssessmentDaoTest extends HibernateTestCase {
 	/** dao under test */
@@ -21,7 +22,8 @@ public class AssessmentDaoTest extends HibernateTestCase {
 	@Autowired GroupDao groupDao;
 	@Autowired ReinforcementDao reinforcementDao;
 	@Autowired TopicDao topicDao;
-	
+
+//> TEST METHODS
 	public void testSave() {
 		// given
 		Assessment a = new Assessment();
@@ -135,6 +137,26 @@ public class AssessmentDaoTest extends HibernateTestCase {
 		}
 	}
 	
+	public void testMessagesEagerLoading() {
+		// given
+		AssessmentMessage m = new AssessmentMessage();
+		m.setStartDate(YESTERDAY);
+		m.setEndDate(TOMORROW);
+		Assessment a = new Assessment();
+		a.setMessages(asList(m));
+		dao.save(a);
+		setComplete();
+		endTransaction();
+		
+		// when
+		a = dao.list().get(0);
+		
+		// then
+		assertEquals(YESTERDAY, a.getStartDate());
+		assertEquals(TOMORROW, a.getEndDate());
+	}
+	
+//> SETUP HELPER METHODS
 	private Topic[] createTopics(String... names) throws Exception {
 		Topic[] topics = new Topic[names.length];
 		for (int i = 0; i < topics.length; i++) {

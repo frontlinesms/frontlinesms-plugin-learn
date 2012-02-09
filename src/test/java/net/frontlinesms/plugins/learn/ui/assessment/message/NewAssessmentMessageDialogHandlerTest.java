@@ -33,7 +33,7 @@ public class NewAssessmentMessageDialogHandlerTest extends ThinletEventHandlerTe
 
 //> TEST METHODS
 	public void testDialogTitle() {
-		assertEquals("plugins.learn.assessment.message.new", $().getText());
+		assertEquals("plugins.learn.message.new", $().getText());
 	}
 	
 	public void testTopicItemSummaryNotEditable() {
@@ -45,7 +45,7 @@ public class NewAssessmentMessageDialogHandlerTest extends ThinletEventHandlerTe
 	}
 	
 	public void testRepeatInitialisedToOnce() {
-		assertEquals("plugins.learn.repeat.once", $("cbRepeat").getText());
+		assertEquals("plugins.learn.frequency.once", $("cbRepeat").getText());
 	}
 	
 	public void testStartDateInitialisedToNowishInLocalTimezone() {
@@ -63,7 +63,7 @@ public class NewAssessmentMessageDialogHandlerTest extends ThinletEventHandlerTe
 	
 	public void testRepeatOptions() {
 		assertEquals("Repeat options should be as listed",
-				i18n("plugins.learn.repeat.", "once", "daily", "weekly", "monthly"),
+				i18n("plugins.learn.frequency.", "once", "daily", "weekly", "monthly"),
 				$("cbRepeat").getOptions());
 	}
 	

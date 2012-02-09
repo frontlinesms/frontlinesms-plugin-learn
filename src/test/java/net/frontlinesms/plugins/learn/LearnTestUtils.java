@@ -46,10 +46,19 @@ public class LearnTestUtils {
 	}
 	
 //> TEST HELPER METHODS
-	public static Assessment mockAssessment(String groupName, String startDate, String endDate) {
+	public static Assessment mockAssessmentWithGroup(String groupName, String startDate, String endDate) {
 		Assessment a = mock(Assessment.class);
 		Group g = mockGroup(groupName);
 		when(a.getGroup()).thenReturn(g);
+		when(a.getStartDate()).thenReturn(parseDate(startDate));
+		when(a.getEndDate()).thenReturn(parseDate(endDate));
+		return a;
+	}
+	
+	public static Assessment mockAssessmentWithTopic(String topicName, String startDate, String endDate) {
+		Assessment a = mock(Assessment.class);
+		Topic t = mockTopic(topicName);
+		when(a.getTopic()).thenReturn(t);
 		when(a.getStartDate()).thenReturn(parseDate(startDate));
 		when(a.getEndDate()).thenReturn(parseDate(endDate));
 		return a;
@@ -62,7 +71,8 @@ public class LearnTestUtils {
 		return m;
 	}
 	
-	public static long parseDate(String date) {
+	public static Long parseDate(String date) {
+		if(date == null) return null;
 		try {
 			return new SimpleDateFormat("d/M/y").parse(date).getTime();
 		} catch (ParseException ex) {
@@ -74,6 +84,12 @@ public class LearnTestUtils {
 		Group g = mock(Group.class);
 		when(g.getName()).thenReturn(name);
 		return g;
+	}
+	
+	public static Topic mockTopic(String name) {
+		Topic t = mock(Topic.class);
+		when(t.getName()).thenReturn(name);
+		return t;
 	}
 	
 	public static Reinforcement mockReinforcement(TopicDao topicDao, String topicName, TopicItemDao topicItemDao, String messageText) {

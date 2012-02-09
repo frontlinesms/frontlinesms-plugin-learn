@@ -93,7 +93,12 @@ public class AssessmentTabHandler implements ThinletUiEventHandler, SingleGroupS
 				ui.add(cbTopic, ui.createComboboxChoice(t.getName(), t));
 			}
 		}
-		Object tableHeader = Thinlet.get(find("tblAssessments"), Thinlet.HEADER);
+		
+		Object assessmentsTable = find("tblAssessments");
+		
+		ui.removeAll(assessmentsTable);
+		Object tableHeader = Thinlet.get(assessmentsTable, Thinlet.HEADER);
+		
 		ui.removeAll(tableHeader);
 		for(String columnTitle : topic? TOPIC_COLUMN_TITLES: CLASS_COLUMN_TITLES) {
 			ui.add(tableHeader, ui.createColumn(
@@ -107,8 +112,10 @@ public class AssessmentTabHandler implements ThinletUiEventHandler, SingleGroupS
 	}
 
 	private Object createRow(Assessment a, boolean topic) {
-		String start = InternationalisationUtils.formatDate(a.getStartDate());
-		String end = InternationalisationUtils.formatDate(a.getEndDate());
+		String start = a.getStartDate() == null? "?":
+				InternationalisationUtils.formatDate(a.getStartDate());
+		String end = a.getEndDate() == null? "?":
+				InternationalisationUtils.formatDate(a.getEndDate());
 		Object row = ui.createTableRow(a,
 				topic? a.getGroup().getName(): a.getTopic().getName(),
 				start, end);
@@ -121,7 +128,7 @@ public class AssessmentTabHandler implements ThinletUiEventHandler, SingleGroupS
 		ui.removeAll(assessmentsTable);
 		if(group != null) {
 			for(Assessment a : assessmentDao.findAllByGroup(group)) {
-				ui.add(assessmentsTable, createRow(a, true));
+				ui.add(assessmentsTable, createRow(a, false));
 			}
 		}
 	}
