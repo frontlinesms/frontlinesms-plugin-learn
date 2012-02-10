@@ -51,7 +51,7 @@ public class AssessmentTabHandlerTest extends ThinletEventHandlerTest<Assessment
 				array("plugins.learn.topic",
 						"plugins.learn.assessment.start",
 						"plugins.learn.assessment.end"),
-				$("tblAssessments").getColumnText());
+				$("tblAssessments").getColumnTitles());
 	}
 	
 	public void testListByClassTableContents() {
@@ -132,7 +132,7 @@ public class AssessmentTabHandlerTest extends ThinletEventHandlerTest<Assessment
 				array("plugins.learn.assessment.class",
 						"plugins.learn.assessment.start",
 						"plugins.learn.assessment.end"),
-				$("tblAssessments").getColumnText());
+				$("tblAssessments").getColumnTitles());
 	}
 	
 	public void testListByTopicTableContents() {

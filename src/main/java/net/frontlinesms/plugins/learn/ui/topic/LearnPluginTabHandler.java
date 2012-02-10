@@ -5,6 +5,7 @@ import org.springframework.context.ApplicationContext;
 import thinlet.Thinlet;
 
 import net.frontlinesms.plugins.learn.ui.assessment.AssessmentTabHandler;
+import net.frontlinesms.plugins.learn.ui.gradebook.GradebookTabHandler;
 import net.frontlinesms.ui.FrontlineUI;
 import net.frontlinesms.ui.ThinletUiEventHandler;
 
@@ -20,6 +21,7 @@ public class LearnPluginTabHandler implements ThinletUiEventHandler {
 		ui.add(tab, tabbedPane);
 		ui.add(tabbedPane, new TopicTabHandler(ui, ctx).getTab());
 		ui.add(tabbedPane, new AssessmentTabHandler(ui, ctx).getTab());
+		ui.add(tabbedPane, new GradebookTabHandler(ui, ctx).getTab());
 	}
 
 	public Object getTab() {

@@ -12,6 +12,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.TimeZone;
 
+import net.frontlinesms.data.domain.Contact;
 import net.frontlinesms.data.domain.Group;
 import net.frontlinesms.plugins.learn.data.domain.*;
 import net.frontlinesms.plugins.learn.data.repository.*;
@@ -46,6 +47,22 @@ public class LearnTestUtils {
 	}
 	
 //> TEST HELPER METHODS
+	public static StudentGrades mockStudentClassResults(Contact student, Integer... grades) {
+		StudentGrades r = mock(StudentGrades.class);
+		when(r.getStudent()).thenReturn(student);
+		when(r.getGrades()).thenReturn(grades);
+		return r;
+	}
+	
+	public static Contact[] mockContacts(String... names) {
+		Contact[] c = new Contact[names.length];
+		for (int i = 0; i < c.length; i++) {
+			c[i] = mock(Contact.class);
+			when(c[i].getName()).thenReturn(names[i]);
+		}
+		return c;
+	}
+	
 	public static AssessmentMessage mockAssessmentWithTopicItem(TopicItem i) {
 		AssessmentMessage m = mock(AssessmentMessage.class);
 		when(m.getTopicItem()).thenReturn(i);
@@ -119,6 +136,16 @@ public class LearnTestUtils {
 		when(topicItemDao.getAllByTopic(t)).thenReturn(items);
 		
 		return r;
+	}
+	
+	public static Topic[] mockTopics(String... names) {
+		ArrayList<Topic> topics = new ArrayList<Topic>();
+		for(String name : names) {
+			Topic t = mock(Topic.class);
+			when(t.getName()).thenReturn(name);
+			topics.add(t);
+		}
+		return topics.toArray(new Topic[topics.size()]);
 	}
 	
 	public static Topic[] mockTopics(TopicDao topicDao, String... names) {

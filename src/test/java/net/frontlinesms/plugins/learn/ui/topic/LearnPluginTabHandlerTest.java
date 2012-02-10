@@ -36,6 +36,10 @@ public class LearnPluginTabHandlerTest extends ThinletEventHandlerTest<LearnPlug
 		$("tbAssessments").exists();
 	}
 	
+	public void testGradebookTabLoaded() {
+		$("tbGradebook").exists();
+	}
+	
 	public void testInit() {
 		// given init was called in setup
 		// then
