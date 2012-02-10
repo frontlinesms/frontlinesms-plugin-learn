@@ -4,6 +4,7 @@
 	<session-factory>
 		<mapping class="net.frontlinesms.plugins.learn.data.domain.Assessment"/>
 		<mapping class="net.frontlinesms.plugins.learn.data.domain.AssessmentMessage"/>
+		<mapping class="net.frontlinesms.plugins.learn.data.domain.AssessmentMessageResponse"/>
 		<mapping class="net.frontlinesms.plugins.learn.data.domain.Question"/>
 		<mapping class="net.frontlinesms.plugins.learn.data.domain.Reinforcement"/>
 		<mapping class="net.frontlinesms.plugins.learn.data.domain.Topic"/>
