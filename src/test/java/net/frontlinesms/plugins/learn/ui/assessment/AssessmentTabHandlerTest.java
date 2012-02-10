@@ -14,8 +14,6 @@ import static org.mockito.Mockito.*;
 
 import static net.frontlinesms.plugins.learn.LearnTestUtils.*;
 
-import static java.util.Arrays.asList;
-
 public class AssessmentTabHandlerTest extends ThinletEventHandlerTest<AssessmentTabHandler> {
 	@SuppressWarnings("unused")
 	@MockBean private GroupDao groupDao;

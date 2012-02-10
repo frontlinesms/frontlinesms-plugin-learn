@@ -15,7 +15,6 @@ import net.frontlinesms.test.spring.MockBean;
 
 import static net.frontlinesms.plugins.learn.LearnTestUtils.*;
 import static org.mockito.Mockito.*;
-import static java.util.Arrays.asList;
 
 public class NewAssessmentDialogHandlerTest extends NewTopicChoosingDialogHandlerTest<NewAssessmentDialogHandler> {
 	@MockBean private AssessmentDao assessmentDao;

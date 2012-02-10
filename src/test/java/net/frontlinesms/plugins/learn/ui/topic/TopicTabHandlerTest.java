@@ -1,7 +1,6 @@
 package net.frontlinesms.plugins.learn.ui.topic;
 
 import static org.mockito.Mockito.*;
-import static java.util.Arrays.asList;
 import static net.frontlinesms.plugins.learn.LearnTestUtils.*;
 
 import net.frontlinesms.data.events.EntityDeletedNotification;

@@ -1,7 +1,5 @@
 package net.frontlinesms.plugins.learn.ui.topic;
 
-import static java.util.Arrays.asList;
-
 import java.util.List;
 
 import net.frontlinesms.plugins.learn.ui.topic.TopicChoosingDialogHandler;

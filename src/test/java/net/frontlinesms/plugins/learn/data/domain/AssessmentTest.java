@@ -4,8 +4,6 @@ import java.util.List;
 
 import net.frontlinesms.junit.BaseTestCase;
 
-import static java.util.Arrays.asList;
-
 import static net.frontlinesms.plugins.learn.LearnTestUtils.*;
 
 public class AssessmentTest extends BaseTestCase {
