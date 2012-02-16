@@ -67,10 +67,10 @@ public class AssessmentTabHandlerTest extends ThinletEventHandlerTest<Assessment
 		
 		// then
 		assertEquals("First row contents.",
-				new String[]{ "Topicana", "20/12/11", "13/12/12" },
+				new String[]{ "Topicana", "20/12/2011", "13/12/2012" },
 				$("tblAssessments").getRowText(0));
 		assertEquals("Second row contents.",
-				new String[]{ "Umbongo", "3/4/12", "14/4/12" },
+				new String[]{ "Umbongo", "3/4/2012", "14/4/2012" },
 				$("tblAssessments").getRowText(1));
 	}
 	
@@ -147,10 +147,10 @@ public class AssessmentTabHandlerTest extends ThinletEventHandlerTest<Assessment
 		
 		// then
 		assertEquals("First row contents.",
-				new String[]{ "Space mutants", "20/12/11", "13/12/12" },
+				new String[]{ "Space mutants", "20/12/2011", "13/12/2012" },
 				$("tblAssessments").getRowText(0));
 		assertEquals("Second row contents.",
-				new String[]{ "Biker mice", "3/4/12", "14/4/12" },
+				new String[]{ "Biker mice", "3/4/2012", "14/4/2012" },
 				$("tblAssessments").getRowText(1));
 	}
 	
