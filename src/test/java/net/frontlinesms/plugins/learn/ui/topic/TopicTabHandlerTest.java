@@ -194,4 +194,8 @@ public class TopicTabHandlerTest extends ThinletEventHandlerTest<TopicTabHandler
 		// then
 		$("btEditTreeItem").exists();
 	}
+	
+	public void testEditQuestion() {
+		TODO("implement button and double click versions as per reinforcement");
+	}
 }
