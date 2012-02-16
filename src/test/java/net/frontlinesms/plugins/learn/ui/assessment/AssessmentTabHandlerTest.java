@@ -228,6 +228,26 @@ public class AssessmentTabHandlerTest extends ThinletEventHandlerTest<Assessment
 		assertFalse($("btEditAssessment").isEnabled());
 	}
 	
+	public void testDeleteAssessmentButtonVisible() {
+		TODO("");
+	}
+	
+	public void testDeleteAssessmentButtonDisabledByDefault() {
+		TODO("");
+	}
+	
+	public void testDeleteAssessmentButtonEnabledWhenAssessmentSelected() {
+		TODO("");
+	}
+	
+	public void testDeleteAssessmentButtonShowsConfirmationDialog() {
+		TODO("");
+	}
+	
+	public void testConfirmingDeleteAssessmentCallsDaoDeleteForCorrectAssessment() {
+		TODO("");
+	}
+	
 	public void testEditAssesmentButtonShouldOpenEditWindow() {
 		// given
 		populateAssessmentListForTopic();
