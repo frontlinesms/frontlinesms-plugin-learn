@@ -19,6 +19,7 @@ public class GradebookTabHandlerTest extends ThinletEventHandlerTest<GradebookTa
 	@MockBean private GradebookDao gradebookDao;
 	@SuppressWarnings("unused")
 	@MockBean private GroupDao groupDao;
+	@MockBean private TopicDao topicDao;
 
 //> SETUP METHODS
 	@Override
@@ -41,31 +42,66 @@ public class GradebookTabHandlerTest extends ThinletEventHandlerTest<GradebookTa
 	}
 	
 	public void testTopicSelecterInitialisedToAllTopics() {
-		TODO("implement");
+		assertEquals("plugins.learn.topic.all", $("cbTopic").getText());
 	}
 	
 	public void testTopicSelecterDisabledByDefault() {
-		TODO("implement");
+		assertFalse($("cbTopic").isEnabled());
 	}
 	
 	public void testSettingGroupEnablesTopicSelecter() {
-		TODO("implement");
+		// when
+		h.groupSelectionCompleted(mockGroup("any-group"));
+		
+		// then
+		assertTrue($("cbTopic").isEnabled());
 	}
 	
 	public void testChangingToAnotherGroupResetsTopicSelecter() {
-		TODO("implement");
+		// given
+		mockTopics(topicDao, "topic1", "topic2");
+		initUiForTests();
+		h.groupSelectionCompleted(mockGroup("group1"));
+		$("cbTopic").setSelected("topic1");
+		
+		// when
+		h.groupSelectionCompleted(mockGroup("group2"));
+		
+		// then
+		assertEquals("plugins.learn.topic.all", $("cbTopic").getText());
 	}
 	
 	public void testSelectingATopicUpdatesTableHeaders() {
-		TODO("implement");
+		// given
+		TODO("select group");
+		
+		// when
+		TODO("select topic");
+		
+		// then
+		TODO("check table headers");
 	}
 	
 	public void testSelectingATopicAddsAverageRowAtBottomOfTable() {
-		TODO("implement");
+		// given
+		TODO("select group");
+		
+		// when
+		TODO("select topic");
+		
+		// then
+		TODO("check bottom row of table is all bold, and check the cell contents");
 	}
 	
-	public void testSelectingATopicUpdatesTableContents() {
-		TODO("implement");
+	public void testSelectingATopicUpdatesTableContentsWithStudentsAnswers() {
+		// given
+		TODO("select group");
+		
+		// when
+		TODO("select topic");
+		
+		// then
+		TODO("check table rows for each student");
 	}
 	
 	public void testGradeTableInitialisedEmpty() {
