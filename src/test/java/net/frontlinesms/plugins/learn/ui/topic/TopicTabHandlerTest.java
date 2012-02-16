@@ -129,6 +129,24 @@ public class TopicTabHandlerTest extends ThinletEventHandlerTest<TopicTabHandler
 				$("taText").getText());
 	}
 	
+	public void testEditReinforcementWhenEditButtonClicked() {
+		// given
+		mockReinforcement(topicDao, "People & Places", topicItemDao, "Albert Einstein worked in a patent office for a bit.");
+		initUiForTests();
+		
+		// when
+		ThinletComponent topicComponent = $("trTopics").getRootNode().withText("People & Places");
+		topicComponent.expand();
+		topicComponent.getSubNode().withText("Albert Einstein worked in a patent office for a bit.").select();
+		$("btEditTreeItem").click();
+		
+		// then
+		assertTrue($("dgEditReinforcement").isVisible());
+		assertEquals("People & Places", $("dgEditReinforcement").find("cbTopic").getText());
+		assertEquals("Albert Einstein worked in a patent office for a bit.",
+				$("taText").getText());
+	}
+	
 	public void testNewQuestionButton() {
 		// given
 		mockTopics(topicDao, "Random Topic 1", "Random Topic 2");
@@ -142,5 +160,38 @@ public class TopicTabHandlerTest extends ThinletEventHandlerTest<TopicTabHandler
 	
 	public void testNewQuestionButtonDisabledWhenNoTopics() {
 		assertFalse($("btNewQuestion").isEnabled());
+	}
+	
+	public void testEditTopicButtonIsVisible() {
+		$("btEditTreeItem").exists();
+	}
+	
+	public void testEditTopicButtonIsDisabledByDefault() {
+		assertFalse($("btEditTreeItem").isEnabled());
+	}
+	
+	public void testEditTopicButtonIsEnabledWhenATopicIsSelected() {
+		// given
+		mockTopics(topicDao, "Random Topic 1", "Random Topic 2");
+		initUiForTests();
+		
+		// when
+		$("trTopics").setSelected("Random Topic 2");
+		
+		// then
+		assertFalse($("btEditTreeItem").isEnabled());
+	}
+	
+	public void testEditTopicButtonLaunchesEditTopicWindow() {
+		// given
+		mockTopics(topicDao, "Random Topic 1", "Random Topic 2");
+		initUiForTests();
+		
+		// when
+		$("trTopics").setSelected("Random Topic 2");
+		$("btEditTreeItem").click();
+		
+		// then
+		$("btEditTreeItem").exists();
 	}
 }

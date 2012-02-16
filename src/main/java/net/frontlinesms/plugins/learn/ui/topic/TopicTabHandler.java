@@ -44,6 +44,14 @@ public class TopicTabHandler implements ThinletUiEventHandler, EventObserver {
 		return tab;
 	}
 	
+	private Topic getSelectedTopic() {
+		Object tree = find("trTopics");
+		Object selected = ui.getSelectedItem(tree);
+		if(selected != null) {
+			return ui.getAttachedObject(selected, Topic.class);
+		} else return null;
+	}
+	
 	private void refresh() {
 		Object tree = find("trTopics");
 		ui.removeAll(tree);
@@ -86,12 +94,22 @@ public class TopicTabHandler implements ThinletUiEventHandler, EventObserver {
 		}
 	}
 	
-	public void trTopics_perform(Object tree) {
+	public void treeItemSelected() {
+		Object tree = find("trTopics");
+		Object selectedItem = ui.getSelectedItem(tree);
+		boolean something = selectedItem != null;
+		ui.setEnabled(find("btEditTreeItem"), something);
+	}
+	
+	public void editSelectedTreeItem() {
+		Object tree = find("trTopics");
 		Object selectedItem = ui.getSelectedItem(tree);
 		if(selectedItem != null) {
 			Object attached = ui.getAttachedObject(selectedItem);
 			if(attached instanceof Reinforcement) {
 				ui.add(new EditReinforcementDialogHandler(ui, reinforcementDao, dao, (Reinforcement) attached).getDialog());
+			} else if(attached instanceof Topic) {
+				ui.add(new EditTopicDialogHandler(ui, dao, (Topic) attached).getDialog());
 			} else throw new RuntimeException("Don't know how to handle: " + attached.getClass());
 		}
 	}
