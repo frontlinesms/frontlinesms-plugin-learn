@@ -198,6 +198,27 @@ public class GradebookTabHandlerTest extends ThinletEventHandlerTest<GradebookTa
 				$("tbGrades").getColumnTitles());
 	}
 	
+	public void testSelectingATopicAndThenSelectingAllTopicsUpdatesTableColumnTitles() {
+		// given
+		Group misfits = mockTopicAndClassAndAssessments("topic1", "misfits", "Alfred", "Bernadette");
+		initUiForTests();
+		h.groupSelectionCompleted(misfits);
+		$("cbTopic").setSelected("topic1");
+		
+		// when
+		$("cbTopic").setSelected("plugins.learn.topic.all");
+		
+		// then
+		System.out
+				.println("GradebookTabHandlerTest.testSelectingATopicAndThenSelectingAllTopicsUpdatesTableColumnTitles()");
+		for(String title : $("tbGrades").getColumnTitles()) {
+			System.out.println("Title: " + title);
+		}
+		assertEquals("Grade table headers",
+				array("plugins.learn.student", "topic1"),
+				$("tbGrades").getColumnTitles());
+	}
+	
 	public void testSelectingATopicAddsAverageRowAtBottomOfTable() {
 		// given
 		Group misfits = mockTopicAndClassAndAssessments("topic1", "misfits", "Alfred", "Bernadette");
@@ -256,7 +277,7 @@ public class GradebookTabHandlerTest extends ThinletEventHandlerTest<GradebookTa
 	
 	public void testGradeTableColumnsInitialised() {
 		assertEquals("Grade table column names",
-				array("plugins.learn.gradebook.student"),
+				array("plugins.learn.student"),
 				$("tbGrades").getColumnTitles());
 	}
 	
@@ -288,7 +309,7 @@ public class GradebookTabHandlerTest extends ThinletEventHandlerTest<GradebookTa
 		
 		// then
 		assertEquals("Grade table column names",
-				array("plugins.learn.gradebook.student", "Health & Safety", "Maths + English", "Electronics"),
+				array("plugins.learn.student", "Health & Safety", "Maths + English", "Electronics"),
 				$("tbGrades").getColumnTitles());
 	}
 	
@@ -371,6 +392,10 @@ public class GradebookTabHandlerTest extends ThinletEventHandlerTest<GradebookTa
 		Topic t = mockTopics(topicDao, topicName)[0];
 		
 		Group g = mockGroup(groupName);
+		
+		ClassGradebook classGb = mock(ClassGradebook.class);
+		when(classGb.getTopics()).thenReturn(asList(t));
+		when(gradebookService.getForClass(g)).thenReturn(classGb);
 		
 		// create students
 		Contact[] students = mockContacts(studentNames);
