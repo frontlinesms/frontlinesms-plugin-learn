@@ -44,14 +44,6 @@ public class TopicTabHandler implements ThinletUiEventHandler, EventObserver {
 		return tab;
 	}
 	
-	private Topic getSelectedTopic() {
-		Object tree = find("trTopics");
-		Object selected = ui.getSelectedItem(tree);
-		if(selected != null) {
-			return ui.getAttachedObject(selected, Topic.class);
-		} else return null;
-	}
-	
 	private void refresh() {
 		Object tree = find("trTopics");
 		ui.removeAll(tree);
