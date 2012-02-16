@@ -72,6 +72,10 @@ public class GradebookDao {
 		}
 		return count;
 	}
+
+	public AssessmentGradebook getForAssessment(Assessment a) {
+		return null;
+	}
 }
 
 class StudentSorter implements Comparator<Contact> {

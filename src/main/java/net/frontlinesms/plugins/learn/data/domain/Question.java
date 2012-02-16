@@ -9,6 +9,7 @@ public class Question extends TopicItem {
 	private String questionText;
 	private Type type;
 	private String[] answers;
+	private int correctAnswer;
 
 //> ACCESSORS
 	public String getQuestionText() {
@@ -33,5 +34,13 @@ public class Question extends TopicItem {
 	
 	public void setAnswers(String... answers) {
 		this.answers = answers;
+	}
+	
+	public int getCorrectAnswer() {
+		return correctAnswer;
+	}
+	
+	public void setCorrectAnswer(int correctAnswer) {
+		this.correctAnswer = correctAnswer;
 	}
 }

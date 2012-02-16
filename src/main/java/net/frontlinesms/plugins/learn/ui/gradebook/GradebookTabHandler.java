@@ -8,7 +8,7 @@ import net.frontlinesms.data.domain.Group;
 import net.frontlinesms.data.repository.GroupDao;
 import net.frontlinesms.plugins.learn.data.domain.ClassGradebook;
 import net.frontlinesms.plugins.learn.data.domain.ClassTopicGradebook;
-import net.frontlinesms.plugins.learn.data.domain.IndividualQuestionResponse;
+import net.frontlinesms.plugins.learn.data.domain.QuestionResponse;
 import net.frontlinesms.plugins.learn.data.domain.StudentGrades;
 import net.frontlinesms.plugins.learn.data.domain.StudentTopicResult;
 import net.frontlinesms.plugins.learn.data.domain.Topic;
@@ -159,7 +159,7 @@ public class GradebookTabHandler implements ThinletUiEventHandler, SingleGroupSe
 	}
 
 	private Object createRow(StudentTopicResult r) {
-		IndividualQuestionResponse[] responses = r.getResponses();
+		QuestionResponse[] responses = r.getResponses();
 		String[] text = new String[responses.length + 2];
 		text[0] = r.getContact().getName();
 		for (int i = 0; i < responses.length; i++) {

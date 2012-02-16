@@ -7,7 +7,7 @@ public class StudentTopicResult {
 		return null;
 	}
 
-	public IndividualQuestionResponse[] getResponses() {
+	public QuestionResponse[] getResponses() {
 		return null;
 	}
 	
