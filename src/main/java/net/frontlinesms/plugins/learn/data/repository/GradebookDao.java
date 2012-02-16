@@ -13,11 +13,13 @@ import net.frontlinesms.data.repository.GroupMembershipDao;
 import net.frontlinesms.plugins.learn.data.domain.*;
 
 public class GradebookDao {
+//> DATA ACCESS OBJECTS
 	@Autowired private AssessmentDao assessmentDao;
 	@Autowired private AssessmentMessageResponseDao assessmentMessageResponseDao;
 	@Autowired private GroupMembershipDao groupMembershipDao;
-	
-	public Gradebook getForClass(Group g) {
+
+//> FETCHERS
+	public ClassGradebook getForClass(Group g) {
 		List<Assessment> assessments = assessmentDao.findAllByGroup(g);
 		List<Topic> topics = new ArrayList<Topic>();
 		for(Assessment a : assessments) {
@@ -30,9 +32,14 @@ public class GradebookDao {
 		for(Contact student : students) {
 			results.add(createResult(student, assessments));
 		}
-		return new Gradebook(topics, results);
+		return new ClassGradebook(topics, results);
 	}
 
+	public ClassTopicGradebook getForClassAndTopic(Group g, Topic t) {
+		return null;
+	}
+
+//> HELPERS
 	private StudentGrades createResult(Contact student,
 			List<Assessment> assessments) {
 		List<Integer> grades = new ArrayList<Integer>();

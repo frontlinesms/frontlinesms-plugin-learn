@@ -1,5 +1,6 @@
 package net.frontlinesms.plugins.learn.ui.gradebook;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.frontlinesms.data.domain.Contact;
@@ -8,6 +9,7 @@ import net.frontlinesms.data.repository.*;
 import net.frontlinesms.plugins.learn.data.domain.*;
 import net.frontlinesms.plugins.learn.data.repository.*;
 import net.frontlinesms.test.spring.MockBean;
+import net.frontlinesms.test.ui.ThinletComponent;
 import net.frontlinesms.test.ui.ThinletEventHandlerTest;
 
 import static net.frontlinesms.plugins.learn.LearnTestUtils.*;
@@ -49,9 +51,27 @@ public class GradebookTabHandlerTest extends ThinletEventHandlerTest<GradebookTa
 		assertFalse($("cbTopic").isEnabled());
 	}
 	
+	public void testTopicSelecterNotEditable() {
+		assertFalse($("cbTopic").isEditable());
+	}
+	
+	public void testTopicSelecterOptionsCorrespondToTopics() {
+		// given
+		mockTopics(topicDao, "topic1", "topic2", "topic3");
+		
+		// when
+		initUiForTests();
+		
+		// then
+		assertEquals("topic selecter options",
+				array("plugins.learn.topic.all", "topic1", "topic2", "topic3"),
+				$("cbTopic").getOptions());
+	}
+	
 	public void testSettingGroupEnablesTopicSelecter() {
 		// when
-		h.groupSelectionCompleted(mockGroup("any-group"));
+		Group mockGroup = mockEmptyGradebookAndClass();
+		h.groupSelectionCompleted(mockGroup);
 		
 		// then
 		assertTrue($("cbTopic").isEnabled());
@@ -61,47 +81,65 @@ public class GradebookTabHandlerTest extends ThinletEventHandlerTest<GradebookTa
 		// given
 		mockTopics(topicDao, "topic1", "topic2");
 		initUiForTests();
-		h.groupSelectionCompleted(mockGroup("group1"));
+		
+		Group[] groups = mockEmptyGradebooksAndClasses(2);
+		h.groupSelectionCompleted(groups[0]);
+		
 		$("cbTopic").setSelected("topic1");
 		
 		// when
-		h.groupSelectionCompleted(mockGroup("group2"));
+		h.groupSelectionCompleted(groups[1]);
 		
 		// then
 		assertEquals("plugins.learn.topic.all", $("cbTopic").getText());
 	}
 	
-	public void testSelectingATopicUpdatesTableHeaders() {
+	public void testSelectingATopicUpdatesTableColumnTitles() {
 		// given
-		TODO("select group");
+		Group misfits = mockTopicAndClass("topic1", "misfits", "Alfred", "Bernadette");
+		initUiForTests();
+		h.groupSelectionCompleted(misfits);
 		
 		// when
-		TODO("select topic");
+		$("cbTopic").setSelected("topic1");
 		
 		// then
-		TODO("check table headers");
+		assertEquals("Grade table headers",
+				array("plugins.learn.student", "Q1", "Q2", "Q3", "plugins.learn.gradebook.score"),
+				$("tbGrades").getColumnTitles());
 	}
 	
 	public void testSelectingATopicAddsAverageRowAtBottomOfTable() {
 		// given
-		TODO("select group");
+		Group misfits = mockTopicAndClass("topic1", "misfits", "Alfred", "Bernadette");
+		initUiForTests();
+		h.groupSelectionCompleted(misfits);
 		
 		// when
-		TODO("select topic");
+		$("cbTopic").setSelected("topic1");
 		
 		// then
-		TODO("check bottom row of table is all bold, and check the cell contents");
+		assertEquals("Grade table averages",
+				array("plugins.learn.gradebook.average", "12%", "36%", "0%", "16%"),
+				$("tbGrades").getRowText(2));
 	}
 	
 	public void testSelectingATopicUpdatesTableContentsWithStudentsAnswers() {
 		// given
-		TODO("select group");
+		Group misfits = mockTopicAndClass("topic1", "misfits", "Alfred", "Bernadette");
+		initUiForTests();
+		h.groupSelectionCompleted(misfits);
 		
 		// when
-		TODO("select topic");
+		$("cbTopic").setSelected("topic1");
 		
 		// then
-		TODO("check table rows for each student");
+		assertEquals("Alfred's results",
+				array("Alfred", "", "1", "2", "2%"),
+				$("tbGrades").getRowText(0));
+		assertEquals("Bernadette's results",
+				array("Bernadette", "4", "5", "6", "6%"),
+				$("tbGrades").getRowText(1));
 	}
 	
 	public void testGradeTableInitialisedEmpty() {
@@ -183,10 +221,22 @@ public class GradebookTabHandlerTest extends ThinletEventHandlerTest<GradebookTa
 	}
 	
 	private Group mockEmptyGradebookAndClass() {
-		Group g = mockGroup("empty class");
-		Gradebook gb = mock(Gradebook.class);
+		return mockEmptyGradebookAndClass("empty class");
+	}
+	
+	private Group mockEmptyGradebookAndClass(String name) {
+		Group g = mockGroup(name);
+		ClassGradebook gb = mock(ClassGradebook.class);
 		when(gradebookDao.getForClass(g)).thenReturn(gb);
 		return g;
+	}
+	
+	private Group[] mockEmptyGradebooksAndClasses(int count) {
+		Group[] groups = new Group[count];
+		for (int i = 0; i < count; i++) {
+			groups[i] = mockEmptyGradebookAndClass("group-" + i);
+		}
+		return groups;
 	}
 
 	private Group mockGradeBookAndClass() {
@@ -194,7 +244,7 @@ public class GradebookTabHandlerTest extends ThinletEventHandlerTest<GradebookTa
 		Contact[] students = mockContacts("Angela", "Beatrix", "Clare", "Dave", "Edwina");
 		when(groupMembershipDao.getActiveMembers(g)).thenReturn(asList(students));
 		
-		Gradebook gb = mock(Gradebook.class);
+		ClassGradebook gb = mock(ClassGradebook.class);
 		Topic[] mockTopics = mockTopics("Health & Safety", "Maths + English", "Electronics");
 		when(gb.getTopics()).thenReturn(asList(mockTopics));
 		List<StudentGrades> results = asList(
@@ -207,5 +257,49 @@ public class GradebookTabHandlerTest extends ThinletEventHandlerTest<GradebookTa
 		when(gradebookDao.getForClass(g)).thenReturn(gb);
 		
 		return g;
+	}
+	
+	private Group mockTopicAndClass(String topicName, String groupName, String... studentNames) {
+		Topic t = mockTopics(topicDao, topicName)[0];
+		
+		Group g = mockGroup(groupName);
+		
+		// create students
+		Contact[] students = mockContacts(studentNames);
+		when(groupMembershipDao.getActiveMembers(g)).thenReturn(asList(students));
+		
+		// create gradebook
+		ClassTopicGradebook gb = mock(ClassTopicGradebook.class);
+		when(gb.getQuestionCount()).thenReturn(3);
+		StudentTopicResult[] results = mockStudentTopicResults(students, 3);
+		when(gb.getAverages()).thenReturn(new int[]{12, 36, 0, 16});
+		when(gb.getResults()).thenReturn(results);
+		
+		when(gradebookDao.getForClassAndTopic(g, t)).thenReturn(gb);
+		
+		return g;
+	}
+
+	private StudentTopicResult[] mockStudentTopicResults(Contact[] students,
+			int questionCount) {
+		int counter = -1;
+		ArrayList<StudentTopicResult> results = new ArrayList<StudentTopicResult>();
+		for(Contact s : students) {
+			StudentTopicResult r = mock(StudentTopicResult.class);
+			when(r.getContact()).thenReturn(s);
+			IndividualQuestionResponse[] individualResponses = new IndividualQuestionResponse[questionCount];
+			for (int i = 0; i < individualResponses.length; i++) {
+				IndividualQuestionResponse iqr = mock(IndividualQuestionResponse.class);
+				Integer value = counter < 0? null: counter;
+				when(iqr.isCorrect()).thenReturn(value != null && (counter % 1) == 0);
+				when(iqr.getValue()).thenReturn(value);
+				individualResponses[i] = iqr;
+				++counter;
+			}
+			when(r.getResponses()).thenReturn(individualResponses);
+			when(r.getScore()).thenReturn(counter++);
+			results.add(r);
+		}
+		return results.toArray(new StudentTopicResult[results.size()]);
 	}
 }

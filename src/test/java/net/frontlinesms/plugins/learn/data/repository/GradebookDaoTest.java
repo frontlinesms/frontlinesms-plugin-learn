@@ -34,7 +34,7 @@ public class GradebookDaoTest extends HibernateTestCase {
 		Group g = createGroup();
 		
 		// when
-		Gradebook gb = gradebookDao.getForClass(g);
+		ClassGradebook gb = gradebookDao.getForClass(g);
 		
 		// then
 		assertEquals(0, gb.getResults().size());
@@ -47,7 +47,7 @@ public class GradebookDaoTest extends HibernateTestCase {
 		createAssessments(g, 2);
 		
 		// when
-		Gradebook gb = gradebookDao.getForClass(g);
+		ClassGradebook gb = gradebookDao.getForClass(g);
 		
 		// then
 		assertEquals(0, gb.getResults().size());
@@ -60,7 +60,7 @@ public class GradebookDaoTest extends HibernateTestCase {
 		createContacts(g, 3);
 		
 		// when
-		Gradebook gb = gradebookDao.getForClass(g);
+		ClassGradebook gb = gradebookDao.getForClass(g);
 		
 		// then
 		assertEquals(3, gb.getResults().size());
@@ -75,7 +75,7 @@ public class GradebookDaoTest extends HibernateTestCase {
 		createAssessments(g, 2);
 		
 		// when
-		Gradebook gb = gradebookDao.getForClass(g);
+		ClassGradebook gb = gradebookDao.getForClass(g);
 		
 		// then
 		assertEquals(3, gb.getResults().size());
