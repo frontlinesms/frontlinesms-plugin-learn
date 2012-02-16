@@ -7,14 +7,12 @@
 	<import resource="classpath:spring-junit.xml"/>
 
 	<!-- DAO declarations -->	
-	<bean id="dao" class="net.frontlinesms.plugins.learn.data.repository.GradebookDao"/>
+	<bean id="gradebookDao" class="net.frontlinesms.plugins.learn.data.repository.GradebookDao"/>
 	<bean id="assessmentDao" class="net.frontlinesms.plugins.learn.data.repository.AssessmentDao" parent="baseHibernateDao"/>
 	<bean id="assessmentMessageResponseDao" class="net.frontlinesms.plugins.learn.data.repository.AssessmentMessageResponseDao" parent="baseHibernateDao"/>
-	<bean id="contactDao" class="net.frontlinesms.data.repository.hibernate.HibernateContactDao" parent="baseHibernateDao"/>
-	<bean id="groupDao" class="net.frontlinesms.data.repository.hibernate.HibernateGroupDao" parent="baseHibernateDao"/>
 	<bean id="groupMembershipDao" class="net.frontlinesms.data.repository.hibernate.HibernateGroupMembershipDao" parent="baseHibernateDao"/>
+	<bean id="groupDao" class="net.frontlinesms.data.repository.hibernate.HibernateGroupDao" parent="baseHibernateDao"/>
+	<bean id="contactDao" class="net.frontlinesms.data.repository.hibernate.HibernateContactDao" parent="baseHibernateDao"/>
 	<bean id="questionDao" class="net.frontlinesms.plugins.learn.data.repository.QuestionDao" parent="baseHibernateDao"/>
 	<bean id="reinforcementDao" class="net.frontlinesms.plugins.learn.data.repository.ReinforcementDao" parent="baseHibernateDao"/>
-	<bean id="topicDao" class="net.frontlinesms.plugins.learn.data.repository.TopicDao" parent="baseHibernateDao"/>
-	<bean id="topicItemDao" class="net.frontlinesms.plugins.learn.data.repository.TopicItemDao" parent="baseHibernateDao"/>
 </beans>

@@ -1,17 +1,23 @@
 package net.frontlinesms.plugins.learn.data.domain;
 
 public class AssessmentGradebook {
-
+	private final int[] averages;
+	private final StudentTopicResult[] results;
+	
+	public AssessmentGradebook(int[] averages, StudentTopicResult[] results) {
+		this.averages = averages;
+		this.results = results;
+	}
+	
 	public int getQuestionCount() {
-		return 0;
+		return averages.length - 1;
 	}
-
+	
 	public int[] getAverages() {
-		return null;
+		return averages;
 	}
-
+	
 	public StudentTopicResult[] getResults() {
-		return null;
+		return results;
 	}
-
 }

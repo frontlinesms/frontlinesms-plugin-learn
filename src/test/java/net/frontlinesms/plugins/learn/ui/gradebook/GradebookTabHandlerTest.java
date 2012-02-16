@@ -400,13 +400,15 @@ public class GradebookTabHandlerTest extends ThinletEventHandlerTest<GradebookTa
 		for(Contact s : students) {
 			StudentTopicResult r = mock(StudentTopicResult.class);
 			when(r.getContact()).thenReturn(s);
-			QuestionResponse[] individualResponses = new QuestionResponse[questionCount];
+			AssessmentMessageResponse[] individualResponses = new AssessmentMessageResponse[questionCount];
 			for (int i = 0; i < individualResponses.length; i++) {
-				QuestionResponse iqr = mock(QuestionResponse.class);
+				AssessmentMessageResponse iqr = mock(AssessmentMessageResponse.class);
 				Integer value = counter < baseIndex? null: counter;
-				when(iqr.isCorrect()).thenReturn(value != null && (counter % 1) == 0);
-				when(iqr.getValue()).thenReturn(value==null? null: value % 3);
-				individualResponses[i] = iqr;
+				if(value != null) {
+					when(iqr.isCorrect()).thenReturn((counter % 1) == 0);
+					when(iqr.getAnswer()).thenReturn(value % 3);
+					individualResponses[i] = iqr;
+				}
 				++counter;
 			}
 			when(r.getResponses()).thenReturn(individualResponses);

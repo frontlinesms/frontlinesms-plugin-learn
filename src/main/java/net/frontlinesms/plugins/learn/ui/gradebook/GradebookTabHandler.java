@@ -8,16 +8,8 @@ import thinlet.Thinlet;
 
 import net.frontlinesms.data.domain.Group;
 import net.frontlinesms.data.repository.GroupDao;
-import net.frontlinesms.plugins.learn.data.domain.Assessment;
-import net.frontlinesms.plugins.learn.data.domain.AssessmentGradebook;
-import net.frontlinesms.plugins.learn.data.domain.ClassGradebook;
-import net.frontlinesms.plugins.learn.data.domain.QuestionResponse;
-import net.frontlinesms.plugins.learn.data.domain.StudentGrades;
-import net.frontlinesms.plugins.learn.data.domain.StudentTopicResult;
-import net.frontlinesms.plugins.learn.data.domain.Topic;
-import net.frontlinesms.plugins.learn.data.repository.AssessmentDao;
-import net.frontlinesms.plugins.learn.data.repository.GradebookDao;
-import net.frontlinesms.plugins.learn.data.repository.TopicDao;
+import net.frontlinesms.plugins.learn.data.domain.*;
+import net.frontlinesms.plugins.learn.data.repository.*;
 import net.frontlinesms.ui.FrontlineUI;
 import net.frontlinesms.ui.ThinletUiEventHandler;
 import net.frontlinesms.ui.handler.contacts.GroupSelecterDialog;
@@ -202,12 +194,12 @@ public class GradebookTabHandler implements ThinletUiEventHandler, SingleGroupSe
 	}
 
 	private Object createRow(StudentTopicResult r) {
-		QuestionResponse[] responses = r.getResponses();
+		AssessmentMessageResponse[] responses = r.getResponses();
 		String[] text = new String[responses.length + 2];
 		text[0] = r.getContact().getName();
 		for (int i = 0; i < responses.length; i++) {
-			Integer value = responses[i].getValue();
-			text[i + 1] = value==null? "": ""+(char)('A' + value);
+			AssessmentMessageResponse res = responses[i];
+			text[i + 1] = res==null? "": ""+(char)('A' + res.getAnswer());
 		}
 		text[text.length - 1] = r.getScore() + "%";
 		return ui.createTableRow(null, text);

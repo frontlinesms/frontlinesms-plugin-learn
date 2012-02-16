@@ -1,14 +1,19 @@
 package net.frontlinesms.plugins.learn.data.gradebook;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import net.frontlinesms.data.domain.*;
 import net.frontlinesms.data.repository.*;
+import net.frontlinesms.junit.BaseTestCase;
 import net.frontlinesms.junit.HibernateTestCase;
 import net.frontlinesms.plugins.learn.data.domain.*;
 import net.frontlinesms.plugins.learn.data.repository.*;
 
 import static net.frontlinesms.junit.BaseTestCase.*;
+import static net.frontlinesms.plugins.learn.LearnTestUtils.*;
 
 public class AssessmentGradebookTest extends HibernateTestCase {
 	@Autowired private GradebookDao gradebookDao;
@@ -18,197 +23,201 @@ public class AssessmentGradebookTest extends HibernateTestCase {
 	@Autowired private ContactDao contactDao;
 	@Autowired private QuestionDao questionDao;
 	@Autowired private ReinforcementDao reinforcementDao;
-	@Autowired private QuestionResponseDao questionResponseDao;
+	@Autowired private AssessmentMessageResponseDao assessmentMessageResponseDao;
 	
 	public void testForEmptyClassWithEmptyAssessment() throws Exception {
 		// given
-		createClass(0);
-		Assessment a = createAssessment(0, 0);
+		Group group = createClass(0);
+		Assessment a = createAssessment(group, 0, 0);
 
 		// when
 		AssessmentGradebook g = gradebookDao.getForAssessment(a);
 		
 		// then
-		assertEquals(0, g.getQuestionCount());
-		assertEquals(array(0), g.getAverages());
-		assertEquals(0, g.getResults().length);
+		BaseTestCase.assertEquals(0, g.getQuestionCount());
+		BaseTestCase.assertEquals("averages", array(0), g.getAverages());
+		BaseTestCase.assertEquals(0, g.getResults().length);
 	}
 
 	public void testForEmptyClassWithAssessmentWithAReinforcement() throws Exception {
 		// given
-		createClass(0);
-		Assessment a = createAssessment(0, 1);
+		Group group = createClass(0);
+		Assessment a = createAssessment(group, 0, 1);
 
 		// when
 		AssessmentGradebook g = gradebookDao.getForAssessment(a);
 		
 		// then
-		assertEquals(0, g.getQuestionCount());
-		assertEquals(array(0), g.getAverages());
-		assertEquals(0, g.getResults().length);
+		BaseTestCase.assertEquals(0, g.getQuestionCount());
+		BaseTestCase.assertEquals("averages", array(0), g.getAverages());
+		BaseTestCase.assertEquals(0, g.getResults().length);
 	}
 
 	public void testForEmptyClassWithAssessmentWithAQuestion() throws Exception {
 		// given
-		createClass(0);
-		Assessment a = createAssessment(1, 0);
+		Group group = createClass(0);
+		Assessment a = createAssessment(group, 1, 0);
 
 		// when
 		AssessmentGradebook g = gradebookDao.getForAssessment(a);
 		
 		// then
-		assertEquals(1, g.getQuestionCount());
-		assertEquals(array(0, 0), g.getAverages());
-		assertEquals(0, g.getResults().length);
+		BaseTestCase.assertEquals(1, g.getQuestionCount());
+		BaseTestCase.assertEquals("averages", array(0, 0), g.getAverages());
+		BaseTestCase.assertEquals(0, g.getResults().length);
 	}
 
 	public void testForEmptyClassWithAssessmentWithAQuestionAndAReinforcement() throws Exception {
 		// given
-		createClass(0);
-		Assessment a = createAssessment(1, 1);
+		Group group = createClass(0);
+		Assessment a = createAssessment(group, 1, 1);
 
 		// when
 		AssessmentGradebook g = gradebookDao.getForAssessment(a);
 		
 		// then
-		assertEquals(1, g.getQuestionCount());
-		assertEquals(array(0, 0), g.getAverages());
-		assertEquals(0, g.getResults().length);
+		BaseTestCase.assertEquals(1, g.getQuestionCount());
+		BaseTestCase.assertEquals("averages", array(0, 0), g.getAverages());
+		BaseTestCase.assertEquals(0, g.getResults().length);
 	}
 
 	public void testForEmptyClassWithAssessmentWithManyQuestionsAndReinforcements() throws Exception {
 		// given
-		createClass(0);
-		Assessment a = createAssessment(3, 7);
+		Group group = createClass(0);
+		Assessment a = createAssessment(group, 3, 7);
 
 		// when
 		AssessmentGradebook g = gradebookDao.getForAssessment(a);
 		
 		// then
-		assertEquals(3, g.getQuestionCount());
-		assertEquals(array(0, 0, 0, 0), g.getAverages());
-		assertEquals(0, g.getResults().length);
+		BaseTestCase.assertEquals(3, g.getQuestionCount());
+		BaseTestCase.assertEquals("averages", array(0, 0, 0, 0), g.getAverages());
+		BaseTestCase.assertEquals(0, g.getResults().length);
 	}
 
 	public void testForSingleMemberClassWithEmptyAssessment() throws Exception {
 		// given
-		createClass(1);
-		Assessment a = createAssessment(0, 0);
+		Group group = createClass(1);
+		Assessment a = createAssessment(group, 0, 0);
 
 		// when
 		AssessmentGradebook g = gradebookDao.getForAssessment(a);
 		
 		// then
-		assertEquals(0, g.getQuestionCount());
-		assertEquals(array(0), g.getAverages());
-		assertResults(g, array(0));
+		BaseTestCase.assertEquals(0, g.getQuestionCount());
+		BaseTestCase.assertEquals("averages", array(0), g.getAverages());
+		assertResults(g, 0);
 	}
 
 	public void testForSingleMemberClassWithAssessmentWithAReinforcement() throws Exception {
 		// given
-		createClass(1);
-		Assessment a = createAssessment(0, 1);
+		Group group = createClass(1);
+		Assessment a = createAssessment(group, 0, 1);
 
 		// when
 		AssessmentGradebook g = gradebookDao.getForAssessment(a);
 		
 		// then
-		assertEquals(0, g.getQuestionCount());
-		assertEquals(array(0), g.getAverages());
-		assertResults(g, array(0));
+		BaseTestCase.assertEquals(0, g.getQuestionCount());
+		BaseTestCase.assertEquals("averages", array(0), g.getAverages());
+		assertResults(g, 0);
 	}
 
 	public void testForSingleMemberClassWithAssessmentWithAQuestion() throws Exception {
 		// given
-		createClass(1);
-		Assessment a = createAssessment(1, 0);
+		Group group = createClass(1);
+		Assessment a = createAssessment(group, 1, 0);
 
 		// when
 		AssessmentGradebook g = gradebookDao.getForAssessment(a);
 		
 		// then
-		assertEquals(1, g.getQuestionCount());
-		assertEquals(array(0, 0), g.getAverages());
+		BaseTestCase.assertEquals(1, g.getQuestionCount());
+		BaseTestCase.assertEquals("averages", array(0, 0), g.getAverages());
 		assertResults(g, array(null, 0));
 	}
 
 	public void testForSingleMemberClassWithAssessmentWithAQuestionAndAReinforcement() throws Exception {
 		// given
-		createClass(1);
-		Assessment a = createAssessment(1, 1);
+		Group group = createClass(1);
+		Assessment a = createAssessment(group, 1, 1);
 
 		// when
 		AssessmentGradebook g = gradebookDao.getForAssessment(a);
 		
 		// then
-		assertEquals(1, g.getQuestionCount());
-		assertEquals(array(0, 0), g.getAverages());
+		BaseTestCase.assertEquals(1, g.getQuestionCount());
+		BaseTestCase.assertEquals("averages", array(0, 0), g.getAverages());
 		assertResults(g, array(null, 0));
 	}
 
 	public void testForSingleMemberClassWithAssessmentWithManyQuestionsAndReinforcements() throws Exception {
 		// given
-		createClass(1);
-		Assessment a = createAssessment(3, 7);
+		Group group = createClass(1);
+		Assessment a = createAssessment(group, 3, 7);
 
 		// when
 		AssessmentGradebook g = gradebookDao.getForAssessment(a);
 		
 		// then
-		assertEquals(3, g.getQuestionCount());
-		assertEquals(array(0, 0, 0, 0), g.getAverages());
+		BaseTestCase.assertEquals(3, g.getQuestionCount());
+		BaseTestCase.assertEquals("averages", array(0, 0, 0, 0), g.getAverages());
 		assertResults(g, array(null, 0));
 	}
 
 	public void testForSingleMemberClassWithAssessmentWithAQuestionAndCorrectResponse() throws Exception {
 		// given
-		Contact c = getContacts(createClass(1))[0];
-		Assessment a = createAssessment(1, 0);
+		Group group = createClass(1);
+		Contact c = getContacts(group)[0];
+		Assessment a = createAssessment(group, 1, 0);
 		createResponse(c, a, 0, true);
 
 		// when
 		AssessmentGradebook g = gradebookDao.getForAssessment(a);
 		
 		// then
-		assertEquals(1, g.getQuestionCount());
-		assertEquals(array(100, 100), g.getAverages());
-		assertResults(g, array(1, 100));
+		BaseTestCase.assertEquals(1, g.getQuestionCount());
+		BaseTestCase.assertEquals("averages", array(100, 100), g.getAverages());
+		assertResults(g, 0, 100);
 	}
 
 	public void testForSingleMemberClassWithAssessmentWithAQuestionAndIncorrectResponse() throws Exception {
 		// given
-		Contact c = getContacts(createClass(1))[0];
-		Assessment a = createAssessment(1, 0);
+		Group group = createClass(1);
+		Contact c = getContacts(group)[0];
+		Assessment a = createAssessment(group, 1, 0);
 		createResponse(c, a, 0, false);
 
 		// when
 		AssessmentGradebook g = gradebookDao.getForAssessment(a);
 		
 		// then
-		assertEquals(1, g.getQuestionCount());
-		assertEquals(array(0, 0), g.getAverages());
-		assertResults(g, array(1, 0));
+		BaseTestCase.assertEquals(1, g.getQuestionCount());
+		BaseTestCase.assertEquals("averages", array(0, 0), g.getAverages());
+		assertResults(g, 1, 0);
 	}
 
 	public void testForSingleMemberClassWithAssessmentWithAQuestionAndAReinforcementAndAResponse() throws Exception {
 		// given
-		Contact c = getContacts(createClass(1))[0];
-		Assessment a = createAssessment(1, 1);
+		Group group = createClass(1);
+		Contact c = getContacts(group)[0];
+		Assessment a = createAssessment(group, 1, 1);
 		createResponse(c, a, 0, true);
 
 		// when
 		AssessmentGradebook g = gradebookDao.getForAssessment(a);
 		
 		// then
-		assertEquals(1, g.getQuestionCount());
-		assertEquals(array(100, 100), g.getAverages());
-		assertResults(g, array(1, 0));
+		BaseTestCase.assertEquals(1, g.getQuestionCount());
+		BaseTestCase.assertEquals("averages", array(100, 100), g.getAverages());
+		assertResults(g, 0, 100);
 	}
 
 	public void testForSingleMemberClassWithAssessmentWithManyQuestionsAndReinforcementsAndSomeResponses() throws Exception {
 		// given
-		Contact c = getContacts(createClass(1))[0];
-		Assessment a = createAssessment(3, 7);
+		Group group = createClass(1);
+		Contact c = getContacts(group)[0];
+		Assessment a = createAssessment(group, 3, 7);
 		createResponse(c, a, 0, true);
 		createResponse(c, a, 2, false);
 
@@ -216,24 +225,41 @@ public class AssessmentGradebookTest extends HibernateTestCase {
 		AssessmentGradebook g = gradebookDao.getForAssessment(a);
 		
 		// then
-		assertEquals(3, g.getQuestionCount());
-		assertEquals(array(100, 0, 0, 33), g.getAverages());
-		assertResults(g, array(1, null, 1, 33));
+		BaseTestCase.assertEquals(3, g.getQuestionCount());
+		BaseTestCase.assertEquals("averages", array(100, 0, 0, 33), g.getAverages());
+		assertResults(g, array(0, null, 1, 33));
 	}
 	
 //> ASSERT METHODS
+	private void assertResults(AssessmentGradebook g, Integer... results) {
+		assertResults(g, new Integer[][] { results });
+	}
+	
 	private void assertResults(AssessmentGradebook g, Integer[]...results) {
+		StudentTopicResult[] strs = g.getResults();
+		assertEquals("results length", results.length, strs.length);
+		for(int i=0; i<results.length; ++i) {
+			StudentTopicResult str = strs[i];
+			Integer[] individualResults = results[i];
+			for (int j = 0; j < individualResults.length-1; j++) {
+				AssessmentMessageResponse amr = str.getResponses()[j];
+				Integer answer = amr==null? null: amr.getAnswer();
+				assertEquals("result #"+i, individualResults[j], answer);
+			}
+			assertEquals(individualResults[individualResults.length-1].intValue(), str.getScore());
+		}
 	}
 	
 //> SETUP HELPER METHODS
 	private Group createClass(int memberCount) throws Exception {
-		Group g = new Group(null, "test-group");
+		Group g = new Group(new Group(null, null), "test-group");
 		groupDao.saveGroup(g);
 		
 		for (int i = 0; i < memberCount; i++) {
 			Contact c = new Contact("test-contact-"+i,
 					"012345"+i, null, null, null, true);
 			contactDao.saveContact(c);
+			groupMembershipDao.addMember(g, c);
 		}
 		
 		return g;
@@ -243,19 +269,25 @@ public class AssessmentGradebookTest extends HibernateTestCase {
 		return groupMembershipDao.getActiveMembers(g).toArray(new Contact[0]);
 	}
 
-	private Assessment createAssessment(int questionCount, int reinforcementCount) {
+	private Assessment createAssessment(Group g, int questionCount, int reinforcementCount) {
 		Assessment a = new Assessment();
+		a.setGroup(g);
 		
+		List<AssessmentMessage> messages = new ArrayList<AssessmentMessage>();
 		for(int i=0; i<Math.max(questionCount, reinforcementCount); ++i) {
 			if(i < questionCount) {
 				Question q = new Question();
+				q.setAnswers(new String[3]);
 				questionDao.save(q);
+				messages.add(new AssessmentMessage(q));
 			}
 			if(i < reinforcementCount) {
 				Reinforcement r = new Reinforcement();
 				reinforcementDao.save(r);
+				messages.add(new AssessmentMessage(r));
 			}
 		}
+		a.setMessages(messages);
 		
 		assessmentDao.save(a);
 		
@@ -275,8 +307,13 @@ public class AssessmentGradebookTest extends HibernateTestCase {
 		if(am == null) throw new RuntimeException("Could not find question #" + questionNumber);
 		
 		Question q = (Question) am.getTopicItem();
+		System.out.println("AssessmentGradebookTest.createResponse() : q=" + q);
 		int answer = correct? q.getCorrectAnswer(): q.getCorrectAnswer()+1 % q.getAnswers().length;
-		QuestionResponse r = new QuestionResponse(am, answer);
-		questionResponseDao.save(r);
+		AssessmentMessageResponse r = new AssessmentMessageResponse();
+		r.setStudent(c);
+		r.setAnswer(answer);
+		r.setAssessmentMessage(am);
+		r.setCorrect(correct);
+		assessmentMessageResponseDao.save(r);
 	}
 }
