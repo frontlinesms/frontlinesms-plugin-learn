@@ -40,6 +40,34 @@ public class GradebookTabHandlerTest extends ThinletEventHandlerTest<GradebookTa
 		assertFalse($("tfClass").isEditable());
 	}
 	
+	public void testTopicSelecterInitialisedToAllTopics() {
+		TODO("implement");
+	}
+	
+	public void testTopicSelecterDisabledByDefault() {
+		TODO("implement");
+	}
+	
+	public void testSettingGroupEnablesTopicSelecter() {
+		TODO("implement");
+	}
+	
+	public void testChangingToAnotherGroupResetsTopicSelecter() {
+		TODO("implement");
+	}
+	
+	public void testSelectingATopicUpdatesTableHeaders() {
+		TODO("implement");
+	}
+	
+	public void testSelectingATopicAddsAverageRowAtBottomOfTable() {
+		TODO("implement");
+	}
+	
+	public void testSelectingATopicUpdatesTableContents() {
+		TODO("implement");
+	}
+	
 	public void testGradeTableInitialisedEmpty() {
 		assertEquals(0, $("tbGrades").getRowCount());
 	}
