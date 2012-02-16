@@ -1,4 +1,4 @@
-package net.frontlinesms.plugins.learn.data.repository;
+package net.frontlinesms.plugins.learn.data.gradebook;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,10 +14,17 @@ import net.frontlinesms.junit.BaseTestCase;
 import net.frontlinesms.junit.HibernateTestCase;
 import net.frontlinesms.plugins.learn.data.domain.*;
 import net.frontlinesms.plugins.learn.data.domain.Question.Type;
+import net.frontlinesms.plugins.learn.data.repository.AssessmentDao;
+import net.frontlinesms.plugins.learn.data.repository.AssessmentMessageResponseDao;
+import net.frontlinesms.plugins.learn.data.repository.GradebookDao;
+import net.frontlinesms.plugins.learn.data.repository.QuestionDao;
+import net.frontlinesms.plugins.learn.data.repository.ReinforcementDao;
+import net.frontlinesms.plugins.learn.data.repository.TopicDao;
+import net.frontlinesms.plugins.learn.data.repository.TopicItemDao;
 
 import static net.frontlinesms.plugins.learn.LearnTestUtils.*;
 
-public class GradebookDaoTest extends HibernateTestCase {
+public class ClassGradebookTest extends HibernateTestCase {
 	@Autowired private GradebookDao gradebookDao;
 	@Autowired private AssessmentDao assessmentDao;
 	@Autowired private AssessmentMessageResponseDao assessmentMessageResponseDao;
