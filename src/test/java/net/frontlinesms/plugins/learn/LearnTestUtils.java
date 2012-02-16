@@ -79,6 +79,12 @@ public class LearnTestUtils {
 		return items;
 	}
 	
+	public static Assessment mockAssessmentWithGroup(long id, String groupName, String startDate, String endDate) {
+		Assessment a = mockAssessmentWithGroup(groupName, startDate, endDate);
+		when(a.getId()).thenReturn(id);
+		return a;
+	}
+	
 	public static Assessment mockAssessmentWithGroup(String groupName, String startDate, String endDate) {
 		Assessment a = mock(Assessment.class);
 		Group g = mockGroup(groupName);

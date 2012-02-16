@@ -20,7 +20,6 @@ import net.frontlinesms.data.domain.Group;
 @Entity
 public class Assessment implements HasTopic {
 	/** Unique id for this entity.  This is for hibernate usage. */
-	@SuppressWarnings("unused")
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(unique=true,nullable=false,updatable=false)
 	private long id;
@@ -30,6 +29,10 @@ public class Assessment implements HasTopic {
 	private Group group;
 	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER) @OrderBy("startDate")
 	private List<AssessmentMessage> messages = new ArrayList<AssessmentMessage>();
+	
+	public long getId() {
+		return id;
+	}
 	
 	public Topic getTopic() {
 		return topic;

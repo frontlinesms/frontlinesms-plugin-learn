@@ -19,6 +19,7 @@
 		<panel colspan="2">
 			<button name="btNewAssessment" action="newAssessment" text="i18n.plugins.learn.assessment.new" icon="/icons/plugins/learn/add.png" halign="left"/>
 			<button name="btEditAssessment" action="editAssessment" text="i18n.plugins.learn.assessment.edit" enabled="false"/>
+			<button name="btDeleteAssessment" action="deleteAssessment" text="i18n.plugins.learn.assessment.delete" enabled="false"/>
 		</panel>
 	</panel>
 </tab>

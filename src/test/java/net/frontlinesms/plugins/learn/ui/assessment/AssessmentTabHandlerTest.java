@@ -244,7 +244,7 @@ public class AssessmentTabHandlerTest extends ThinletEventHandlerTest<Assessment
 		$("tblAssessments").getRow(0).select();
 		
 		// then
-		assertFalse($("btDeleteAssessment").isEnabled());
+		assertTrue($("btDeleteAssessment").isEnabled());
 	}
 	
 	public void testDeleteAssessmentButtonShouldBeDisabledAfterAssessmentListIsCleared() {
@@ -273,7 +273,7 @@ public class AssessmentTabHandlerTest extends ThinletEventHandlerTest<Assessment
 		$("btDeleteAssessment").click();
 		
 		// then
-		$("dgConfirm").exists();
+		$("confirmDialog").exists();
 		verify(assessmentDao, never()).delete(any(Assessment.class));
 	}
 	
@@ -284,10 +284,24 @@ public class AssessmentTabHandlerTest extends ThinletEventHandlerTest<Assessment
 		// when
 		$("tblAssessments").getRow(0).select();
 		$("btDeleteAssessment").click();
-		$("dgConfirm").find("btnOk").click();
+		$("confirmDialog").find("btContinue").click();
 		
 		// then
 		verify(assessmentDao).delete(a);
+	}
+	
+	public void testDeletedAssessmentShouldBeRemovedFromView() {
+		// given
+		populateAssessmentListForTopic().get(0);
+		assertEquals(2, $("tblAssessments").getRowCount());
+
+		// when
+		$("tblAssessments").getRow(0).select();
+		$("btDeleteAssessment").click();
+		$("confirmDialog").find("btContinue").click();
+		
+		// then
+		assertEquals(1, $("tblAssessments").getRowCount());
 	}
 	
 	public void testEditAssesmentButtonShouldOpenEditWindow() {
@@ -305,8 +319,8 @@ public class AssessmentTabHandlerTest extends ThinletEventHandlerTest<Assessment
 //> TEST HELPER METHODS
 	private List<Assessment> populateAssessmentListForTopic() {
 		List<Assessment> assessments = asList(
-				mockAssessmentWithGroup("Space mutants", "20/12/11", "13/12/12"),
-				mockAssessmentWithGroup("Biker mice", "3/4/12", "14/4/12"));
+				mockAssessmentWithGroup(1, "Space mutants", "20/12/11", "13/12/12"),
+				mockAssessmentWithGroup(2, "Biker mice", "3/4/12", "14/4/12"));
 		when(assessmentDao.findAllByTopic(any(Topic.class))).thenReturn(assessments);
 		$("cbTopic").setSelected("Music");
 		assertEquals(2, $("tblAssessments").getRowCount());

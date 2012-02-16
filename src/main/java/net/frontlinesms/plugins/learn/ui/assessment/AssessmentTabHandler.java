@@ -13,6 +13,7 @@ import net.frontlinesms.ui.FrontlineUI;
 import net.frontlinesms.ui.ThinletUiEventHandler;
 import net.frontlinesms.ui.handler.contacts.GroupSelecterDialog;
 import net.frontlinesms.ui.handler.contacts.SingleGroupSelecterDialogOwner;
+import net.frontlinesms.ui.handler.core.ConfirmationDialogHandler;
 import net.frontlinesms.ui.i18n.InternationalisationUtils;
 
 public class AssessmentTabHandler implements ThinletUiEventHandler, SingleGroupSelecterDialogOwner {
@@ -61,8 +62,24 @@ public class AssessmentTabHandler implements ThinletUiEventHandler, SingleGroupS
 		ui.add(new EditAssessmentDialogHandler(ui, assessmentDao, groupDao, topicDao, topicItemDao, getSelectedAssessment()).getDialog());
 	}
 	
+	public void deleteAssessment() {
+		new ConfirmationDialogHandler(ui, this, "doDeleteAssessment");
+	}
+	
+	public void doDeleteAssessment() {
+		Assessment assessment = getSelectedAssessment();
+		assessmentDao.delete(assessment);
+		for(Object row : ui.getItems(find("tblAssessments"))) {
+			if(ui.getAttachedObject(row, Assessment.class).getId() == assessment.getId()) {
+				ui.remove(row);
+			}
+		}
+	}
+	
 	public void assessmentSelectionChanged() {
-		ui.setEnabled(find("btEditAssessment"), getSelectedAssessment()!=null);
+		boolean assessmentSelected = getSelectedAssessment()!=null;
+		ui.setEnabled(find("btEditAssessment"), assessmentSelected);
+		ui.setEnabled(find("btDeleteAssessment"), assessmentSelected);
 	}
 	
 	public void topicChanged(Object cbTopic) {

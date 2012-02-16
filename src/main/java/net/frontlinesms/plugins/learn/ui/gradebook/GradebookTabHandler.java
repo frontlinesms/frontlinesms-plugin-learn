@@ -68,7 +68,6 @@ public class GradebookTabHandler implements ThinletUiEventHandler, SingleGroupSe
 		Object cbTopic = find("cbTopic");
 		selectedTopic = ui.getAttachedObject(ui.getSelectedItem(cbTopic), Topic.class);
 		
-		System.out.println("GradebookTabHandler.topicSelected() : " + selectedTopic);
 		if(selectedTopic == null) {
 			setGroup(selectedGroup);
 		} else {
@@ -136,7 +135,6 @@ public class GradebookTabHandler implements ThinletUiEventHandler, SingleGroupSe
 	}
 	
 	private void setGroup(Group g) {
-		System.out.println("GradebookTabHandler.setGroup() : ENTRY");
 		selectedGroup = g;
 		
 		// disable and reset assessment selecter
