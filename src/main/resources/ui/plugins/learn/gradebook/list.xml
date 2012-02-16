@@ -9,6 +9,10 @@
 			<choice text="plugins.learn.topic.all"/>
 		</combobox>
 		
+		<combobox name="cbAssessment"
+				action="assessmentSelected"
+				editable="false" enabled="false"/>
+		
 		<table name="tbGrades">
 			<header>
 				<column text="i18n.plugins.learn.gradebook.student"/>

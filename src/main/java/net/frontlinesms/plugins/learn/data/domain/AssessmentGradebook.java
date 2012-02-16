@@ -10,7 +10,7 @@ public class AssessmentGradebook {
 		return null;
 	}
 
-	public QuestionResponse[] getResults() {
+	public StudentTopicResult[] getResults() {
 		return null;
 	}
 

@@ -35,10 +35,6 @@ public class GradebookDao {
 		return new ClassGradebook(topics, results);
 	}
 
-	public ClassTopicGradebook getForClassAndTopic(Group g, Topic t) {
-		return null;
-	}
-
 //> HELPERS
 	private StudentGrades createResult(Contact student,
 			List<Assessment> assessments) {
