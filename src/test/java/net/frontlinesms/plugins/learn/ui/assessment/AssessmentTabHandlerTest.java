@@ -229,23 +229,65 @@ public class AssessmentTabHandlerTest extends ThinletEventHandlerTest<Assessment
 	}
 	
 	public void testDeleteAssessmentButtonVisible() {
-		TODO("");
+		$("btDeleteAssessment").exists();
 	}
 	
 	public void testDeleteAssessmentButtonDisabledByDefault() {
-		TODO("");
+		assertFalse($("btDeleteAssessment").isEnabled());
 	}
 	
 	public void testDeleteAssessmentButtonEnabledWhenAssessmentSelected() {
-		TODO("");
+		// given
+		populateAssessmentListForTopic();
+
+		// when
+		$("tblAssessments").getRow(0).select();
+		
+		// then
+		assertFalse($("btDeleteAssessment").isEnabled());
+	}
+	
+	public void testDeleteAssessmentButtonShouldBeDisabledAfterAssessmentListIsCleared() {
+		// given
+		populateAssessmentListForTopic();
+
+		// when
+		$("tblAssessments").getRow(0).select();
+		// then
+		assertTrue($("btDeleteAssessment").isEnabled());
+		
+		// when
+		$("cbViewBy_class").select();
+		
+		// then
+		assertEquals(0, $("tblAssessments").getRowCount());
+		assertFalse($("btDeleteAssessment").isEnabled());
 	}
 	
 	public void testDeleteAssessmentButtonShowsConfirmationDialog() {
-		TODO("");
+		// given
+		populateAssessmentListForTopic();
+
+		// when
+		$("tblAssessments").getRow(0).select();
+		$("btDeleteAssessment").click();
+		
+		// then
+		$("dgConfirm").exists();
+		verify(assessmentDao, never()).delete(any(Assessment.class));
 	}
 	
 	public void testConfirmingDeleteAssessmentCallsDaoDeleteForCorrectAssessment() {
-		TODO("");
+		// given
+		Assessment a = populateAssessmentListForTopic().get(0);
+
+		// when
+		$("tblAssessments").getRow(0).select();
+		$("btDeleteAssessment").click();
+		$("dgConfirm").find("btnOk").click();
+		
+		// then
+		verify(assessmentDao).delete(a);
 	}
 	
 	public void testEditAssesmentButtonShouldOpenEditWindow() {
@@ -261,12 +303,13 @@ public class AssessmentTabHandlerTest extends ThinletEventHandlerTest<Assessment
 	}
 	
 //> TEST HELPER METHODS
-	private void populateAssessmentListForTopic() {
+	private List<Assessment> populateAssessmentListForTopic() {
 		List<Assessment> assessments = asList(
 				mockAssessmentWithGroup("Space mutants", "20/12/11", "13/12/12"),
 				mockAssessmentWithGroup("Biker mice", "3/4/12", "14/4/12"));
 		when(assessmentDao.findAllByTopic(any(Topic.class))).thenReturn(assessments);
 		$("cbTopic").setSelected("Music");
 		assertEquals(2, $("tblAssessments").getRowCount());
+		return assessments;
 	}
 }
