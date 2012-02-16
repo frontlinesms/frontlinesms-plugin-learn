@@ -139,10 +139,15 @@ public class GradebookTabHandler implements ThinletUiEventHandler, SingleGroupSe
 		System.out.println("GradebookTabHandler.setGroup() : ENTRY");
 		selectedGroup = g;
 		
+		// disable and reset assessment selecter
+		Object cbAssessment = find("cbAssessment");
+		ui.setEnabled(cbAssessment, false);
+		ui.setText(cbAssessment, "");
+		
 		// enable and reset topic selecter
 		Object cbTopic = find("cbTopic");
 		ui.setEnabled(cbTopic, true);
-		ui.setText(cbTopic, "plugins.learn.topic.all");
+		ui.setText(cbTopic, getI18nString("plugins.learn.topic.all"));
 		
 		// Update group selecter
 		ui.setText(find("tfClass"), g.getName());

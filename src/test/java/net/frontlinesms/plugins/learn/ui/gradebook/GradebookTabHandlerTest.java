@@ -209,14 +209,24 @@ public class GradebookTabHandlerTest extends ThinletEventHandlerTest<GradebookTa
 		$("cbTopic").setSelected("plugins.learn.topic.all");
 		
 		// then
-		System.out
-				.println("GradebookTabHandlerTest.testSelectingATopicAndThenSelectingAllTopicsUpdatesTableColumnTitles()");
-		for(String title : $("tbGrades").getColumnTitles()) {
-			System.out.println("Title: " + title);
-		}
 		assertEquals("Grade table headers",
 				array("plugins.learn.student", "topic1"),
 				$("tbGrades").getColumnTitles());
+	}
+	
+	public void testReturningToAllTopicViewShouldResetAssessmentsList() {
+		// given
+		Group misfits = mockTopicAndClassAndAssessments("topic1", "misfits", "Alfred", "Bernadette");
+		initUiForTests();
+		h.groupSelectionCompleted(misfits);
+		$("cbTopic").setSelected("topic1");
+		
+		// when
+		$("cbTopic").setSelected("plugins.learn.topic.all");
+		
+		// then
+		assertFalse($("cbAssessment").isEnabled());
+		assertEquals("", $("cbAssessment").getText());
 	}
 	
 	public void testSelectingATopicAddsAverageRowAtBottomOfTable() {
