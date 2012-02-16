@@ -1,4 +1,4 @@
-package net.frontlinesms.plugins.learn.data.repository;
+package net.frontlinesms.plugins.learn.data.gradebook;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -11,8 +11,10 @@ import net.frontlinesms.data.domain.Contact;
 import net.frontlinesms.data.domain.Group;
 import net.frontlinesms.data.repository.GroupMembershipDao;
 import net.frontlinesms.plugins.learn.data.domain.*;
+import net.frontlinesms.plugins.learn.data.repository.AssessmentDao;
+import net.frontlinesms.plugins.learn.data.repository.AssessmentMessageResponseDao;
 
-public class GradebookDao {
+public class GradebookService {
 //> DATA ACCESS OBJECTS
 	@Autowired private AssessmentDao assessmentDao;
 	@Autowired private AssessmentMessageResponseDao assessmentMessageResponseDao;

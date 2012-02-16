@@ -9,6 +9,7 @@ import thinlet.Thinlet;
 import net.frontlinesms.data.domain.Group;
 import net.frontlinesms.data.repository.GroupDao;
 import net.frontlinesms.plugins.learn.data.domain.*;
+import net.frontlinesms.plugins.learn.data.gradebook.GradebookService;
 import net.frontlinesms.plugins.learn.data.repository.*;
 import net.frontlinesms.ui.FrontlineUI;
 import net.frontlinesms.ui.ThinletUiEventHandler;
@@ -24,7 +25,7 @@ public class GradebookTabHandler implements ThinletUiEventHandler, SingleGroupSe
 	private final FrontlineUI ui;
 	private final Object tab;
 	private final GroupDao groupDao;
-	private final GradebookDao gradebookDao;
+	private final GradebookService gradebookService;
 	private final TopicDao topicDao;
 	private final AssessmentDao assessmentDao;
 
@@ -35,7 +36,7 @@ public class GradebookTabHandler implements ThinletUiEventHandler, SingleGroupSe
 		this.ui = ui;
 		tab = ui.loadComponentFromFile(XML_LAYOUT, this);
 		groupDao = (GroupDao) ctx.getBean("groupDao");
-		gradebookDao = (GradebookDao) ctx.getBean("gradebookDao");
+		gradebookService = (GradebookService) ctx.getBean("gradebookService");
 		topicDao = (TopicDao) ctx.getBean("topicDao");
 		assessmentDao = (AssessmentDao) ctx.getBean("assessmentDao");
 		
@@ -102,7 +103,7 @@ public class GradebookTabHandler implements ThinletUiEventHandler, SingleGroupSe
 	}
 	
 	private void setSelectedAssessment(Assessment assessment) {
-		AssessmentGradebook gradebook = gradebookDao.getForAssessment(assessment);
+		AssessmentGradebook gradebook = gradebookService.getForAssessment(assessment);
 		updateTable(gradebook);
 	}
 
@@ -145,7 +146,7 @@ public class GradebookTabHandler implements ThinletUiEventHandler, SingleGroupSe
 		
 		// Update group selecter
 		ui.setText(find("tfClass"), g.getName());
-		ClassGradebook gradebook = gradebookDao.getForClass(g);
+		ClassGradebook gradebook = gradebookService.getForClass(g);
 		
 		// Update table
 		Object table = find("tbGrades");

@@ -16,7 +16,6 @@ import net.frontlinesms.plugins.learn.data.domain.*;
 import net.frontlinesms.plugins.learn.data.domain.Question.Type;
 import net.frontlinesms.plugins.learn.data.repository.AssessmentDao;
 import net.frontlinesms.plugins.learn.data.repository.AssessmentMessageResponseDao;
-import net.frontlinesms.plugins.learn.data.repository.GradebookDao;
 import net.frontlinesms.plugins.learn.data.repository.QuestionDao;
 import net.frontlinesms.plugins.learn.data.repository.ReinforcementDao;
 import net.frontlinesms.plugins.learn.data.repository.TopicDao;
@@ -25,7 +24,8 @@ import net.frontlinesms.plugins.learn.data.repository.TopicItemDao;
 import static net.frontlinesms.plugins.learn.LearnTestUtils.*;
 
 public class ClassGradebookTest extends HibernateTestCase {
-	@Autowired private GradebookDao gradebookDao;
+	@Autowired private GradebookService gradebookService;
+	
 	@Autowired private AssessmentDao assessmentDao;
 	@Autowired private AssessmentMessageResponseDao assessmentMessageResponseDao;
 	@Autowired private ContactDao contactDao;
@@ -41,7 +41,7 @@ public class ClassGradebookTest extends HibernateTestCase {
 		Group g = createGroup();
 		
 		// when
-		ClassGradebook gb = gradebookDao.getForClass(g);
+		ClassGradebook gb = gradebookService.getForClass(g);
 		
 		// then
 		assertEquals(0, gb.getResults().size());
@@ -54,7 +54,7 @@ public class ClassGradebookTest extends HibernateTestCase {
 		createAssessments(g, 2);
 		
 		// when
-		ClassGradebook gb = gradebookDao.getForClass(g);
+		ClassGradebook gb = gradebookService.getForClass(g);
 		
 		// then
 		assertEquals(0, gb.getResults().size());
@@ -67,7 +67,7 @@ public class ClassGradebookTest extends HibernateTestCase {
 		createContacts(g, 3);
 		
 		// when
-		ClassGradebook gb = gradebookDao.getForClass(g);
+		ClassGradebook gb = gradebookService.getForClass(g);
 		
 		// then
 		assertEquals(3, gb.getResults().size());
@@ -82,7 +82,7 @@ public class ClassGradebookTest extends HibernateTestCase {
 		createAssessments(g, 2);
 		
 		// when
-		ClassGradebook gb = gradebookDao.getForClass(g);
+		ClassGradebook gb = gradebookService.getForClass(g);
 		
 		// then
 		assertEquals(3, gb.getResults().size());
@@ -101,7 +101,7 @@ public class ClassGradebookTest extends HibernateTestCase {
 		createResponses(assessment, contacts);
 
 		// when
-		List<StudentGrades> actualGrades = gradebookDao.getForClass(g).getResults();
+		List<StudentGrades> actualGrades = gradebookService.getForClass(g).getResults();
 		
 		// then
 		assertEquals(3, actualGrades.size());
@@ -120,7 +120,7 @@ public class ClassGradebookTest extends HibernateTestCase {
 		createResponses(assessments[1], contacts[0], contacts[2]);
 		
 		// when
-		List<StudentGrades> actualGrades = gradebookDao.getForClass(g).getResults();
+		List<StudentGrades> actualGrades = gradebookService.getForClass(g).getResults();
 		
 		// then
 		Integer[][] expectedGrades = {

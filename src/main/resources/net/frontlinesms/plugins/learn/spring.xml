@@ -13,6 +13,7 @@
 	<tx:annotation-driven />
 	
 	<bean id="assessmentDao" parent="baseHibernateDao" class="net.frontlinesms.plugins.learn.data.repository.AssessmentDao"/>
+	<bean id="assessmentMessageResponseDao" parent="baseHibernateDao" class="net.frontlinesms.plugins.learn.data.repository.AssessmentMessageResponseDao"/>
 	<bean id="questionDao" parent="baseHibernateDao" class="net.frontlinesms.plugins.learn.data.repository.QuestionDao"/>
 	<bean id="reinforcementDao" parent="baseHibernateDao" class="net.frontlinesms.plugins.learn.data.repository.ReinforcementDao"/>
 	<bean id="topicItemDao" parent="baseHibernateDao" class="net.frontlinesms.plugins.learn.data.repository.TopicItemDao"/>
@@ -22,4 +23,6 @@
 		<property name="sessionFactory" ref="sessionFactory"/>
 		<property name="eventBus" ref="eventBus"/>
 	</bean>
+
+	<bean id="gradebookService" class="net.frontlinesms.plugins.learn.data.repository.GradebookService"/>
 </beans>

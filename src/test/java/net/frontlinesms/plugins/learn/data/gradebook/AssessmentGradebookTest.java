@@ -13,10 +13,10 @@ import net.frontlinesms.plugins.learn.data.domain.*;
 import net.frontlinesms.plugins.learn.data.repository.*;
 
 import static net.frontlinesms.junit.BaseTestCase.*;
-import static net.frontlinesms.plugins.learn.LearnTestUtils.*;
 
 public class AssessmentGradebookTest extends HibernateTestCase {
-	@Autowired private GradebookDao gradebookDao;
+	@Autowired private GradebookService gradebookService;
+	
 	@Autowired private AssessmentDao assessmentDao;
 	@Autowired private GroupMembershipDao groupMembershipDao;
 	@Autowired private GroupDao groupDao;
@@ -31,7 +31,7 @@ public class AssessmentGradebookTest extends HibernateTestCase {
 		Assessment a = createAssessment(group, 0, 0);
 
 		// when
-		AssessmentGradebook g = gradebookDao.getForAssessment(a);
+		AssessmentGradebook g = gradebookService.getForAssessment(a);
 		
 		// then
 		BaseTestCase.assertEquals(0, g.getQuestionCount());
@@ -45,7 +45,7 @@ public class AssessmentGradebookTest extends HibernateTestCase {
 		Assessment a = createAssessment(group, 0, 1);
 
 		// when
-		AssessmentGradebook g = gradebookDao.getForAssessment(a);
+		AssessmentGradebook g = gradebookService.getForAssessment(a);
 		
 		// then
 		BaseTestCase.assertEquals(0, g.getQuestionCount());
@@ -59,7 +59,7 @@ public class AssessmentGradebookTest extends HibernateTestCase {
 		Assessment a = createAssessment(group, 1, 0);
 
 		// when
-		AssessmentGradebook g = gradebookDao.getForAssessment(a);
+		AssessmentGradebook g = gradebookService.getForAssessment(a);
 		
 		// then
 		BaseTestCase.assertEquals(1, g.getQuestionCount());
@@ -73,7 +73,7 @@ public class AssessmentGradebookTest extends HibernateTestCase {
 		Assessment a = createAssessment(group, 1, 1);
 
 		// when
-		AssessmentGradebook g = gradebookDao.getForAssessment(a);
+		AssessmentGradebook g = gradebookService.getForAssessment(a);
 		
 		// then
 		BaseTestCase.assertEquals(1, g.getQuestionCount());
@@ -87,7 +87,7 @@ public class AssessmentGradebookTest extends HibernateTestCase {
 		Assessment a = createAssessment(group, 3, 7);
 
 		// when
-		AssessmentGradebook g = gradebookDao.getForAssessment(a);
+		AssessmentGradebook g = gradebookService.getForAssessment(a);
 		
 		// then
 		BaseTestCase.assertEquals(3, g.getQuestionCount());
@@ -101,7 +101,7 @@ public class AssessmentGradebookTest extends HibernateTestCase {
 		Assessment a = createAssessment(group, 0, 0);
 
 		// when
-		AssessmentGradebook g = gradebookDao.getForAssessment(a);
+		AssessmentGradebook g = gradebookService.getForAssessment(a);
 		
 		// then
 		BaseTestCase.assertEquals(0, g.getQuestionCount());
@@ -115,7 +115,7 @@ public class AssessmentGradebookTest extends HibernateTestCase {
 		Assessment a = createAssessment(group, 0, 1);
 
 		// when
-		AssessmentGradebook g = gradebookDao.getForAssessment(a);
+		AssessmentGradebook g = gradebookService.getForAssessment(a);
 		
 		// then
 		BaseTestCase.assertEquals(0, g.getQuestionCount());
@@ -129,7 +129,7 @@ public class AssessmentGradebookTest extends HibernateTestCase {
 		Assessment a = createAssessment(group, 1, 0);
 
 		// when
-		AssessmentGradebook g = gradebookDao.getForAssessment(a);
+		AssessmentGradebook g = gradebookService.getForAssessment(a);
 		
 		// then
 		BaseTestCase.assertEquals(1, g.getQuestionCount());
@@ -143,7 +143,7 @@ public class AssessmentGradebookTest extends HibernateTestCase {
 		Assessment a = createAssessment(group, 1, 1);
 
 		// when
-		AssessmentGradebook g = gradebookDao.getForAssessment(a);
+		AssessmentGradebook g = gradebookService.getForAssessment(a);
 		
 		// then
 		BaseTestCase.assertEquals(1, g.getQuestionCount());
@@ -157,7 +157,7 @@ public class AssessmentGradebookTest extends HibernateTestCase {
 		Assessment a = createAssessment(group, 3, 7);
 
 		// when
-		AssessmentGradebook g = gradebookDao.getForAssessment(a);
+		AssessmentGradebook g = gradebookService.getForAssessment(a);
 		
 		// then
 		BaseTestCase.assertEquals(3, g.getQuestionCount());
@@ -173,7 +173,7 @@ public class AssessmentGradebookTest extends HibernateTestCase {
 		createResponse(c, a, 0, true);
 
 		// when
-		AssessmentGradebook g = gradebookDao.getForAssessment(a);
+		AssessmentGradebook g = gradebookService.getForAssessment(a);
 		
 		// then
 		BaseTestCase.assertEquals(1, g.getQuestionCount());
@@ -189,7 +189,7 @@ public class AssessmentGradebookTest extends HibernateTestCase {
 		createResponse(c, a, 0, false);
 
 		// when
-		AssessmentGradebook g = gradebookDao.getForAssessment(a);
+		AssessmentGradebook g = gradebookService.getForAssessment(a);
 		
 		// then
 		BaseTestCase.assertEquals(1, g.getQuestionCount());
@@ -205,7 +205,7 @@ public class AssessmentGradebookTest extends HibernateTestCase {
 		createResponse(c, a, 0, true);
 
 		// when
-		AssessmentGradebook g = gradebookDao.getForAssessment(a);
+		AssessmentGradebook g = gradebookService.getForAssessment(a);
 		
 		// then
 		BaseTestCase.assertEquals(1, g.getQuestionCount());
@@ -222,7 +222,7 @@ public class AssessmentGradebookTest extends HibernateTestCase {
 		createResponse(c, a, 2, false);
 
 		// when
-		AssessmentGradebook g = gradebookDao.getForAssessment(a);
+		AssessmentGradebook g = gradebookService.getForAssessment(a);
 		
 		// then
 		BaseTestCase.assertEquals(3, g.getQuestionCount());

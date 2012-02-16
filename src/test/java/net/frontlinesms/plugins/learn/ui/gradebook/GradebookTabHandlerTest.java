@@ -8,6 +8,7 @@ import net.frontlinesms.data.domain.Contact;
 import net.frontlinesms.data.domain.Group;
 import net.frontlinesms.data.repository.*;
 import net.frontlinesms.plugins.learn.data.domain.*;
+import net.frontlinesms.plugins.learn.data.gradebook.GradebookService;
 import net.frontlinesms.plugins.learn.data.repository.*;
 import net.frontlinesms.test.spring.MockBean;
 import net.frontlinesms.test.ui.ThinletEventHandlerTest;
@@ -17,8 +18,8 @@ import static net.frontlinesms.plugins.learn.LearnTestUtils.*;
 import static org.mockito.Mockito.*;
 
 public class GradebookTabHandlerTest extends ThinletEventHandlerTest<GradebookTabHandler> {
+	@MockBean private GradebookService gradebookService;
 	@MockBean private GroupMembershipDao groupMembershipDao;
-	@MockBean private GradebookDao gradebookDao;
 	@SuppressWarnings("unused")
 	@MockBean private GroupDao groupDao;
 	@MockBean private TopicDao topicDao;
@@ -334,7 +335,7 @@ public class GradebookTabHandlerTest extends ThinletEventHandlerTest<GradebookTa
 	private Group mockEmptyGradebookAndClass(String name) {
 		Group g = mockGroup(name);
 		ClassGradebook gb = mock(ClassGradebook.class);
-		when(gradebookDao.getForClass(g)).thenReturn(gb);
+		when(gradebookService.getForClass(g)).thenReturn(gb);
 		return g;
 	}
 	
@@ -361,7 +362,7 @@ public class GradebookTabHandlerTest extends ThinletEventHandlerTest<GradebookTa
 				mockStudentClassResults(students[3], 100, null, 100),
 				mockStudentClassResults(students[4], 4, null, 100));
 		when(gb.getResults()).thenReturn(results);
-		when(gradebookDao.getForClass(g)).thenReturn(gb);
+		when(gradebookService.getForClass(g)).thenReturn(gb);
 		
 		return g;
 	}
@@ -386,7 +387,7 @@ public class GradebookTabHandlerTest extends ThinletEventHandlerTest<GradebookTa
 			StudentTopicResult[] results = mockStudentTopicResults(baseIndex, students, 3);
 			when(gb.getAverages()).thenReturn(new int[]{12, 36, 0, 16});
 			when(gb.getResults()).thenReturn(results);
-			when(gradebookDao.getForAssessment(a)).thenReturn(gb);
+			when(gradebookService.getForAssessment(a)).thenReturn(gb);
 			baseIndex += 10;
 		}
 		

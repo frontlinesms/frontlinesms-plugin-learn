@@ -7,7 +7,8 @@
 	<import resource="classpath:spring-junit.xml"/>
 
 	<!-- DAO declarations -->	
-	<bean id="gradebookDao" class="net.frontlinesms.plugins.learn.data.repository.GradebookDao"/>
+	<bean id="gradebookService" class="net.frontlinesms.plugins.learn.data.gradebook.GradebookService"/>
+	
 	<bean id="assessmentDao" class="net.frontlinesms.plugins.learn.data.repository.AssessmentDao" parent="baseHibernateDao"/>
 	<bean id="assessmentMessageResponseDao" class="net.frontlinesms.plugins.learn.data.repository.AssessmentMessageResponseDao" parent="baseHibernateDao"/>
 	<bean id="groupMembershipDao" class="net.frontlinesms.data.repository.hibernate.HibernateGroupMembershipDao" parent="baseHibernateDao"/>
