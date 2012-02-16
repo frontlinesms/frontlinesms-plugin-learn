@@ -54,6 +54,39 @@ public class AssessmentDaoTest extends HibernateTestCase {
 		assertEquals(2, dao.list().get(0).getMessages().size());
 	}
 	
+	public void testDelete() {
+		// given
+		Assessment a = new Assessment();
+		assertEquals(0, dao.count());
+		dao.save(a);
+		assertEquals(1, dao.count());
+		
+		// when
+		dao.delete(a);
+		
+		// then
+		assertEquals(0, dao.count());
+	}
+	
+	public void testDeleteWithMessages() throws Exception {
+		// given
+		Assessment a = new Assessment();
+		Topic t = createTopics("test")[0];
+		a.setMessages(asList(
+				newAssessmentMessage(createReinforcement(t)),
+				newAssessmentMessage(createReinforcement(t))));
+		a.setTopic(t);
+		a.setGroup(createGroup("test-group"));
+		dao.save(a);
+		assertEquals(1, dao.count());
+		
+		// when
+		dao.delete(a);
+		
+		// then
+		assertEquals(0, dao.count());
+	}
+	
 	public void testFindAllByTopic_none() throws Exception {
 		// given
 		Topic t = createTopics("Random")[0];
