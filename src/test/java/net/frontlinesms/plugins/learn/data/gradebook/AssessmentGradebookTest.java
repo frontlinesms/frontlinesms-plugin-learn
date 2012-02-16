@@ -10,7 +10,7 @@ import net.frontlinesms.plugins.learn.data.repository.*;
 
 import static net.frontlinesms.junit.BaseTestCase.*;
 
-public class ClassAssessmentGradebookTest extends HibernateTestCase {
+public class AssessmentGradebookTest extends HibernateTestCase {
 	@Autowired private GradebookDao gradebookDao;
 	@Autowired private AssessmentDao assessmentDao;
 	@Autowired private GroupMembershipDao groupMembershipDao;
