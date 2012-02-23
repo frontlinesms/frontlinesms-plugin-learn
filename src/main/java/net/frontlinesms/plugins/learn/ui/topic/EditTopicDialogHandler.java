@@ -25,6 +25,8 @@ public class EditTopicDialogHandler implements ThinletUiEventHandler {
 
 	public EditTopicDialogHandler(FrontlineUI ui, TopicDao dao, Topic t) {
 		this.dao = dao;
+		this.ui = ui;
+		dialog = ui.loadComponentFromFile(LAYOUT_FILE, this);
 		
 		String dialogTitle;
 		if(t == null) {
@@ -33,10 +35,8 @@ public class EditTopicDialogHandler implements ThinletUiEventHandler {
 		} else {
 			this.t = t;
 			dialogTitle = "plugins.learn.topic.edit";
+			ui.setText(find(TF_NAME), t.getName());
 		}
-		
-		this.ui = ui;
-		dialog = ui.loadComponentFromFile(LAYOUT_FILE, this);
 		ui.setText(dialog, InternationalisationUtils.getI18nString(dialogTitle));
 		
 		validate();

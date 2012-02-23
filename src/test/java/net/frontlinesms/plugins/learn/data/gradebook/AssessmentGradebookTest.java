@@ -307,7 +307,6 @@ public class AssessmentGradebookTest extends HibernateTestCase {
 		if(am == null) throw new RuntimeException("Could not find question #" + questionNumber);
 		
 		Question q = (Question) am.getTopicItem();
-		System.out.println("AssessmentGradebookTest.createResponse() : q=" + q);
 		int answer = correct? q.getCorrectAnswer(): q.getCorrectAnswer()+1 % q.getAnswers().length;
 		AssessmentMessageResponse r = new AssessmentMessageResponse();
 		r.setStudent(c);

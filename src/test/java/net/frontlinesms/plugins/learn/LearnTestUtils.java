@@ -255,7 +255,12 @@ public class LearnTestUtils {
 			@Override
 			public boolean matches(Object a) {
 				Topic t = (Topic) a;
-				return expectedName.equals(t.getName());
+				boolean matches = expectedName.equals(t.getName());
+				if(!matches) {
+					println("LearnTestUtils.topicWithName(...).new ArgumentMatcher() {...}.matches()");
+					println(t, "name", expectedName);
+				}
+				return matches;
 			}
 		});
 	}

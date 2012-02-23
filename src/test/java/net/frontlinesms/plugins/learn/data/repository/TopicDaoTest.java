@@ -29,6 +29,25 @@ public class TopicDaoTest extends HibernateTestCase {
 		assertTrue(t.getId() > 0);
 		assertEquals(1, dao.count());
 	}
+	
+	public void testSaveShouldAlsoUpdate() throws Exception {
+		// given
+		Topic t = new Topic();
+		t.setName("original");
+		dao.save(t);
+		assertEquals(1, dao.count());
+		long id = t.getId();
+		
+		// when
+		t.setName("changed");
+		dao.save(t);
+		
+		// then
+		assertEquals(1, dao.count());
+		assertEquals(id, t.getId());
+		assertNotNull(dao.findByName("changed"));
+		assertNull(dao.findByName("original"));
+	}
 
 	public void testDelete() throws Exception {
 		// given a topic is already saved
