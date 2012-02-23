@@ -9,9 +9,12 @@ import net.frontlinesms.plugins.learn.data.domain.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import static net.frontlinesms.junit.BaseTestCase.*;
+
 public class TopicItemDaoTest extends HibernateTestCase {
 	/** dao under test */
 	@Autowired TopicItemDao dao;
+	@Autowired AssessmentDao assessmentDao;
 	@Autowired TopicDao topicDao;
 	@Autowired ReinforcementDao reinforcementDao;
 	@Autowired QuestionDao questionDao;
@@ -42,6 +45,23 @@ public class TopicItemDaoTest extends HibernateTestCase {
 		}
 	}
 	
+	public void testDeleteCascadesToAssessmentMessages() throws Exception {
+		// given
+		Topic t = createTopics("Topic 0")[0];
+		Reinforcement r = createReinforcements("r0", t)[0];
+		AssessmentMessage m = new AssessmentMessage(r);
+		Assessment a = new Assessment();
+		a.setMessages(asList(m));
+		assessmentDao.save(a);
+		
+		// when
+		dao.delete(r);
+		
+		// then
+		assertEquals(0, dao.count());
+	}
+	
+//> TEST HELPERS
 	private static void assertEquals(List<TopicItem> expected, TopicItem... actual) {
 		long[] expectedIds = getIds(expected);
 		long[] actualIds = getIds(actual);

@@ -8,6 +8,7 @@
 
 	<!-- DAO declarations -->	
 	<bean id="dao" class="net.frontlinesms.plugins.learn.data.repository.TopicItemDao" parent="baseHibernateDao"/>
+	<bean id="assessmentDao" class="net.frontlinesms.plugins.learn.data.repository.AssessmentDao" parent="baseHibernateDao"/>
 	<bean id="topicDao" class="net.frontlinesms.plugins.learn.data.repository.TopicDao" parent="baseHibernateDao"/>
 	<bean id="reinforcementDao" class="net.frontlinesms.plugins.learn.data.repository.ReinforcementDao" parent="baseHibernateDao"/>
 	<bean id="questionDao" class="net.frontlinesms.plugins.learn.data.repository.QuestionDao" parent="baseHibernateDao"/>

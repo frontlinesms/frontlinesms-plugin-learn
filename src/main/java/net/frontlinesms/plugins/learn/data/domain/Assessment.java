@@ -1,6 +1,5 @@
 package net.frontlinesms.plugins.learn.data.domain;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -28,7 +27,7 @@ public class Assessment implements HasTopic {
 	@ManyToOne
 	private Group group;
 	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER) @OrderBy("startDate")
-	private List<AssessmentMessage> messages = new ArrayList<AssessmentMessage>();
+	private List<AssessmentMessage> messages;
 	
 	public long getId() {
 		return id;
@@ -51,11 +50,18 @@ public class Assessment implements HasTopic {
 	}
 	
 	public List<AssessmentMessage> getMessages() {
-		return Collections.unmodifiableList(messages);
+		List<AssessmentMessage> messages = this.messages;
+		if(messages == null) return Collections.emptyList();
+		else return messages;
 	}
 
 	public void setMessages(List<AssessmentMessage> messages) {
+		System.out.println("Assessment.setMessages()");
 		this.messages = messages;
+	}
+	
+	public void removeMessage(AssessmentMessage message) {
+		this.messages.remove(message);
 	}
 	
 	public Long getStartDate() {
