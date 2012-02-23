@@ -108,7 +108,7 @@ public class TopicTabHandler implements ThinletUiEventHandler, EventObserver {
 	
 	public void deleteSelectedTreeItem() {
 		Object attached = getSelectedTreeItemAttachment();
-		if(attached instanceof Topic) {
+		if(attached != null) {
 			new ConfirmationDialogHandler(ui, this, "do_deleteSelectedTreeItem");
 		}
 	}
@@ -117,7 +117,9 @@ public class TopicTabHandler implements ThinletUiEventHandler, EventObserver {
 		Object attached = getSelectedTreeItemAttachment();
 		if(attached instanceof Topic) {
 			dao.delete((Topic) attached);
-		}
+		} else if(attached instanceof TopicItem) {
+			topicItemDao.delete((TopicItem) attached);
+		} else throw new IllegalArgumentException("No idea how to delete item of class: " + attached.getClass());
 	}
 	
 //> UI HELPER METHODS

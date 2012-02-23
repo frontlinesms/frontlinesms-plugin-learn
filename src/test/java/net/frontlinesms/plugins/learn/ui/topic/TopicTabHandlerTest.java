@@ -275,4 +275,38 @@ public class TopicTabHandlerTest extends ThinletEventHandlerTest<TopicTabHandler
 		verify(topicDao).delete(topicWithName("test-delete-topic"));
 		assertFalse($("confirmDialog").isVisible());
 	}
+	
+	public void testConfirmingDeleteCausesCorrectReinforcementToBeDeleted() throws Exception {
+		// given
+		Reinforcement r = mockReinforcement(topicDao, "reinforcement-owner",
+				topicItemDao, "Don't forget!");
+		initUiForTests();
+		$("trTopics").getRootNode().withText("reinforcement-owner").expand();
+		$("trTopics").getSubNode().withAttachment(r).select();
+		$("btDeleteTreeItem").click();
+		
+		// when
+		$("confirmDialog").find("btContinue").click();
+		
+		// then
+		verify(topicItemDao).delete(r);
+		assertFalse($("confirmDialog").isVisible());
+	}
+	
+	public void testConfirmingDeleteCausesCorrectQuestionToBeDeleted() throws Exception {
+		// given
+		Question q = mockQuestion(topicDao, "question-owner",
+				topicItemDao, "Should you forget?", "Yes!", "No!");
+		initUiForTests();
+		$("trTopics").getRootNode().withText("question-owner").expand();
+		$("trTopics").getSubNode().withAttachment(q).select();
+		$("btDeleteTreeItem").click();
+		
+		// when
+		$("confirmDialog").find("btContinue").click();
+		
+		// then
+		verify(topicItemDao).delete(q);
+		assertFalse($("confirmDialog").isVisible());
+	}
 }

@@ -17,6 +17,10 @@ public class TopicItemDao extends BaseHibernateDao<TopicItem> {
 	public int count() {
 		return super.countAll();
 	}
+	
+	public void delete(TopicItem topicItem) {
+		super.delete(topicItem);
+	}
 
 	public List<TopicItem> getAllByTopic(Topic t) {
 		DetachedCriteria criteria = getCriterion();
