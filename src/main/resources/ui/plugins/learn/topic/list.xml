@@ -13,6 +13,9 @@
 			<button name="btEditTreeItem" action="editSelectedTreeItem"
 					enabled="false"
 					text="i18n.plugins.learn.topic.edit"/>
+			<button name="btDeleteTreeItem" action="deleteSelectedTreeItem"
+					enabled="false"
+					text="i18n.plugins.learn.topic.delete"/>
 		</panel>
 	</panel>
 </tab>

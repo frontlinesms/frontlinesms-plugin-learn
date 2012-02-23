@@ -179,7 +179,7 @@ public class TopicTabHandlerTest extends ThinletEventHandlerTest<TopicTabHandler
 		$("trTopics").setSelected("Random Topic 2");
 		
 		// then
-		assertFalse($("btEditTreeItem").isEnabled());
+		assertTrue($("btEditTreeItem").isEnabled());
 	}
 	
 	public void testEditTopicButtonLaunchesEditTopicWindow() {
@@ -232,5 +232,48 @@ public class TopicTabHandlerTest extends ThinletEventHandlerTest<TopicTabHandler
 		assertEquals("Which instrument is the best?", $("tfQuestion").getText());
 	}
 
+	public void testDeleteButtonDisabledWhenNothingSelected() {
+		assertFalse($("btDeleteTreeItem").isEnabled());
+	}
 	
+	public void testDeleteButtonEnabledWhenTopicSelected() {
+		// given
+		mockTopics(topicDao, "test-delete-topic");
+		initUiForTests();
+		
+		// when
+		$("trTopics").setSelected("test-delete-topic");
+		
+		// then
+		System.out.println("enabled? " + $("btDeleteTreeItem").isEnabled());
+		assertTrue($("btDeleteTreeItem").isEnabled());
+	}
+	
+	public void testClickingDeleteButtonDisplaysConfirmationScreen() {
+		// given
+		mockTopics(topicDao, "test-delete-topic");
+		initUiForTests();
+		$("trTopics").setSelected("test-delete-topic");
+		
+		// when
+		$("btDeleteTreeItem").click();
+		
+		// then
+		assertTrue($("confirmDialog").isVisible());
+	}
+	
+	public void testConfirmingDeleteCausesCorrectTopicToBeDeleted() {
+		// given
+		mockTopics(topicDao, "test-delete-topic");
+		initUiForTests();
+		$("trTopics").setSelected("test-delete-topic");
+		$("btDeleteTreeItem").click();
+		
+		// when
+		$("confirmDialog").find("btContinue").click();
+		
+		// then
+		verify(topicDao).delete(topicWithName("test-delete-topic"));
+		assertFalse($("confirmDialog").isVisible());
+	}
 }

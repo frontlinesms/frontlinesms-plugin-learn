@@ -16,6 +16,7 @@ import net.frontlinesms.plugins.learn.data.repository.*;
 import net.frontlinesms.ui.FrontlineUI;
 import net.frontlinesms.ui.ThinletUiEventHandler;
 import net.frontlinesms.ui.events.FrontlineUiUpdateJob;
+import net.frontlinesms.ui.handler.core.ConfirmationDialogHandler;
 
 public class TopicTabHandler implements ThinletUiEventHandler, EventObserver {
 	private static final String TAB_LAYOUT = "/ui/plugins/learn/topic/list.xml";
@@ -89,26 +90,44 @@ public class TopicTabHandler implements ThinletUiEventHandler, EventObserver {
 	public void treeItemSelected() {
 		Object tree = find("trTopics");
 		Object selectedItem = ui.getSelectedItem(tree);
-		boolean something = selectedItem != null;
-		ui.setEnabled(find("btEditTreeItem"), something);
+		boolean somethingSelected = selectedItem != null;
+		ui.setEnabled(find("btEditTreeItem"), somethingSelected);
+		ui.setEnabled(find("btDeleteTreeItem"), somethingSelected);
 	}
 	
 	public void editSelectedTreeItem() {
-		Object tree = find("trTopics");
-		Object selectedItem = ui.getSelectedItem(tree);
-		if(selectedItem != null) {
-			Object attached = ui.getAttachedObject(selectedItem);
-			if(attached instanceof Reinforcement) {
-				ui.add(new EditReinforcementDialogHandler(ui, reinforcementDao, dao, (Reinforcement) attached).getDialog());
-			} else if(attached instanceof Question) {
-				ui.add(new EditQuestionDialogHandler(ui, questionDao, dao, (Question) attached).getDialog());
-			} else if(attached instanceof Topic) {
-				ui.add(new EditTopicDialogHandler(ui, dao, (Topic) attached).getDialog());
-			} else throw new RuntimeException("Don't know how to handle: " + attached.getClass());
+		Object attached = getSelectedTreeItemAttachment();
+		if(attached instanceof Reinforcement) {
+			ui.add(new EditReinforcementDialogHandler(ui, reinforcementDao, dao, (Reinforcement) attached).getDialog());
+		} else if(attached instanceof Question) {
+			ui.add(new EditQuestionDialogHandler(ui, questionDao, dao, (Question) attached).getDialog());
+		} else if(attached instanceof Topic) {
+			ui.add(new EditTopicDialogHandler(ui, dao, (Topic) attached).getDialog());
+		} else throw new RuntimeException("Don't know how to handle: " + attached.getClass());
+	}
+	
+	public void deleteSelectedTreeItem() {
+		Object attached = getSelectedTreeItemAttachment();
+		if(attached instanceof Topic) {
+			new ConfirmationDialogHandler(ui, this, "do_deleteSelectedTreeItem");
+		}
+	}
+	
+	public void do_deleteSelectedTreeItem() {
+		Object attached = getSelectedTreeItemAttachment();
+		if(attached instanceof Topic) {
+			dao.delete((Topic) attached);
 		}
 	}
 	
 //> UI HELPER METHODS
+	private Object getSelectedTreeItemAttachment() {
+		Object tree = find("trTopics");
+		Object selectedItem = ui.getSelectedItem(tree);
+		if(selectedItem == null) return null;
+		else return ui.getAttachedObject(selectedItem);
+	}
+	
 	private Object find(String componentName) {
 		return Thinlet.find(tab, componentName);
 	}

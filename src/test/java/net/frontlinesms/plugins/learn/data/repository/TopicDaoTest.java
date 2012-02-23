@@ -7,6 +7,8 @@ import net.frontlinesms.plugins.learn.data.domain.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 
+import static net.frontlinesms.junit.BaseTestCase.*;
+
 public class TopicDaoTest extends HibernateTestCase {
 	/** dao under test */
 	@Autowired TopicDao dao;
@@ -62,6 +64,14 @@ public class TopicDaoTest extends HibernateTestCase {
 
 		// then it is no longer in the database
 		assertEquals(0, dao.count());
+	}
+	
+	public void testDeleteCascadesToTopicItems() {
+		TODO("");
+	}
+	
+	public void testDeleteCascadesToAssessments() {
+		TODO("this shoudl be implemented in the UI handler");
 	}
 	
 	public void testTopicNameNotNull() throws Exception {
