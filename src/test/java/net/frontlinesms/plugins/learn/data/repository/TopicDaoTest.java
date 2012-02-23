@@ -7,11 +7,12 @@ import net.frontlinesms.plugins.learn.data.domain.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 
-import static net.frontlinesms.junit.BaseTestCase.*;
-
 public class TopicDaoTest extends HibernateTestCase {
 	/** dao under test */
 	@Autowired TopicDao dao;
+	@Autowired AssessmentDao assessmentDao;
+	@Autowired TopicItemDao topicItemDao;
+	@Autowired ReinforcementDao reinforcementDao;
 
 	public void setTopicDao(TopicDao topicDao) {
 		this.dao = topicDao;
@@ -66,12 +67,35 @@ public class TopicDaoTest extends HibernateTestCase {
 		assertEquals(0, dao.count());
 	}
 	
-	public void testDeleteCascadesToTopicItems() {
-		TODO("");
+	public void testDeleteCascadesToTopicItems() throws Exception {
+		// given
+		Topic topic = createTopic("test-delete-cascades");
+		Reinforcement r = new Reinforcement();
+		r.setMessageText("reinforcement-message");
+		r.setTopic(topic);
+		reinforcementDao.save(r);
+		assertEquals(1, topicItemDao.count());
+		
+		// when
+		dao.delete(topic);
+		
+		// then
+		assertEquals(0, topicItemDao.count());
 	}
 	
-	public void testDeleteCascadesToAssessments() {
-		TODO("this shoudl be implemented in the UI handler");
+	public void testDeleteCascadesToAssessments() throws Exception {
+		// given
+		Topic topic = createTopic("test-delete-cascades");
+		Assessment a = new Assessment();
+		a.setTopic(topic);
+		assessmentDao.save(a);
+		assertEquals(1, assessmentDao.count());
+		
+		// when
+		dao.delete(topic);
+		
+		// then
+		assertEquals(0, assessmentDao.count());
 	}
 	
 	public void testTopicNameNotNull() throws Exception {
@@ -120,9 +144,14 @@ public class TopicDaoTest extends HibernateTestCase {
 	
 	private void createTopics(String... names) throws Exception {
 		for(String name : names) {
-			Topic t = new Topic();
-			t.setName(name);
-			dao.save(t);
+			createTopic(name);
 		}
+	}
+	
+	private Topic createTopic(String name) throws Exception {
+		Topic t = new Topic();
+		t.setName(name);
+		dao.save(t);
+		return t;
 	}
 }

@@ -23,6 +23,8 @@ public class TopicDao extends BaseHibernateDao<Topic> {
 	}
 
 	public void delete(Topic t) {
+		getHibernateTemplate().bulkUpdate("DELETE FROM Assessment WHERE topic=?", t);
+		getHibernateTemplate().bulkUpdate("DELETE FROM TopicItem WHERE topic=?", t);
 		super.delete(t);
 	}
 	

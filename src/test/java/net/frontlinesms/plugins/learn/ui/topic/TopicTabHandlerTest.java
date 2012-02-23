@@ -245,7 +245,6 @@ public class TopicTabHandlerTest extends ThinletEventHandlerTest<TopicTabHandler
 		$("trTopics").setSelected("test-delete-topic");
 		
 		// then
-		System.out.println("enabled? " + $("btDeleteTreeItem").isEnabled());
 		assertTrue($("btDeleteTreeItem").isEnabled());
 	}
 	

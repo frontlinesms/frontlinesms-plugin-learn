@@ -13,6 +13,10 @@ public class TopicItemDao extends BaseHibernateDao<TopicItem> {
 	protected TopicItemDao() {
 		super(TopicItem.class);
 	}
+	
+	public int count() {
+		return super.countAll();
+	}
 
 	public List<TopicItem> getAllByTopic(Topic t) {
 		DetachedCriteria criteria = getCriterion();
