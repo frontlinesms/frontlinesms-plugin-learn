@@ -195,7 +195,42 @@ public class TopicTabHandlerTest extends ThinletEventHandlerTest<TopicTabHandler
 		$("btEditTreeItem").exists();
 	}
 	
-	public void testEditQuestion() {
-		TODO("implement button and double click versions as per reinforcement");
+	public void testEditQuestionTrigger() {
+		// given
+		Question q = mockQuestion(topicDao, "People & Places",
+				topicItemDao, "Which instrument is the best?", "Trumpet", "Violin", "Banjo");
+		initUiForTests();
+		
+		// when
+		ThinletComponent topicComponent = $("trTopics").getRootNode().withText("People & Places");
+		topicComponent.expand();
+		ThinletComponent questionComponent = topicComponent.getSubNode().withAttachment(q);
+		questionComponent.select();
+		questionComponent.doubleClick();
+		
+		// then
+		assertTrue($("dgEditQuestion").isVisible());
+		assertEquals("People & Places", $("dgEditQuestion").find("cbTopic").getText());
+		assertEquals("Which instrument is the best?", $("tfQuestion").getText());
 	}
+	
+	public void testEditQuestionWhenEditButtonClicked() {
+		// given
+		Question q = mockQuestion(topicDao, "People & Places",
+				topicItemDao, "Which instrument is the best?", "Trumpet", "Violin", "Banjo");
+		initUiForTests();
+		
+		// when
+		ThinletComponent topicComponent = $("trTopics").getRootNode().withText("People & Places");
+		topicComponent.expand();
+		topicComponent.getSubNode().withAttachment(q).select();
+		$("btEditTreeItem").click();
+		
+		// then
+		assertTrue($("dgEditQuestion").isVisible());
+		assertEquals("People & Places", $("dgEditQuestion").find("cbTopic").getText());
+		assertEquals("Which instrument is the best?", $("tfQuestion").getText());
+	}
+
+	
 }

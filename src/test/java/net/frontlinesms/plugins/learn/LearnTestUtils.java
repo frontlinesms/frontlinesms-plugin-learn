@@ -144,6 +144,21 @@ public class LearnTestUtils {
 		return r;
 	}
 	
+	public static Question mockQuestion(TopicDao topicDao, String topicName,
+			TopicItemDao topicItemDao, String questionText, String... answers) {
+		Topic t = mockTopics(topicDao, topicName)[0];
+		
+		Question q = mock(Question.class);
+		when(q.getQuestionText()).thenReturn(questionText);
+		when(q.getAnswers()).thenReturn(answers);
+		when(q.getTopic()).thenReturn(t);
+		
+		List<TopicItem> items = asList(new TopicItem[] {q});
+		when(topicItemDao.getAllByTopic(t)).thenReturn(items);
+		
+		return q;
+	}
+	
 	public static Topic[] mockTopics(String... names) {
 		ArrayList<Topic> topics = new ArrayList<Topic>();
 		for(String name : names) {

@@ -1,5 +1,9 @@
 package net.frontlinesms.plugins.learn.ui.topic;
 
-public class EditTopicDialogHandlerTest {
-implement this 
+import net.frontlinesms.junit.BaseTestCase;
+
+public class EditTopicDialogHandlerTest extends BaseTestCase {
+	public void test() {
+		TODO("Implement this class.");
+	}
 }

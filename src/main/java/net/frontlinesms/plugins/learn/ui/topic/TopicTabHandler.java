@@ -100,6 +100,8 @@ public class TopicTabHandler implements ThinletUiEventHandler, EventObserver {
 			Object attached = ui.getAttachedObject(selectedItem);
 			if(attached instanceof Reinforcement) {
 				ui.add(new EditReinforcementDialogHandler(ui, reinforcementDao, dao, (Reinforcement) attached).getDialog());
+			} else if(attached instanceof Question) {
+				ui.add(new EditQuestionDialogHandler(ui, questionDao, dao, (Question) attached).getDialog());
 			} else if(attached instanceof Topic) {
 				ui.add(new EditTopicDialogHandler(ui, dao, (Topic) attached).getDialog());
 			} else throw new RuntimeException("Don't know how to handle: " + attached.getClass());
