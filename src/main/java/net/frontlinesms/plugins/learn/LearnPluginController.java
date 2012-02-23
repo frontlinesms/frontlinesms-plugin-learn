@@ -16,19 +16,23 @@ import net.frontlinesms.ui.UiGeneratorController;
 public class LearnPluginController extends BasePluginController {
 	private ApplicationContext ctx;
 	private ScheduleHandler scheduleHandler;
+	private LearnIncomingMessageProcessor messageProcessor;
 
 	public void init(FrontlineSMS frontlineController, ApplicationContext applicationContext) throws PluginInitialisationException {
 		ctx = applicationContext;
 		scheduleHandler = new ScheduleHandler(ctx);
+		messageProcessor = (LearnIncomingMessageProcessor) ctx.getBean("learnIncomingMessageProcessor");
 	}
 
 	public void deinit() {
 		scheduleHandler.shutdown();
+		messageProcessor.shutdown();
 	}
 
 	@Override
 	protected Object initThinletTab(UiGeneratorController ui) {
 		scheduleHandler.start();
+		messageProcessor.start();
 		
 		LearnPluginTabHandler tabHandler = new LearnPluginTabHandler();
 		tabHandler.init(ui, ctx);
