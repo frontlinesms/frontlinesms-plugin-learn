@@ -15,15 +15,21 @@ import net.frontlinesms.ui.UiGeneratorController;
 		springConfigLocation="classpath:net/frontlinesms/plugins/learn/spring.xml")
 public class LearnPluginController extends BasePluginController {
 	private ApplicationContext ctx;
+	private ScheduleHandler scheduleHandler;
 
 	public void init(FrontlineSMS frontlineController, ApplicationContext applicationContext) throws PluginInitialisationException {
 		ctx = applicationContext;
+		scheduleHandler = new ScheduleHandler(ctx);
 	}
 
-	public void deinit() {}
+	public void deinit() {
+		scheduleHandler.shutdown();
+	}
 
 	@Override
 	protected Object initThinletTab(UiGeneratorController ui) {
+		scheduleHandler.start();
+		
 		LearnPluginTabHandler tabHandler = new LearnPluginTabHandler();
 		tabHandler.init(ui, ctx);
 		return tabHandler.getTab();
