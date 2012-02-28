@@ -67,6 +67,10 @@ public class EditAssessmentDialogHandlerTest extends TopicChoosingDialogHandlerT
 	public void testTitle() {
 		assertEquals("plugins.learn.assessment.edit", $().getText());
 	}
+	
+	public void testSaveButtonEnabledForEdit() {
+		assertTrue($("btSave").isEnabled());
+	}
 
 	@Override
 	public void testSaveButton() {

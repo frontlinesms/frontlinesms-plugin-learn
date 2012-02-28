@@ -26,7 +26,8 @@ public class TopicItemDao extends BaseHibernateDao<TopicItem> {
 		for(Object o : getHibernateTemplate().findByCriteria(assessmentCriteria)) {
 			Assessment a = (Assessment) o;
 			for(AssessmentMessage message : a.getMessages().toArray(new AssessmentMessage[0])) {
-				if(message.getTopicItem().getId() == topicItem.getId()) {
+				if(message.getTopicItem()!= null && 
+						message.getTopicItem().getId() == topicItem.getId()) {
 					a.getMessages().remove(message);
 					getHibernateTemplate().save(a);
 					getHibernateTemplate().delete(message);
