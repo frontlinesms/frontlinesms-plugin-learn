@@ -56,7 +56,6 @@ public class Assessment implements HasTopic {
 	}
 
 	public void setMessages(List<AssessmentMessage> messages) {
-		System.out.println("Assessment.setMessages()");
 		this.messages = messages;
 	}
 	
