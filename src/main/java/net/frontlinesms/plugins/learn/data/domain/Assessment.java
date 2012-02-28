@@ -64,20 +64,26 @@ public class Assessment implements HasTopic {
 	}
 	
 	public Long getStartDate() {
-		long firstStartDate = Long.MAX_VALUE;
-		for(AssessmentMessage m : messages) {
-			firstStartDate = Math.min(firstStartDate, m.getStartDate());
+		if (messages == null) return null;
+		else {
+			long firstStartDate = Long.MAX_VALUE;
+			for(AssessmentMessage m : messages) {
+				firstStartDate = Math.min(firstStartDate, m.getStartDate());
+			}
+			return firstStartDate==Long.MAX_VALUE? null: firstStartDate;
 		}
-		return firstStartDate==Long.MAX_VALUE? null: firstStartDate;
 	}
 	
 	public Long getEndDate() {
-		long lastEndDate = -1;
-		for(AssessmentMessage m : messages) {
-			Long endDate = m.getEndDate();
-			if(endDate != null) lastEndDate = Math.max(lastEndDate, endDate);
+		if (messages == null) return null;
+		else {
+			long lastEndDate = -1;
+			for(AssessmentMessage m : messages) {
+				Long endDate = m.getEndDate();
+				if(endDate != null) lastEndDate = Math.max(lastEndDate, endDate);
+			}
+			return lastEndDate==-1? null: lastEndDate;
 		}
-		return lastEndDate==-1? null: lastEndDate;
 	}
 
 	public AssessmentMessage getMessage(TopicItem topicItem) {
