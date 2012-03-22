@@ -189,8 +189,11 @@ public class AssessmentDaoTest extends HibernateTestCase {
 		// then
 		assertEquals(YESTERDAY, a.getStartDate());
 		assertEquals(TOMORROW, a.getEndDate());
+		
+		// cleanup
+		deleteAllAssessments();
 	}
-	
+
 //> SETUP HELPER METHODS
 	private Topic[] createTopics(String... names) throws Exception {
 		Topic[] topics = new Topic[names.length];
@@ -240,5 +243,10 @@ public class AssessmentDaoTest extends HibernateTestCase {
 	private AssessmentMessage newAssessmentMessage(TopicItem t) {
 		AssessmentMessage m = new AssessmentMessage(t);
 		return m;
+	}
+	
+//> CLEANUP HELPER METHODS
+	private void deleteAllAssessments() {
+		for(Assessment a : dao.list()) dao.delete(a);
 	}
 }
