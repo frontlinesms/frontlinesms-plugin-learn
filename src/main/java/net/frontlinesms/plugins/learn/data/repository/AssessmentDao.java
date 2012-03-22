@@ -16,7 +16,11 @@ public class AssessmentDao extends BaseHibernateDao<Assessment> {
 	}
 	
 	public void save(Assessment a) {
-		super.saveWithoutDuplicateHandling(a);
+		if(a.getId() > 0) {
+			super.updateWithoutDuplicateHandling(a);
+		} else {
+			super.saveWithoutDuplicateHandling(a);
+		}
 	}
 	
 	public void delete(Assessment a) {
