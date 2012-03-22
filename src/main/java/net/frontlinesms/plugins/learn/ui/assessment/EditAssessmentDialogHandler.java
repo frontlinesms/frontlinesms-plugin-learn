@@ -30,8 +30,6 @@ public class EditAssessmentDialogHandler extends TopicChoosingDialogHandler<Asse
 		this.groupDao = groupDao;
 		this.topicItemDao = topicItemDao;
 		
-		validate(null);
-		
 		if(a.getGroup() != null) {
 			groupSelectionCompleted(a.getGroup());
 		}
@@ -45,6 +43,8 @@ public class EditAssessmentDialogHandler extends TopicChoosingDialogHandler<Asse
 				else ui.add(table, createTableRow(topicItem));
 			}
 		}
+		
+		validate(null);
 	}
 
 	@Override
