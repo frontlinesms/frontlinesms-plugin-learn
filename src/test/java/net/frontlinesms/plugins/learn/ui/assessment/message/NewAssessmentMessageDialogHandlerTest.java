@@ -5,6 +5,7 @@ import java.util.Calendar;
 import net.frontlinesms.plugins.learn.data.domain.Frequency;
 import net.frontlinesms.plugins.learn.data.domain.TopicItem;
 import net.frontlinesms.test.ui.ThinletEventHandlerTest;
+import net.frontlinesms.ui.i18n.InternationalisationUtils;
 
 import static org.mockito.Mockito.*;
 import static net.frontlinesms.plugins.learn.LearnTestUtils.*;
@@ -49,7 +50,7 @@ public class NewAssessmentMessageDialogHandlerTest extends ThinletEventHandlerTe
 	}
 	
 	public void testStartDateInitialisedToNowishInLocalTimezone() {
-		assertEquals(TEST_DATE, getTimeLocal("Start"));
+		assertTimeEquals(TEST_DATE, "Start");
 	}
 	
 	public void testEndDateDisabled() {
@@ -107,18 +108,10 @@ public class NewAssessmentMessageDialogHandlerTest extends ThinletEventHandlerTe
 		return labels;
 	}
 	
-	private long getTimeLocal(String name) {
+	private void assertTimeEquals(long expectedTime, String fieldName) {
 		Calendar c = Calendar.getInstance();
-		c.set(Calendar.MILLISECOND, 0);
-		c.set(getInteger(name + "Year"),
-				getInteger(name + "Month"),
-				getInteger(name + "DayOfMonth"),
-				getInteger(name + "Hour"),
-				getInteger(name + "Minute"), 0);
-		return c.getTimeInMillis();
-	}
-	
-	private int getInteger(String tf) {
-		return Integer.parseInt($("tf" + tf).getText());
+		c.setTimeInMillis(expectedTime);
+		assertEquals(InternationalisationUtils.formatDate(expectedTime), $("tf" + fieldName + "Date").getText());
+		assertEquals(InternationalisationUtils.formatTime(expectedTime), $("tf" + fieldName + "Time").getText());
 	}
 }

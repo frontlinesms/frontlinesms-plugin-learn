@@ -9,6 +9,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
@@ -45,6 +46,8 @@ public class LearnTestUtils {
 		c.set(Calendar.MILLISECOND, 0);
 		TOMORROW = c.getTimeInMillis();
 	}
+	
+	private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("d/M/yyyy HH:mm");
 	
 //> TEST HELPER METHODS
 	public static StudentGrades mockStudentClassResults(Contact student, Integer... grades) {
@@ -347,6 +350,7 @@ public class LearnTestUtils {
 	}
 	
 	private static void println(Object o, Object...fieldsAndExpectedValues) {
+		println(1, "<fieldName>: <actualValue> vs <expectedValue>");
 		for (int i = 0; i < fieldsAndExpectedValues.length; i+=2) {
 			println(o, (String) fieldsAndExpectedValues[i], fieldsAndExpectedValues[i+1]);
 		}
@@ -365,10 +369,18 @@ public class LearnTestUtils {
 				Method m = value.getClass().getMethod(methodName);
 				value = m.invoke(value);
 			}
-			println(1, "o." + fieldName + ": " + value + " vs " + expectedValue);
+			
+			println(1, "o." + fieldName + ": " + value + " vs " + expectedValue + " (" + getAlternateFormat(value) + " vs " + getAlternateFormat(expectedValue) + ")");
 		} catch(Exception ex) {
 			throw new RuntimeException(ex);
 		}
+	}
+	
+	private static String getAlternateFormat(Object value) {
+		if(value == null) return null;
+		String formatted = null;
+		if(value instanceof Long) formatted = DATE_FORMAT.format(new Date((Long) value));
+		return formatted == null? "": formatted;
 	}
 	
 	private static void println(int tabs, String s) {

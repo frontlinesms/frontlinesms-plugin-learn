@@ -1,5 +1,6 @@
 package net.frontlinesms.plugins.learn.ui.assessment.message;
 
+import java.text.ParseException;
 import java.util.Calendar;
 
 import net.frontlinesms.plugins.learn.data.domain.AssessmentMessage;
@@ -8,6 +9,7 @@ import net.frontlinesms.ui.FrontlineUI;
 import net.frontlinesms.ui.ThinletUiEventHandler;
 
 import static thinlet.Thinlet.find;
+import static net.frontlinesms.ui.i18n.InternationalisationUtils.*;
 
 public class EditAssessmentMessageDialogHandler implements ThinletUiEventHandler {
 	private final FrontlineUI ui;
@@ -32,30 +34,30 @@ public class EditAssessmentMessageDialogHandler implements ThinletUiEventHandler
 	
 //> ACCESSORS METHODS
 	public void setStartDate(long date) {
-		Calendar c = Calendar.getInstance();
-		c.setTimeInMillis(date);
-		setText("tfStartYear", c.get(Calendar.YEAR));
-		setText("tfStartMonth", c.get(Calendar.MONTH));
-		setText("tfStartDayOfMonth", c.get(Calendar.DAY_OF_MONTH));
-		setText("tfStartHour", c.get(Calendar.HOUR_OF_DAY));
-		setText("tfStartMinute", c.get(Calendar.MINUTE));
+		String formattedDate = formatDate(date);
+		String formattedTime = formatTime(date);
+		System.out.println("EditAssessmentMessageDialogHandler.setStartDate() : " + formattedDate + " " + formattedTime);
+		setText("tfStartDate", formattedDate);
+		setText("tfStartTime", formattedTime);
 	}
 	
 //> UI EVENT METHODS
 	public void save() {
-		Calendar c = Calendar.getInstance();
-		c.set(getTextAsInteger("tfStartYear"),
-				getTextAsInteger("tfStartMonth"),
-				getTextAsInteger("tfStartDayOfMonth"),
-				getTextAsInteger("tfStartHour"),
-				getTextAsInteger("tfStartMinute"), 0);
-		c.set(Calendar.MILLISECOND, 0);
-		assessmentMessage.setStartDate(c.getTimeInMillis());
-		
-		close();
-		
-		dialogOwner.notifyAssessmentMessageSaved(assessmentMessage);
+		try {
+			Calendar c = Calendar.getInstance();
+			c.setTime(parseTime(parseDate(getText("tfStartDate")), getText("tfStartTime")));
+			
+			assessmentMessage.setStartDate(c.getTimeInMillis());
+			
+			close();
+			
+			dialogOwner.notifyAssessmentMessageSaved(assessmentMessage);
+		} catch(ParseException ex) {
+			ui.alert(getI18nString("message.wrong.format.date"));
+		}
 	}
+	
+	public void showDateSelecter(Object tfDate) {}
 	
 	public void close() {
 		ui.remove(dialog);
@@ -66,7 +68,7 @@ public class EditAssessmentMessageDialogHandler implements ThinletUiEventHandler
 		ui.setText(find(dialog, componentName), value.toString());
 	}
 	
-	private int getTextAsInteger(String componentName) {
-		return Integer.parseInt(ui.getText(find(dialog, componentName)));
+	private String getText(String componentName) {
+		return ui.getText(find(dialog, componentName));
 	}
 }
