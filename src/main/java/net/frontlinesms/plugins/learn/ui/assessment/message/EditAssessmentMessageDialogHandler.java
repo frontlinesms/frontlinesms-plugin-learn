@@ -57,8 +57,6 @@ public class EditAssessmentMessageDialogHandler implements ThinletUiEventHandler
 		}
 	}
 	
-	public void showDateSelecter(Object tfDate) {}
-	
 	public void close() {
 		ui.remove(dialog);
 	}

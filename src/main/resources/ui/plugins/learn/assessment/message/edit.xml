@@ -2,13 +2,13 @@
 	<label text="i18n.plugins.learn.message.summary" valign="top"/>
 	<textarea name="taSummary" editable="false"/>
 	
-	<panel gap="10">
-		<label text="i18n.plugins.learn.message.date.start"/>
-		<panel>
+	<label text="i18n.plugins.learn.message.date.start"/>
+	<panel gap="8">
+		<!-- <panel> -->
 			<textfield name="tfStartDate" tooltip="i18n.tooltip.start.date"/>
-			<button action="showDateSelecter(tfStartDate)" icon="/icons/date_start.png"/>
-			<textfield name="tfStartTime"/>
-		</panel>
+			<!-- <button action="showDateSelecter(tfStartDate)" icon="/icons/date_start.png"/>
+		</panel> -->
+		<textfield name="tfStartTime"/>
 	</panel>
 	
 	<label text="i18n.plugins.learn.message.repeat"/>
