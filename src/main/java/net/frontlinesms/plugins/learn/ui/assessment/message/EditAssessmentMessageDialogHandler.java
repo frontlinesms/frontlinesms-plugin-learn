@@ -36,7 +36,6 @@ public class EditAssessmentMessageDialogHandler implements ThinletUiEventHandler
 	public void setStartDate(long date) {
 		String formattedDate = formatDate(date);
 		String formattedTime = formatTime(date);
-		System.out.println("EditAssessmentMessageDialogHandler.setStartDate() : " + formattedDate + " " + formattedTime);
 		setText("tfStartDate", formattedDate);
 		setText("tfStartTime", formattedTime);
 	}
