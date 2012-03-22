@@ -5,6 +5,8 @@ import org.springframework.context.ApplicationContext;
 import thinlet.Thinlet;
 
 import net.frontlinesms.data.domain.Group;
+import net.frontlinesms.data.events.DatabaseEntityNotification;
+import net.frontlinesms.data.events.EntityDeleteWarning;
 import net.frontlinesms.data.events.EntitySavedNotification;
 import net.frontlinesms.data.repository.GroupDao;
 import net.frontlinesms.events.EventBus;
@@ -187,13 +189,14 @@ public class AssessmentTabHandler implements ThinletUiEventHandler, SingleGroupS
 //> EVENT BUS HANDLER METHODS
 	public void notify(FrontlineEventNotification n) {
 		if(n instanceof EntitySavedNotification<?>) {
-			handleEntitySavedNotification((EntitySavedNotification<?>) n);
+			handleDatabaseEntityNotification((DatabaseEntityNotification<?>) n);
 		} else if(n instanceof UiDestroyEvent) {
 			this.eventBus.unregisterObserver(this);
 		}
 	}
 
-	private void handleEntitySavedNotification(EntitySavedNotification<?> n) {
+	private void handleDatabaseEntityNotification(DatabaseEntityNotification<?> n) {
+		if(n instanceof EntityDeleteWarning<?>) return;
 		if(n.getDatabaseEntity() instanceof Topic) {
 			refreshTopicsThreadSafe();
 		}
