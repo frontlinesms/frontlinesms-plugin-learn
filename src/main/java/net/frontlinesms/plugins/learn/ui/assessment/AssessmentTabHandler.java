@@ -5,18 +5,24 @@ import org.springframework.context.ApplicationContext;
 import thinlet.Thinlet;
 
 import net.frontlinesms.data.domain.Group;
+import net.frontlinesms.data.events.EntitySavedNotification;
 import net.frontlinesms.data.repository.GroupDao;
+import net.frontlinesms.events.EventBus;
+import net.frontlinesms.events.EventObserver;
+import net.frontlinesms.events.FrontlineEventNotification;
 import net.frontlinesms.plugins.learn.data.domain.Assessment;
 import net.frontlinesms.plugins.learn.data.domain.Topic;
 import net.frontlinesms.plugins.learn.data.repository.*;
 import net.frontlinesms.ui.FrontlineUI;
 import net.frontlinesms.ui.ThinletUiEventHandler;
+import net.frontlinesms.ui.UiDestroyEvent;
+import net.frontlinesms.ui.events.FrontlineUiUpdateJob;
 import net.frontlinesms.ui.handler.contacts.GroupSelecterDialog;
 import net.frontlinesms.ui.handler.contacts.SingleGroupSelecterDialogOwner;
 import net.frontlinesms.ui.handler.core.ConfirmationDialogHandler;
 import net.frontlinesms.ui.i18n.InternationalisationUtils;
 
-public class AssessmentTabHandler implements ThinletUiEventHandler, SingleGroupSelecterDialogOwner {
+public class AssessmentTabHandler implements ThinletUiEventHandler, SingleGroupSelecterDialogOwner, EventObserver {
 	private static final String XML_LAYOUT = "/ui/plugins/learn/assessment/list.xml";
 
 	private static final String[] TOPIC_COLUMN_TITLES = {
@@ -36,9 +42,11 @@ public class AssessmentTabHandler implements ThinletUiEventHandler, SingleGroupS
 	private final GroupDao groupDao;
 	private final TopicItemDao topicItemDao;
 	private final AssessmentDao assessmentDao;
+	private final EventBus eventBus;
 	
 	public AssessmentTabHandler(FrontlineUI ui, ApplicationContext ctx) {
 		this.ui = ui;
+		eventBus = (EventBus) ctx.getBean("eventBus");
 		topicDao = (TopicDao) ctx.getBean("topicDao");
 		groupDao = (GroupDao) ctx.getBean("groupDao");
 		topicItemDao = (TopicItemDao) ctx.getBean("topicItemDao");
@@ -46,11 +54,29 @@ public class AssessmentTabHandler implements ThinletUiEventHandler, SingleGroupS
 
 		tab = ui.loadComponentFromFile(XML_LAYOUT, this);
 		
+		eventBus.registerObserver(this);
+		
+		refreshTopics();
 		setViewBy("topic");
 	}
 	
 	public Object getTab() {
 		return tab;
+	}
+	
+//> UI INIT/UPDATE
+	private void refreshTopics() {
+		Object cbTopic = find("cbTopic");
+		ui.removeAll(cbTopic);
+		for(Topic t : topicDao.list()) {
+			ui.add(cbTopic, ui.createComboboxChoice(t.getName(), t));
+		}
+	}
+	
+	private void refreshTopicsThreadSafe() {
+		new FrontlineUiUpdateJob() {
+			public void run() { refreshTopics(); }
+		}.execute();
 	}
 	
 //> UI EVENT METHODS
@@ -114,13 +140,6 @@ public class AssessmentTabHandler implements ThinletUiEventHandler, SingleGroupS
 		boolean topic = viewBy.equals("topic");
 		ui.setVisible(find("cbTopic"), topic);
 		ui.setVisible(find("pnClass"), !topic);
-		if(topic) {
-			Object cbTopic = find("cbTopic");
-			ui.removeAll(cbTopic);
-			for(Topic t : topicDao.list()) {
-				ui.add(cbTopic, ui.createComboboxChoice(t.getName(), t));
-			}
-		}
 		
 		Object assessmentsTable = clearAssessmentTable();
 		
@@ -162,6 +181,21 @@ public class AssessmentTabHandler implements ThinletUiEventHandler, SingleGroupS
 			for(Assessment a : assessmentDao.findAllByGroup(group)) {
 				ui.add(assessmentsTable, createRow(a, false));
 			}
+		}
+	}
+	
+//> EVENT BUS HANDLER METHODS
+	public void notify(FrontlineEventNotification n) {
+		if(n instanceof EntitySavedNotification<?>) {
+			handleEntitySavedNotification((EntitySavedNotification<?>) n);
+		} else if(n instanceof UiDestroyEvent) {
+			this.eventBus.unregisterObserver(this);
+		}
+	}
+
+	private void handleEntitySavedNotification(EntitySavedNotification<?> n) {
+		if(n.getDatabaseEntity() instanceof Topic) {
+			refreshTopicsThreadSafe();
 		}
 	}
 }

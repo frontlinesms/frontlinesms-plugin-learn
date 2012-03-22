@@ -4,6 +4,8 @@ import java.util.List;
 
 import net.frontlinesms.data.domain.Group;
 import net.frontlinesms.data.repository.GroupDao;
+import net.frontlinesms.events.EventBus;
+import net.frontlinesms.plugins.learn.LearnTestUtils;
 import net.frontlinesms.plugins.learn.data.domain.Assessment;
 import net.frontlinesms.plugins.learn.data.domain.Topic;
 import net.frontlinesms.plugins.learn.data.repository.*;
@@ -15,6 +17,8 @@ import static org.mockito.Mockito.*;
 import static net.frontlinesms.plugins.learn.LearnTestUtils.*;
 
 public class AssessmentTabHandlerTest extends ThinletEventHandlerTest<AssessmentTabHandler> {
+	@SuppressWarnings("unused")
+	@MockBean private EventBus eventBus;
 	@SuppressWarnings("unused")
 	@MockBean private GroupDao groupDao;
 	@MockBean private TopicDao topicDao;
@@ -314,6 +318,23 @@ public class AssessmentTabHandlerTest extends ThinletEventHandlerTest<Assessment
 		
 		// then
 		assertTrue($("dgEditAssessment").isVisible());
+	}
+	
+	public void testCreationOfNewTopicShouldUpdateListOfTopics() {
+		// given
+		assertEquals("Displayed topics",
+				array("Cookery", "Music", "Philately"),
+				$("cbTopic").getOptions());
+		mockTopics(topicDao, "Cookery", "Music", "Philately", "Tomfoolery");
+		
+		// when
+		h.notify(LearnTestUtils.mockEntitySavedNotification(Topic.class));
+		
+		// then
+		waitForUiEvents();
+		assertEquals("Displayed topics",
+				array("Cookery", "Music", "Philately", "Tomfoolery"),
+				$("cbTopic").getOptions());
 	}
 	
 //> TEST HELPER METHODS

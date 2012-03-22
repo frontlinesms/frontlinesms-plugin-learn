@@ -8,6 +8,7 @@ import java.lang.reflect.Method;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -15,6 +16,9 @@ import java.util.TimeZone;
 
 import net.frontlinesms.data.domain.Contact;
 import net.frontlinesms.data.domain.Group;
+import net.frontlinesms.data.events.EntitySavedNotification;
+import net.frontlinesms.events.EventObserver;
+import net.frontlinesms.events.FrontlineEventNotification;
 import net.frontlinesms.plugins.learn.data.domain.*;
 import net.frontlinesms.plugins.learn.data.repository.*;
 
@@ -211,6 +215,18 @@ public class LearnTestUtils {
 		});
 	}
 	
+	public static EventObserver eventObserversOfClass(final Class<?>... classes) {
+		// seems to check twice for each of these!
+		final ArrayList<Class<?>> classesStillExpected1 = new ArrayList<Class<?>>(Arrays.asList(classes));
+		final ArrayList<Class<?>> classesStillExpected2 = new ArrayList<Class<?>>(Arrays.asList(classes));
+		return argThat(new ArgumentMatcher<EventObserver>() {
+			@Override
+			public boolean matches(Object o) {
+				return classesStillExpected1.remove(o.getClass()) || classesStillExpected2.remove(o.getClass());
+			}
+		});
+	}
+	
 	public static Assessment assessmentWithTopic(final String expectedTopicName) {
 		return argThat(new ArgumentMatcher<Assessment>() {
 			@Override
@@ -389,5 +405,9 @@ public class LearnTestUtils {
 	
 	public static void println(String s) {
 		System.out.println(s);
+	}
+
+	public static <T> FrontlineEventNotification mockEntitySavedNotification(Class<T> clazz) {
+		return new EntitySavedNotification<T>(mock(clazz));
 	}
 }
