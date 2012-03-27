@@ -161,17 +161,31 @@ public class GradebookTabHandler implements ThinletUiEventHandler, SingleGroupSe
 			for(Topic t : gradebook.getTopics()) {
 				ui.add(header, ui.createColumn(t.getName(), null));
 			}
+			ui.add(header, ui.createColumn(getI18nString("plugins.learn.gradebook.average"), null));
 			
 			// Update table contents
 			for(StudentGrades r : gradebook.getResults()) {
 				ui.add(table, createRow(r));
 			}
+			
+			ui.add(table, createRow(gradebook.getTopicAverages()));
 		}
+	}
+	
+	private Object createRow(int[] averages) {
+		String[] cellText = new String[averages.length + 1];
+		cellText[0] = getI18nString("plugins.learn.gradebook.average");
+		for (int i = 0; i < averages.length; i++) {
+			String grade = averages[i] + "%";
+			cellText[i + 1] = grade;
+		}
+		return ui.createTableRow(null, cellText);
+		
 	}
 
 	private Object createRow(StudentGrades r) {
 		Integer[] grades = r.getGrades();
-		String[] cellText = new String[grades.length + 1];
+		String[] cellText = new String[grades.length + 2];
 		cellText[0] = r.getStudent().getName();
 		for (int i = 0; i < grades.length; i++) {
 			String grade = grades[i] == null
@@ -179,6 +193,7 @@ public class GradebookTabHandler implements ThinletUiEventHandler, SingleGroupSe
 					: grades[i] + "%";
 			cellText[i + 1] = grade;
 		}
+		cellText[cellText.length - 1] = r.getAverage() + "%";
 		return ui.createTableRow(null, cellText);
 	}
 	

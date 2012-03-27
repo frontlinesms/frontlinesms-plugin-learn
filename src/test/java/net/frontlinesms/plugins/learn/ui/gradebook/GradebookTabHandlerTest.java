@@ -1,6 +1,7 @@
 package net.frontlinesms.plugins.learn.ui.gradebook;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
@@ -210,7 +211,7 @@ public class GradebookTabHandlerTest extends ThinletEventHandlerTest<GradebookTa
 		
 		// then
 		assertEquals("Grade table headers",
-				array("plugins.learn.student", "topic1"),
+				array("plugins.learn.student", "topic1", "plugins.learn.gradebook.average"),
 				$("tbGrades").getColumnTitles());
 	}
 	
@@ -273,12 +274,19 @@ public class GradebookTabHandlerTest extends ThinletEventHandlerTest<GradebookTa
 		$("cbAssessment").setSelected("1/1/2001 - 31/12/2001");
 		
 		// then
+		for(int i=0; i<$("tbGrades").getRowCount(); ++i) {
+			System.out.println(Arrays.toString($("tbGrades").getRowText(i)));
+		}
+		assertEquals(3, $("tbGrades").getRowCount());
 		assertEquals("Alfred's results",
 				array("Alfred", "", "B", "C", "12%"),
 				$("tbGrades").getRowText(0));
 		assertEquals("Bernadette's results",
 				array("Bernadette", "B", "C", "A", "16%"),
 				$("tbGrades").getRowText(1));
+		assertEquals("average results",
+				array("plugins.learn.gradebook.average", "12%", "36%", "0%", "16%"),
+				$("tbGrades").getRowText(2));
 	}
 	
 	public void testGradeTableInitialisedEmpty() {
@@ -319,7 +327,7 @@ public class GradebookTabHandlerTest extends ThinletEventHandlerTest<GradebookTa
 		
 		// then
 		assertEquals("Grade table column names",
-				array("plugins.learn.student", "Health & Safety", "Maths + English", "Electronics"),
+				array("plugins.learn.student", "Health & Safety", "Maths + English", "Electronics", "plugins.learn.gradebook.average"),
 				$("tbGrades").getColumnTitles());
 	}
 	
@@ -332,7 +340,7 @@ public class GradebookTabHandlerTest extends ThinletEventHandlerTest<GradebookTa
 		
 		// then
 		assertEquals("Student column values",
-				array("Angela", "Beatrix", "Clare", "Dave", "Edwina"),
+				array("Angela", "Beatrix", "Clare", "Dave", "Edwina", "plugins.learn.gradebook.average"),
 				$("tbGrades").getColumnText(0));
 	}
 	
@@ -344,19 +352,23 @@ public class GradebookTabHandlerTest extends ThinletEventHandlerTest<GradebookTa
 		h.groupSelectionCompleted(g);
 		
 		// then
+		assertEquals(5, $("tbGrades").getColumnCount());
 		assertEquals("Results (Health & Safety)",
-				array("100%", "47%", "82%", "100%", "4%"),
+				array("100%", "47%", "82%", "100%", "4%", "67%"),
 				$("tbGrades").getColumnText(1));
 		assertEquals("Results (Maths + English)",
 				array("plugins.learn.gradebook.result.none",
 						"plugins.learn.gradebook.result.none",
 						"plugins.learn.gradebook.result.none",
 						"plugins.learn.gradebook.result.none",
-						"plugins.learn.gradebook.result.none"),
+						"plugins.learn.gradebook.result.none", "0%"),
 				$("tbGrades").getColumnText(2));
 		assertEquals("Results (Electronics)",
-				array("17%", "52%", "76%", "100%", "100%"),
+				array("17%", "52%", "76%", "100%", "100%", "69%"),
 				$("tbGrades").getColumnText(3));
+		assertEquals("Average results",
+				array("39%", "33%", "52%", "66%", "34%", "45%"),
+				$("tbGrades").getColumnText(4));
 	}
 	
 	private Group mockEmptyGradebookAndClass() {
@@ -366,6 +378,7 @@ public class GradebookTabHandlerTest extends ThinletEventHandlerTest<GradebookTa
 	private Group mockEmptyGradebookAndClass(String name) {
 		Group g = mockGroup(name);
 		ClassGradebook gb = mock(ClassGradebook.class);
+		when(gb.getTopicAverages()).thenReturn(new int[0]);
 		when(gradebookService.getForClass(g)).thenReturn(gb);
 		return g;
 	}
@@ -393,6 +406,7 @@ public class GradebookTabHandlerTest extends ThinletEventHandlerTest<GradebookTa
 				mockStudentClassResults(students[3], 100, null, 100),
 				mockStudentClassResults(students[4], 4, null, 100));
 		when(gb.getResults()).thenReturn(results);
+		when(gb.getTopicAverages()).thenReturn(array(67, 0, 69, 45));
 		when(gradebookService.getForClass(g)).thenReturn(gb);
 		
 		return g;
@@ -405,6 +419,7 @@ public class GradebookTabHandlerTest extends ThinletEventHandlerTest<GradebookTa
 		
 		ClassGradebook classGb = mock(ClassGradebook.class);
 		when(classGb.getTopics()).thenReturn(asList(t));
+		when(classGb.getTopicAverages()).thenReturn(new int[0]);
 		when(gradebookService.getForClass(g)).thenReturn(classGb);
 		
 		// create students

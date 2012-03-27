@@ -58,7 +58,14 @@ public class LearnTestUtils {
 		StudentGrades r = mock(StudentGrades.class);
 		when(r.getStudent()).thenReturn(student);
 		when(r.getGrades()).thenReturn(grades);
+		when(r.getAverage()).thenReturn(calculateMean(grades));
 		return r;
+	}
+	
+	private static int calculateMean(Integer... grades) {
+		long total = 0;
+		for(Integer g : grades) if(g != null) total += g;
+		return (int) (total/grades.length);
 	}
 	
 	public static Contact[] mockContacts(String... names) {
