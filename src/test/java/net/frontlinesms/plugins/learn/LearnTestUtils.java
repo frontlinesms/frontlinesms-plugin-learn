@@ -365,6 +365,16 @@ public class LearnTestUtils {
 		return c.getTimeInMillis();
 	}
 	
+	public static long firstOfTheMonth9am() {
+		Calendar c = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+		c.set(Calendar.DAY_OF_MONTH, 1);
+		c.set(Calendar.HOUR_OF_DAY, 9);
+		c.set(Calendar.MINUTE, 0);
+		c.set(Calendar.SECOND, 0);
+		c.set(Calendar.MILLISECOND, 0);
+		return c.getTimeInMillis();
+	}
+	
 	private static void println(Object o, Object...fieldsAndExpectedValues) {
 		println(1, "<fieldName>: <actualValue> vs <expectedValue>");
 		for (int i = 0; i < fieldsAndExpectedValues.length; i+=2) {

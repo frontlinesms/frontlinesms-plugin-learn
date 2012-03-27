@@ -53,6 +53,30 @@ public class NewAssessmentMessageDialogHandlerTest extends ThinletEventHandlerTe
 		assertTimeEquals(TEST_DATE, "Start");
 	}
 	
+	public void testDatePickerButtonAvailableForStartDate() {
+		$("btShowStartDatePicker").exists();
+	}
+	
+	public void testDatePickerLaunchForStartDate() {
+		// when
+		$("btShowStartDatePicker").click();
+		
+		// then
+		assertTrue($("dateSelecter").isVisible());
+	}
+	
+	public void testDatePickerDateUpdateForStartDate() {
+		// given
+		$("btShowStartDatePicker").click();
+		assertTrue($("dateSelecter").isVisible());
+		
+		// when
+		$("dateSelecter").find("pn1").getChild().withText("1").click();
+		
+		// then
+		assertTimeEquals(firstOfTheMonth9am(), "Start");
+	}
+	
 	public void testEndDateDisabled() {
 		assertFalse($("pnEndDate").isEnabled());
 	}

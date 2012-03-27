@@ -1,5 +1,6 @@
 package net.frontlinesms.plugins.learn.ui.assessment.message;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.Calendar;
 
@@ -7,6 +8,7 @@ import net.frontlinesms.plugins.learn.data.domain.AssessmentMessage;
 import net.frontlinesms.plugins.learn.data.domain.Frequency;
 import net.frontlinesms.ui.FrontlineUI;
 import net.frontlinesms.ui.ThinletUiEventHandler;
+import net.frontlinesms.ui.handler.core.DateSelecter;
 
 import static thinlet.Thinlet.find;
 import static net.frontlinesms.ui.i18n.InternationalisationUtils.*;
@@ -58,6 +60,10 @@ public class EditAssessmentMessageDialogHandler implements ThinletUiEventHandler
 	
 	public void close() {
 		ui.remove(dialog);
+	}
+	
+	public void showDateSelecter(Object dateFieldToUpdate) throws IOException {
+		new DateSelecter(ui, dateFieldToUpdate).showSelecter();
 	}
 	
 //> UI HELPER METHODS
