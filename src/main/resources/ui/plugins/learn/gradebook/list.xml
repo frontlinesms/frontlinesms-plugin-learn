@@ -9,9 +9,7 @@
 		<label text="i18n.plugins.learn.topic"/>
 		<combobox name="cbTopic" text="i18n.plugins.learn.topic.all"
 				action="topicSelected"
-				editable="false" enabled="false">
-			<choice text="i18n.plugins.learn.topic.all"/>
-		</combobox>
+				editable="false" enabled="false"/>
 		
 		<label text="i18n.plugins.learn.assessment"/>
 		<combobox name="cbAssessment"

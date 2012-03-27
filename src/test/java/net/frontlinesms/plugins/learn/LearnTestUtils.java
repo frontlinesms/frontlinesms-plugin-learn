@@ -16,6 +16,7 @@ import java.util.TimeZone;
 
 import net.frontlinesms.data.domain.Contact;
 import net.frontlinesms.data.domain.Group;
+import net.frontlinesms.data.events.EntityDeletedNotification;
 import net.frontlinesms.data.events.EntitySavedNotification;
 import net.frontlinesms.events.EventObserver;
 import net.frontlinesms.events.FrontlineEventNotification;
@@ -426,5 +427,9 @@ public class LearnTestUtils {
 
 	public static <T> FrontlineEventNotification mockEntitySavedNotification(Class<T> clazz) {
 		return new EntitySavedNotification<T>(mock(clazz));
+	}
+
+	public static <T> FrontlineEventNotification mockEntityDeletedNotification(Class<T> clazz) {
+		return new EntityDeletedNotification<T>(mock(clazz));
 	}
 }

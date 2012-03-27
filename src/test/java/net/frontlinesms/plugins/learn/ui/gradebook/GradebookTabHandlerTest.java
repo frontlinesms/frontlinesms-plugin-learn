@@ -8,11 +8,13 @@ import java.util.List;
 import net.frontlinesms.data.domain.Contact;
 import net.frontlinesms.data.domain.Group;
 import net.frontlinesms.data.repository.*;
+import net.frontlinesms.events.EventBus;
 import net.frontlinesms.plugins.learn.data.domain.*;
 import net.frontlinesms.plugins.learn.data.gradebook.GradebookService;
 import net.frontlinesms.plugins.learn.data.repository.*;
 import net.frontlinesms.test.spring.MockBean;
 import net.frontlinesms.test.ui.ThinletEventHandlerTest;
+import net.frontlinesms.ui.UiDestroyEvent;
 
 import static net.frontlinesms.plugins.learn.LearnTestUtils.*;
 
@@ -25,6 +27,7 @@ public class GradebookTabHandlerTest extends ThinletEventHandlerTest<GradebookTa
 	@MockBean private GroupDao groupDao;
 	@MockBean private TopicDao topicDao;
 	@MockBean private AssessmentDao assessmentDao;
+	@MockBean private EventBus eventBus;
 
 //> SETUP METHODS
 	@Override
@@ -371,6 +374,57 @@ public class GradebookTabHandlerTest extends ThinletEventHandlerTest<GradebookTa
 				$("tbGrades").getColumnText(4));
 	}
 	
+	public void testTopicSelecterShouldUpdateWhenANewTopicIsCreated() {
+		// given
+		mockTopics(topicDao, "topic1");
+		initUiForTests();
+		assertEquals("Topic selecter content",
+				array("plugins.learn.topic.all", "topic1"),
+				$("cbTopic").getOptions());
+		
+		// when
+		mockTopics(topicDao, "topic1", "topic2");
+		h.notify(mockEntitySavedNotification(Topic.class));
+		
+		// then
+		waitForUiEvents();
+		assertEquals("Topic selecter content",
+				array("plugins.learn.topic.all", "topic1", "topic2"),
+				$("cbTopic").getOptions());
+	}
+	
+	public void testTopicSelecterShouldUpdateWhenATopicIsDeleted() {
+		// given
+		mockTopics(topicDao, "topic1", "topic2");
+		initUiForTests();
+		assertEquals("Topic selecter content",
+				array("plugins.learn.topic.all", "topic1", "topic2"),
+				$("cbTopic").getOptions());
+		
+		// when
+		mockTopics(topicDao, "topic2");
+		h.notify(mockEntityDeletedNotification(Topic.class));
+		
+		// then
+		waitForUiEvents();
+		assertEquals("Topic selecter content",
+				array("plugins.learn.topic.all", "topic2"),
+				$("cbTopic").getOptions());
+	}
+	
+	public void testTabHandlerShouldRegisterWithEventBusOnInit() {
+		verify(eventBus).registerObserver(h);
+	}
+	
+	public void testTabHandlerShouldUnregisterWithEventBusOnUiDestroy() {
+		// when
+		h.notify(new UiDestroyEvent(ui));
+		
+		// then
+		verify(eventBus).unregisterObserver(h);
+	}
+	
+//> SETUP HELPER METHODS
 	private Group mockEmptyGradebookAndClass() {
 		return mockEmptyGradebookAndClass("empty class");
 	}

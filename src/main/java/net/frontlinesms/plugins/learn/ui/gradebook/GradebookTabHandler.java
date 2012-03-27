@@ -7,19 +7,26 @@ import org.springframework.context.ApplicationContext;
 import thinlet.Thinlet;
 
 import net.frontlinesms.data.domain.Group;
+import net.frontlinesms.data.events.DatabaseEntityNotification;
+import net.frontlinesms.data.events.EntityDeleteWarning;
 import net.frontlinesms.data.repository.GroupDao;
+import net.frontlinesms.events.EventBus;
+import net.frontlinesms.events.EventObserver;
+import net.frontlinesms.events.FrontlineEventNotification;
 import net.frontlinesms.plugins.learn.data.domain.*;
 import net.frontlinesms.plugins.learn.data.gradebook.GradebookService;
 import net.frontlinesms.plugins.learn.data.repository.*;
 import net.frontlinesms.ui.FrontlineUI;
 import net.frontlinesms.ui.ThinletUiEventHandler;
+import net.frontlinesms.ui.UiDestroyEvent;
+import net.frontlinesms.ui.events.FrontlineUiUpdateJob;
 import net.frontlinesms.ui.handler.contacts.GroupSelecterDialog;
 import net.frontlinesms.ui.handler.contacts.SingleGroupSelecterDialogOwner;
 import net.frontlinesms.ui.i18n.InternationalisationUtils;
 
 import static net.frontlinesms.ui.i18n.InternationalisationUtils.getI18nString;
 
-public class GradebookTabHandler implements ThinletUiEventHandler, SingleGroupSelecterDialogOwner {
+public class GradebookTabHandler implements ThinletUiEventHandler, SingleGroupSelecterDialogOwner, EventObserver {
 	private static final String XML_LAYOUT = "/ui/plugins/learn/gradebook/list.xml";
 
 	private final FrontlineUI ui;
@@ -28,6 +35,7 @@ public class GradebookTabHandler implements ThinletUiEventHandler, SingleGroupSe
 	private final GradebookService gradebookService;
 	private final TopicDao topicDao;
 	private final AssessmentDao assessmentDao;
+	private final EventBus eventBus;
 
 	private Group selectedGroup;
 	private Topic selectedTopic;
@@ -39,12 +47,11 @@ public class GradebookTabHandler implements ThinletUiEventHandler, SingleGroupSe
 		gradebookService = (GradebookService) ctx.getBean("gradebookService");
 		topicDao = (TopicDao) ctx.getBean("topicDao");
 		assessmentDao = (AssessmentDao) ctx.getBean("assessmentDao");
+		eventBus = (EventBus) ctx.getBean("eventBus");
+		eventBus.registerObserver(this);
 		
 		// initialise topic chooser combobox
-		Object cbTopic = find("cbTopic");
-		for(Topic t : topicDao.list()) {
-			ui.add(cbTopic, ui.createComboboxChoice(t.getName(), t));
-		}
+		refreshTopics();
 	}
 
 	public Object getTab() {
@@ -80,6 +87,19 @@ public class GradebookTabHandler implements ThinletUiEventHandler, SingleGroupSe
 		setGroup(group);
 	}
 	
+//> EVENT BUS HANDLER
+	public void notify(FrontlineEventNotification n) {
+		if(n instanceof UiDestroyEvent) {
+			if(((UiDestroyEvent) n).isFor(ui)) {
+				eventBus.unregisterObserver(this);
+			}
+		} else if(n instanceof DatabaseEntityNotification<?>) {
+			if(n instanceof EntityDeleteWarning<?>) return;
+			Object entity = ((DatabaseEntityNotification<?>) n).getDatabaseEntity();
+			if(entity instanceof Topic) refreshTopics_threadSafe();
+		}
+	}
+	
 //> UI HELPER METHODS
 	private void refreshAssessments() {
 		List<Assessment> assessments = assessmentDao.findAllByGroupAndTopic(selectedGroup, selectedTopic);
@@ -99,6 +119,23 @@ public class GradebookTabHandler implements ThinletUiEventHandler, SingleGroupSe
 			ui.setText(cbAssessment, getDescription(selectedAssessment));
 			setSelectedAssessment(selectedAssessment);
 		}
+	}
+	
+	private void refreshTopics() {
+		Object cbTopic = find("cbTopic");
+		ui.removeAll(cbTopic);
+		ui.add(cbTopic, ui.createComboboxChoice(getI18nString("plugins.learn.topic.all"), null));
+		for(Topic t : topicDao.list()) {
+			ui.add(cbTopic, ui.createComboboxChoice(t.getName(), t));
+		}
+	}
+	
+	private void refreshTopics_threadSafe() {
+		new FrontlineUiUpdateJob() {
+			public void run() {
+				refreshTopics();
+			}
+		}.execute();
 	}
 	
 	private void setSelectedAssessment(Assessment assessment) {
