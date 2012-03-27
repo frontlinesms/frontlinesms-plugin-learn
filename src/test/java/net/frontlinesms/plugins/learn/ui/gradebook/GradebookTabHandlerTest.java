@@ -347,6 +347,21 @@ public class GradebookTabHandlerTest extends ThinletEventHandlerTest<GradebookTa
 				$("tbGrades").getColumnText(0));
 	}
 	
+	public void testChangingClassCorrectlyUpdatesGradeTableStudents() {
+		// given
+		Group g1 = mockGradeBookAndClass();
+		h.groupSelectionCompleted(g1);
+		Group g2 = mockEmptyGradebookAndClass();
+		
+		// when
+		h.groupSelectionCompleted(g2);
+		
+		// then
+		assertEquals("Student column values",
+				array("plugins.learn.gradebook.average"),
+				$("tbGrades").getColumnText(0));
+	}
+	
 	public void testSelectingClassUpdatesGradeTableResults() {
 		// given
 		Group g = mockGradeBookAndClass();

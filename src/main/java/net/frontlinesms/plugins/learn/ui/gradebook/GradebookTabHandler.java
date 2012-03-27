@@ -190,6 +190,7 @@ public class GradebookTabHandler implements ThinletUiEventHandler, SingleGroupSe
 		
 		// Update table
 		Object table = find("tbGrades");
+		ui.removeAll(table);
 
 		// Update table header
 		Object header = Thinlet.get(table, Thinlet.HEADER);
