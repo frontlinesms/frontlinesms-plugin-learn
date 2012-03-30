@@ -15,9 +15,11 @@ import java.util.List;
 import java.util.TimeZone;
 
 import net.frontlinesms.data.domain.Contact;
+import net.frontlinesms.data.domain.FrontlineMessage;
 import net.frontlinesms.data.domain.Group;
 import net.frontlinesms.data.events.EntityDeletedNotification;
 import net.frontlinesms.data.events.EntitySavedNotification;
+import net.frontlinesms.data.repository.ContactDao;
 import net.frontlinesms.events.EventObserver;
 import net.frontlinesms.events.FrontlineEventNotification;
 import net.frontlinesms.plugins.learn.data.domain.*;
@@ -67,6 +69,12 @@ public class LearnTestUtils {
 		long total = 0;
 		for(Integer g : grades) if(g != null) total += g;
 		return (int) (total/grades.length);
+	}
+	
+	public static Contact mockContact(ContactDao dao, String number) {
+		Contact c = mock(Contact.class);
+		when(dao.getFromMsisdn(number)).thenReturn(c);
+		return c;
 	}
 	
 	public static Contact[] mockContacts(String... names) {
@@ -125,6 +133,12 @@ public class LearnTestUtils {
 		return m;
 	}
 	
+	public static AssessmentMessage mockAssessmentMessage(TopicItem item) {
+		AssessmentMessage m = mock(AssessmentMessage.class);
+		when(m.getTopicItem()).thenReturn(item);
+		return m;
+	}
+	
 	public static Long parseDate(String date) {
 		if(date == null) return null;
 		try {
@@ -174,6 +188,18 @@ public class LearnTestUtils {
 		return q;
 	}
 	
+	public static FrontlineMessage mockMessage(String messageText) {
+		FrontlineMessage m = mock(FrontlineMessage.class);
+		when(m.getTextContent()).thenReturn(messageText);
+		return m;
+	}
+	
+	public static FrontlineMessage mockMessage(String from, String messageText) {
+		FrontlineMessage m = mockMessage(messageText);
+		when(m.getSenderMsisdn()).thenReturn(from);
+		return m;
+	}
+	
 	public static Topic[] mockTopics(String... names) {
 		ArrayList<Topic> topics = new ArrayList<Topic>();
 		for(String name : names) {
@@ -203,22 +229,11 @@ public class LearnTestUtils {
 		return argThat(new ArgumentMatcher<AssessmentMessage>() {
 			@Override
 			public boolean matches(Object o) {
-				AssessmentMessage m = (AssessmentMessage) o;
-				
-				boolean matches = expectedTopicItem == m.getTopicItem() &&
-						expectedStartDate == m.getStartDate() &&
-						expectedStartDate == m.getEndDate() &&
-						expectedFrequency == m.getFrequency();
-				
-				if(!matches) {
-					System.out.println("LearnTestUtils.assessmentMessageWithTopicItemAndStartDateAndRepeat(...).new ArgumentMatcher() {...}.matches()");
-					println(o, "topicItem", expectedTopicItem,
-							"startDate", expectedStartDate,
-							"endDate", expectedStartDate,
-							"frequency", expectedFrequency);
-				}
-				
-				return matches;
+				return match("assessmentMessageWithTopicItemAndStartDateAndRepeat", o,
+						"topicItem", expectedTopicItem,
+						"startDate", expectedStartDate,
+						"endDate", expectedStartDate,
+						"frequency", expectedFrequency);
 			}
 		});
 	}
@@ -239,8 +254,8 @@ public class LearnTestUtils {
 		return argThat(new ArgumentMatcher<Assessment>() {
 			@Override
 			public boolean matches(Object o) {
-				Assessment a = (Assessment) o;
-				return expectedTopicName.equals(a.getTopic().getName());
+				return match("assessmentWithTopic", o,
+						"topic.name", expectedTopicName);
 			}
 		});
 	}
@@ -249,9 +264,9 @@ public class LearnTestUtils {
 		return argThat(new ArgumentMatcher<Assessment>() {
 			@Override
 			public boolean matches(Object o) {
-				Assessment a = (Assessment) o;
-				return expectedTopicName.equals(a.getTopic().getName()) &&
-						expectedGroupName.equals(a.getGroup().getName());
+				return match("assessmentWithTopicAndGroup", o,
+						"topic.name", expectedTopicName,
+						"group.name", expectedGroupName);
 			}
 		});
 	}
@@ -260,19 +275,23 @@ public class LearnTestUtils {
 		return argThat(new ArgumentMatcher<Assessment>() {
 			@Override
 			public boolean matches(Object o) {
-				Assessment a = (Assessment) o;
-				boolean matches = expectedTopicName.equals(a.getTopic().getName()) &&
-						expectedGroupName.equals(a.getGroup().getName()) &&
-						expectedMessageCount == a.getMessages().size();
-				
-				if(!matches) {
-					System.out.println("LearnTestUtils.assessmentWithTopicAndGroupAndMessageCount(...).new ArgumentMatcher() {...}.matches()");
-					println(o, "topic.name", expectedTopicName,
-							"group.name", expectedGroupName,
-							"messages.size()", expectedMessageCount);
-				}
-				
-				return matches;
+				return match("assessmentWithTopicAndGroupAndMessageCount", o,
+						"topic.name", expectedTopicName,
+						"group.name", expectedGroupName,
+						"messages.size()", expectedMessageCount);
+			}
+		});
+	}
+	
+	public static AssessmentMessageResponse assessmentMessageResponseWithMessageAndStudentAndAnswerAndCorrect(final AssessmentMessage expectedAssessmentMessage, final Contact expectedStudent, final int expectedAnswer, final boolean expectedCorrect) {
+		return argThat(new ArgumentMatcher<AssessmentMessageResponse>() {
+			@Override
+			public boolean matches(Object o) {
+				return match("assessmentMessageResponseWithMessageAndStudentAndAnswerAndCorrect", o,
+						"assessmentMessage", expectedAssessmentMessage,
+						"student", expectedStudent,
+						"answer", expectedAnswer,
+						"correct", expectedCorrect);
 			}
 		});
 	}
@@ -281,13 +300,8 @@ public class LearnTestUtils {
 		return argThat(new ArgumentMatcher<Topic>() {
 			@Override
 			public boolean matches(Object a) {
-				Topic t = (Topic) a;
-				boolean matches = expectedName.equals(t.getName());
-				if(!matches) {
-					println("LearnTestUtils.topicWithName(...).new ArgumentMatcher() {...}.matches()");
-					println(t, "name", expectedName);
-				}
-				return matches;
+				return match("topicWithName", a,
+						"name", expectedName);
 			}
 		});
 	}
@@ -300,18 +314,10 @@ public class LearnTestUtils {
 		return argThat(new ArgumentMatcher<Reinforcement>() {
 			@Override
 			public boolean matches(Object o) {
-				Reinforcement r = (Reinforcement) o;
-				final boolean matches =
-						expectedId == r.getId() &&
-						expectedReinforementText.equals(r.getMessageText()) &&
-						expectedTopicName.equals(r.getTopic().getName());
-				if(!matches) {
-					println("LearnTestUtils.reinforcementWithTextAndTopic(...).new ArgumentMatcher() {...}.matches()");
-					println("\tr.id:  " + r.getId());
-					println("\tr.name:  " + r.getMessageText());
-					println("\tr.topic: " + r.getTopic().getName());
-				}
-				return matches;
+				return match("reinforcementWithTextAndTopic", o,
+						"id", expectedId,
+						"messageText", expectedReinforementText,
+						"topic.name", expectedTopicName);
 			}
 		});
 	}
@@ -390,21 +396,50 @@ public class LearnTestUtils {
 		}
 	}
 	
+	private static boolean match(String methodName, Object o, Object... fieldNamesAndExpectedValues) {
+		boolean matches = true;
+
+		for(int i=0; matches && i<fieldNamesAndExpectedValues.length; i+=2) {
+			String fieldName = (String) fieldNamesAndExpectedValues[i];
+			Object expectedValue = fieldNamesAndExpectedValues[i + 1];
+			matches = getValue(o, fieldName).equals(expectedValue);
+		}
+		
+		if(!matches) {
+			println("LearnTestUtils." + methodName + "(...).new ArgumentMatcher() {...}.matches()");
+			for(int i=0; i<fieldNamesAndExpectedValues.length; i+=2) {
+				String fieldName = (String) fieldNamesAndExpectedValues[i];
+				Object expectedValue = fieldNamesAndExpectedValues[i + 1];
+				println(o, fieldName, expectedValue);
+			}
+		}
+		
+		return matches;
+	}
+	
 	private static void println(Object o, String fieldName, Object expectedValue) {
+		Object value = getValue(o, fieldName);
+		println(1, "o." + fieldName + ": " + value + " vs " + expectedValue + " (" + getAlternateFormat(value) + " vs " + getAlternateFormat(expectedValue) + ")");
+	}
+	
+	private static Object getValue(Object o, String fieldName) {
 		try {
 			Object value = o;
 			for(String exp : fieldName.split("\\.")) {
-				String methodName;
+				Method m;
 				if(exp.endsWith("()")) {
-					methodName = exp.substring(0, exp.length() - 2);
+					m = value.getClass().getMethod(exp.substring(0, exp.length() - 2));
 				} else {
-					methodName = "get" + exp.substring(0, 1).toUpperCase() + exp.substring(1);
+					String methodNameBody = exp.substring(0, 1).toUpperCase() + exp.substring(1);
+					try {
+						m = value.getClass().getMethod("get" + methodNameBody);
+					} catch(NoSuchMethodException ex) {
+						m = value.getClass().getMethod("is" + methodNameBody);
+					}
 				}
-				Method m = value.getClass().getMethod(methodName);
 				value = m.invoke(value);
 			}
-			
-			println(1, "o." + fieldName + ": " + value + " vs " + expectedValue + " (" + getAlternateFormat(value) + " vs " + getAlternateFormat(expectedValue) + ")");
+			return value;
 		} catch(Exception ex) {
 			throw new RuntimeException(ex);
 		}
