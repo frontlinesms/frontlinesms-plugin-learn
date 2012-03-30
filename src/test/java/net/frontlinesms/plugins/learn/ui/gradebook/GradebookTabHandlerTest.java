@@ -277,9 +277,6 @@ public class GradebookTabHandlerTest extends ThinletEventHandlerTest<GradebookTa
 		$("cbAssessment").setSelected("1/1/2001 - 31/12/2001");
 		
 		// then
-		for(int i=0; i<$("tbGrades").getRowCount(); ++i) {
-			System.out.println(Arrays.toString($("tbGrades").getRowText(i)));
-		}
 		assertEquals(3, $("tbGrades").getRowCount());
 		assertEquals("Alfred's results",
 				array("Alfred", "", "B", "C", "12%"),
