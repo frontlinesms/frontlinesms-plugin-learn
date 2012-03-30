@@ -9,10 +9,10 @@ import net.frontlinesms.ui.i18n.InternationalisationUtils;
 
 import static org.mockito.Mockito.*;
 import static net.frontlinesms.plugins.learn.LearnTestUtils.*;
+import static net.frontlinesms.plugins.learn.data.domain.Frequency.*;
 
 public class NewAssessmentMessageDialogHandlerTest extends ThinletEventHandlerTest<NewAssessmentMessageDialogHandler> {
 	private long TEST_DATE;
-//	private AssessmentMessageDao dao;
 	private TopicItem topicItem;
 	private EditAssessmentMessageDialogOwner dialogOwner;
 	
@@ -24,6 +24,7 @@ public class NewAssessmentMessageDialogHandlerTest extends ThinletEventHandlerTe
 		when(topicItem.getMessageText()).thenReturn("Message text.");
 		NewAssessmentMessageDialogHandler dialogHandler = new NewAssessmentMessageDialogHandler(ui, dialogOwner, topicItem);
 		dialogHandler.setStartDate(TEST_DATE);
+		dialogHandler.setEndDate(TEST_DATE);
 		return dialogHandler;
 	}
 
@@ -53,13 +54,30 @@ public class NewAssessmentMessageDialogHandlerTest extends ThinletEventHandlerTe
 		assertTimeEquals(TEST_DATE, "Start");
 	}
 	
+	public void testEndDateInitialisedToNowishInLocalTimezone() {
+		assertTimeEquals(TEST_DATE, "End");
+	}
+	
 	public void testDatePickerButtonAvailableForStartDate() {
 		$("btShowStartDatePicker").exists();
+	}
+	
+	public void testDatePickerButtonAvailableForEndDate() {
+		$("btShowEndDatePicker").exists();
 	}
 	
 	public void testDatePickerLaunchForStartDate() {
 		// when
 		$("btShowStartDatePicker").click();
+		
+		// then
+		assertTrue($("dateSelecter").isVisible());
+	}
+	
+	public void testDatePickerLaunchForEndDate() {
+		// when
+		$("cbRepeat").setSelected(WEEKLY);
+		$("btShowEndDatePicker").click();
 		
 		// then
 		assertTrue($("dateSelecter").isVisible());
@@ -77,10 +95,41 @@ public class NewAssessmentMessageDialogHandlerTest extends ThinletEventHandlerTe
 		assertTimeEquals(firstOfTheMonth9am(), "Start");
 	}
 	
+	public void testDatePickerDateUpdateForEndDate() {
+		// given
+		$("cbRepeat").setSelected(WEEKLY);
+		$("btShowEndDatePicker").click();
+		assertTrue($("dateSelecter").isVisible());
+		
+		// when
+		$("dateSelecter").find("pn1").getChild().withText("1").click();
+		
+		// then
+		assertTimeEquals(firstOfTheMonth9am(), "End");
+	}
+	
 	public void testEndDateDisabled() {
 		assertFalse($("pnEndDate").isEnabled());
 	}
 
+	public void settingRepeatToMoreOftenThanOnceShouldEnableEndDate() {
+		// when
+		$("cbRepeat").setSelected(WEEKLY);
+		
+		// then
+		assertFalse($("pnEndDate").isEnabled());
+	}
+	
+	public void resettingRepeatToOnceShouldDisableEndDate() {
+		// given
+		$("cbRepeat").setSelected(WEEKLY);
+		
+		// when
+		$("cbRepeat").setSelected(ONCE);
+		
+		// then
+		assertFalse($("pnEndDate").isEnabled());
+	}
 	
 	public void testRepeatNotEditableByHand() {
 		assertFalse($("cbRepeat").isEditable());

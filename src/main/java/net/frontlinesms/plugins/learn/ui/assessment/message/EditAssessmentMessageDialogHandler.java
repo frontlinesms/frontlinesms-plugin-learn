@@ -26,6 +26,11 @@ public class EditAssessmentMessageDialogHandler implements ThinletUiEventHandler
 		this.dialogOwner = dialogOwner;
 		
 		// init fields
+		Object repeatCombobox = find(dialog, "cbRepeat");
+		for(Frequency f : Frequency.values()) {
+			ui.add(repeatCombobox, ui.createComboboxChoice(getI18nString(f), f));
+		}
+		
 		ui.setText(find(dialog, "taSummary"), am.getTopicItem().getMessageText());
 		ui.setEnabledRecursively(find(dialog, "pnEndDate"), assessmentMessage.getFrequency() != Frequency.ONCE);
 	}
@@ -36,13 +41,19 @@ public class EditAssessmentMessageDialogHandler implements ThinletUiEventHandler
 	
 //> ACCESSORS METHODS
 	public void setStartDate(long date) {
-		String formattedDate = formatDate(date);
-		String formattedTime = formatTime(date);
-		setText("tfStartDate", formattedDate);
-		setText("tfStartTime", formattedTime);
+		setDate("Start", date);
+	}
+
+	public void setEndDate(long date) {
+		setDate("End", date);
 	}
 	
 //> UI EVENT METHODS
+	public void repeatFrequencyChanged() {
+		Frequency f = ui.getAttachedObject(ui.getSelectedItem(find(dialog, "cbRepeat")), Frequency.class);
+		ui.setEnabledRecursively(find(dialog, "pnEndDate"), !f.equals(Frequency.ONCE));
+	}
+	
 	public void save() {
 		try {
 			Calendar c = Calendar.getInstance();
@@ -67,6 +78,13 @@ public class EditAssessmentMessageDialogHandler implements ThinletUiEventHandler
 	}
 	
 //> UI HELPER METHODS
+	private void setDate(String name, long date) {
+		String formattedDate = formatDate(date);
+		String formattedTime = formatTime(date);
+		setText("tf" + name + "Date", formattedDate);
+		setText("tf" + name + "Time", formattedTime);
+	}
+	
 	private void setText(String componentName, Object value) {
 		ui.setText(find(dialog, componentName), value.toString());
 	}
