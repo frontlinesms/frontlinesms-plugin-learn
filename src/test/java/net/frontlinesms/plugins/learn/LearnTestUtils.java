@@ -201,6 +201,16 @@ public class LearnTestUtils {
 		return m;
 	}
 	
+	public static List<StudentGrades> mockStudentGrades(Integer[]... grades) {
+		ArrayList<StudentGrades> sg = new ArrayList<StudentGrades>();
+		for(Integer[] grade : grades) {
+			StudentGrades s = mock(StudentGrades.class);
+			when(s.getGrades()).thenReturn(grade);
+			sg.add(s);
+		}
+		return sg;
+	}
+	
 	public static Topic[] mockTopics(String... names) {
 		ArrayList<Topic> topics = new ArrayList<Topic>();
 		for(String name : names) {
@@ -390,13 +400,6 @@ public class LearnTestUtils {
 		return c.getTimeInMillis();
 	}
 	
-	private static void println(Object o, Object...fieldsAndExpectedValues) {
-		println(1, "<fieldName>: <actualValue> vs <expectedValue>");
-		for (int i = 0; i < fieldsAndExpectedValues.length; i+=2) {
-			println(o, (String) fieldsAndExpectedValues[i], fieldsAndExpectedValues[i+1]);
-		}
-	}
-	
 	private static boolean match(String methodName, Object o, Object... fieldNamesAndExpectedValues) {
 		boolean matches = true;
 
@@ -408,6 +411,7 @@ public class LearnTestUtils {
 		
 		if(!matches) {
 			println("LearnTestUtils." + methodName + "(...).new ArgumentMatcher() {...}.matches()");
+			println(1, "<fieldName>: <actualValue> vs <expectedValue>");
 			for(int i=0; i<fieldNamesAndExpectedValues.length; i+=2) {
 				String fieldName = (String) fieldNamesAndExpectedValues[i];
 				Object expectedValue = fieldNamesAndExpectedValues[i + 1];

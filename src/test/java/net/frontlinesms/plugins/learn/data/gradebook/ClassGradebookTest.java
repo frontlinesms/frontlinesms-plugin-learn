@@ -22,6 +22,7 @@ import net.frontlinesms.plugins.learn.data.repository.TopicDao;
 import net.frontlinesms.plugins.learn.data.repository.TopicItemDao;
 
 import static net.frontlinesms.plugins.learn.LearnTestUtils.*;
+import static net.frontlinesms.junit.BaseTestCase.*;
 
 public class ClassGradebookTest extends HibernateTestCase {
 	@Autowired private GradebookService gradebookService;
@@ -131,6 +132,23 @@ public class ClassGradebookTest extends HibernateTestCase {
 		BaseTestCase.assertEquals("contact 0's grades", expectedGrades[0], actualGrades.get(0).getGrades());
 		BaseTestCase.assertEquals("contact 0's grades", expectedGrades[1], actualGrades.get(1).getGrades());
 		BaseTestCase.assertEquals("contact 0's grades", expectedGrades[2], actualGrades.get(2).getGrades());
+	}
+	
+	public void testGradebookAverageCalculation() {
+		// given
+		List<Topic> topics = asList(mockTopics("topic-1", "topic-2", "topic-3", "topic-4"));
+		List<StudentGrades> results = mockStudentGrades(
+				objectArray(0, 100, 100, 100),
+				objectArray(0, 100, 50,  100),
+				objectArray(0, 100, 0,   0));
+		
+		// when
+		int[] averages = new ClassGradebook(topics, results).getTopicAverages();
+		
+		// then
+		BaseTestCase.assertEquals("ClassGradebook averages",
+				array(0, 100, 50, 67),
+				averages);
 	}
 	
 //> TEST SETUP METHODS

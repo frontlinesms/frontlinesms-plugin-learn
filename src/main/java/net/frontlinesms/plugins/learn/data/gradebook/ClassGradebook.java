@@ -18,8 +18,13 @@ public class ClassGradebook {
 
 	private int[] calculateTopicAverages() {
 		int[] topicAverages = new int[topics.size()];
-		for (int topicIndex = 0; topicIndex < topicAverages.length; topicIndex++) {
-			
+		for (int topicIndex=0; topicIndex<topicAverages.length; ++topicIndex) {
+			int topicTotal = 0;
+			for(StudentGrades r : results) {
+				Integer score = r.getGrades()[topicIndex];
+				if(score != null) topicTotal += score;
+			}
+			topicAverages[topicIndex] = (int) Math.round(1.0 * topicTotal / results.size());
 		}
 		return topicAverages;
 	}
