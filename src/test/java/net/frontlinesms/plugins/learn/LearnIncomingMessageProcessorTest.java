@@ -4,23 +4,43 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 import net.frontlinesms.data.domain.FrontlineMessage;
-import net.frontlinesms.junit.BaseTestCase;
+import net.frontlinesms.events.EventBus;
 import net.frontlinesms.plugins.learn.data.domain.AssessmentMessage;
-import net.frontlinesms.plugins.learn.data.domain.Question;
 import net.frontlinesms.plugins.learn.data.repository.AssessmentMessageDao;
+import net.frontlinesms.test.spring.ApplicationContextAwareTestCase;
+import net.frontlinesms.test.spring.MockBean;
+import net.frontlinesms.test.spring.SpringInitialisedBean;
 
 import static org.mockito.Mockito.*;
 
-public class LearnIncomingMessageProcessTest extends BaseTestCase {
+public class LearnIncomingMessageProcessorTest extends ApplicationContextAwareTestCase {
 	/** instance under test */
-	private LearnIncomingMessageProcessor limp;
+	@SpringInitialisedBean private LearnIncomingMessageProcessor limp;
+
+	@MockBean EventBus eventBus;
 	
 	@Override
 	protected void setUp() throws Exception {
-		limp = new LearnIncomingMessageProcessor();
+		super.setUp();
 	}
 	
 //> TESTS
+	public void testStartShouldRegisterWithEventBus() {
+		// when
+		limp.start();
+		
+		// then
+		verify(eventBus).registerObserver(limp);
+	}
+	
+	public void testShutdownShouldUnregisterWithEventBus() {
+		// when
+		limp.shutdown();
+		
+		// then
+		verify(eventBus).unregisterObserver(limp);
+	}
+	
 	public void testGetAssessmentMessage() {
 		mockAssessmentMessageDao();
 		final Object[] PAIRS = {
