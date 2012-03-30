@@ -9,8 +9,12 @@ public class StudentGrades {
 	private final Integer[] grades;
 	
 	public StudentGrades(Contact student, List<Integer> grades) {
+		this(student, grades.toArray(new Integer[grades.size()]));
+	}
+	
+	public StudentGrades(Contact student, Integer[] grades) {
 		this.student = student;
-		this.grades = grades.toArray(new Integer[grades.size()]);
+		this.grades = grades;
 	}
 	
 	public Integer[] getGrades() {
@@ -22,6 +26,10 @@ public class StudentGrades {
 	}
 
 	public int getAverage() {
-		return 3;
+		int total = 0;
+		for(Integer g : grades) {
+			if(g != null) total += g;
+		}
+		return  (int) Math.round(1.0 * total / grades.length);
 	}
 }
