@@ -1,4 +1,7 @@
-<dialog name="dgEditQuestion" columns="2" gap="8" close="close" text="i18n.plugins.learn.question.edit" left="8" right="8" top="8" bottom="8" modal="true">
+<dialog name="dgEditQuestion" columns="2"
+		width="480" height="360" scrollable="true"
+		gap="8" left="8" right="8" top="8" bottom="8" 
+		close="close" text="i18n.plugins.learn.question.edit" modal="true">
 	<label text="i18n.plugins.learn.topic"/>
 	<combobox name="cbTopic" action="validate(this)" text="i18n.plugins.learn.topic.choose" editable="false"/>
 	
@@ -24,7 +27,7 @@
 	</panel>
 	
 	<label text="i18n.plugins.learn.question.message.text" valign="top"/>
-	<textarea name="taMessage" editable="false"/>
+	<textarea name="taMessage" editable="false" weightx="1"/>
 
 	<panel colspan="2" columns="2" gap="8" halign="center">
 		<button name="btSave" text="i18n.action.save" icon="/icons/tick.png" action="save"/>
