@@ -1,6 +1,8 @@
-package net.frontlinesms.plugins.learn.data.domain;
+package net.frontlinesms.plugins.learn.data.gradebook;
 
 import java.util.List;
+
+import net.frontlinesms.plugins.learn.data.domain.Topic;
 
 /** Immutable class containing results at a specific point in time. */
 public class ClassGradebook {

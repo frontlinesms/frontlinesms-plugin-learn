@@ -23,6 +23,7 @@ import net.frontlinesms.data.repository.ContactDao;
 import net.frontlinesms.events.EventObserver;
 import net.frontlinesms.events.FrontlineEventNotification;
 import net.frontlinesms.plugins.learn.data.domain.*;
+import net.frontlinesms.plugins.learn.data.gradebook.StudentGrades;
 import net.frontlinesms.plugins.learn.data.repository.*;
 
 import org.mockito.ArgumentMatcher;

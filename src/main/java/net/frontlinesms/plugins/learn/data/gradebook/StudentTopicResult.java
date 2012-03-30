@@ -1,6 +1,7 @@
-package net.frontlinesms.plugins.learn.data.domain;
+package net.frontlinesms.plugins.learn.data.gradebook;
 
 import net.frontlinesms.data.domain.Contact;
+import net.frontlinesms.plugins.learn.data.domain.AssessmentMessageResponse;
 
 public class StudentTopicResult {
 	private final Contact contact;

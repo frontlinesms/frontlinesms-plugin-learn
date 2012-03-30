@@ -1,4 +1,4 @@
-package net.frontlinesms.plugins.learn.data.domain;
+package net.frontlinesms.plugins.learn.data.gradebook;
 
 import java.util.List;
 

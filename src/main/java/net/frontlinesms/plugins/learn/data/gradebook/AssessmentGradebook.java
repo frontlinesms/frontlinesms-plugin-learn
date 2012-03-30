@@ -1,4 +1,5 @@
-package net.frontlinesms.plugins.learn.data.domain;
+package net.frontlinesms.plugins.learn.data.gradebook;
+
 
 public class AssessmentGradebook {
 	private final int[] averages;
