@@ -9,7 +9,7 @@ public abstract class TopicItem implements HasTopic {
 	@Column(unique=true,nullable=false,updatable=false)
 	private long id;
 	private String messageText;
-
+	
 	@ManyToOne
 	private Topic topic;
 	

@@ -193,6 +193,49 @@ public class AssessmentDaoTest extends HibernateTestCase {
 		// cleanup
 		deleteAllAssessments();
 	}
+	
+	public void testFindByMessage() throws Exception {
+		// given
+		Topic topic = new Topic();
+		topic.setName("test topic");
+		topicDao.save(topic);
+		Reinforcement r = new Reinforcement();
+		r.setTopic(topic);
+		reinforcementDao.save(r);
+		
+		Assessment b1 = new Assessment();
+		b1.setTopic(topic);
+		b1.setMessages(asList(new AssessmentMessage(r)));
+		dao.save(b1);
+		dao.save(new Assessment());
+
+		AssessmentMessage m = new AssessmentMessage(r);
+		Assessment a = new Assessment();
+		a.setTopic(topic);
+		a.setMessages(asList(m));
+		dao.save(a);
+		long savedId = a.getId();
+
+		Assessment b2 = new Assessment();
+		b2.setTopic(topic);
+		b2.setMessages(asList(new AssessmentMessage(r)));
+		dao.save(b2);
+		dao.save(new Assessment());
+		
+		setComplete();
+		endTransaction();
+		
+		// when
+		a = dao.findByMessage(m);
+		
+		// then
+		assertNotNull(a);
+		assertEquals(savedId, a.getId());
+		
+		// cleanup
+		deleteAllAssessments();
+		topicDao.delete(topic);
+	}
 
 //> SETUP HELPER METHODS
 	private Topic[] createTopics(String... names) throws Exception {

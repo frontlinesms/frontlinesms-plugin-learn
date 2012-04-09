@@ -2,6 +2,7 @@ package net.frontlinesms.plugins.learn;
 
 import java.util.Date;
 
+import net.frontlinesms.FrontlineSMS;
 import net.frontlinesms.FrontlineUtils;
 import net.frontlinesms.data.events.DatabaseEntityNotification;
 import net.frontlinesms.data.events.EntityDeletedNotification;
@@ -26,6 +27,7 @@ import org.quartz.SimpleScheduleBuilder;
 import org.quartz.Trigger;
 import org.quartz.TriggerBuilder;
 import org.quartz.TriggerKey;
+import org.quartz.impl.StdSchedulerFactory;
 import org.springframework.context.ApplicationContext;
 
 public class ScheduleHandler implements EventObserver {
@@ -36,10 +38,18 @@ public class ScheduleHandler implements EventObserver {
 	
 	ScheduleHandler() {}
 	
-	public ScheduleHandler(ApplicationContext ctx) throws PluginInitialisationException {
+	public ScheduleHandler(FrontlineSMS frontlineController, ApplicationContext ctx) throws PluginInitialisationException {
 		eventBus = (EventBus) ctx.getBean("eventBus");
 		assessmentDao = (AssessmentDao) ctx.getBean("assessmentDao");
-		scheduler = (Scheduler) ctx.getBean("scheduler");
+		try {
+			scheduler = new StdSchedulerFactory().getScheduler();
+			scheduler.getContext().put("applicationContext", ctx);
+			scheduler.getContext().put("frontlineController", frontlineController);
+		} catch (SchedulerException ex) {
+			throw new PluginInitialisationException(ex);
+		}
+
+		System.out.println("ScheduleHandler.ScheduleHandler() : scheduler=" + scheduler);
 	}
 	
 	public void start() {
@@ -51,7 +61,9 @@ public class ScheduleHandler implements EventObserver {
 					scheduleJob(m);
 				}
 			}
+			System.out.println("ScheduleHandler.start() : starting scheduler...");
 			scheduler.start();
+			System.out.println("ScheduleHandler.start() : scheduler started :¬)");
 		} catch (SchedulerException ex) {
 			ex.printStackTrace();
 			throw new RuntimeException(ex);
@@ -82,12 +94,17 @@ public class ScheduleHandler implements EventObserver {
 				} else if(n instanceof EntityDeletedNotification<?>) {
 					unscheduleJob(m);
 				}
+			} else if(entity instanceof Assessment) {
+				for(AssessmentMessage m : ((Assessment) entity).getMessages()) {
+					scheduleOrRescheduleJob(m);
+				}
 			}
 		}
 	}
-	
+
 //> SCHEDULE METHODS
 	private void scheduleJob(AssessmentMessage m) {
+		System.out.println("ScheduleHandler.scheduleJob() : " + m.getId());
 		try {
 			scheduler.scheduleJob(createJob(m), createTrigger(m));
 		} catch (SchedulerException e) {
@@ -95,14 +112,29 @@ public class ScheduleHandler implements EventObserver {
 			e.printStackTrace();
 		}
 	}
+	
+	private void scheduleOrRescheduleJob(AssessmentMessage m) {
+		System.out.println("ScheduleHandler.scheduleOrRescheduleJob() : " + m.getId());
+		Trigger trigger = null;
+		try { trigger = scheduler.getTrigger(getTriggerKey(m)); } catch(SchedulerException ex) {
+			ex.printStackTrace();
+		}
+		if(trigger == null) {
+			scheduleJob(m);
+		} else {
+			rescheduleJob(m);
+		}
+	}
 
 	private JobDetail createJob(AssessmentMessage m) {
+		System.out.println("ScheduleHandler.createJob() : " + m.getId());
 		return JobBuilder.newJob(AssessmentMessageJob.class)
 				.usingJobData("assessmentMessageId", m.getId())
 				.build();
 	}
 
 	private void rescheduleJob(AssessmentMessage m) {
+		System.out.println("ScheduleHandler.rescheduleJob() : " + m.getId());
 		try {
 			scheduler.rescheduleJob(getTriggerKey(m), createTrigger(m));
 		} catch (SchedulerException e) {
@@ -112,6 +144,7 @@ public class ScheduleHandler implements EventObserver {
 	}
 	
 	private void unscheduleJob(AssessmentMessage m) {
+		System.out.println("ScheduleHandler.unscheduleJob() : " + m.getId());
 		try {
 			scheduler.unscheduleJob(getTriggerKey(m));
 		} catch (SchedulerException e) {

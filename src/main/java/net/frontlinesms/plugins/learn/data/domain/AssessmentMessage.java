@@ -56,4 +56,8 @@ public class AssessmentMessage {
 	public void setEndDate(Long endDate) {
 		this.endDate = endDate;
 	}
+
+	public String getMessageText() {
+		return topicItem.getMessageText().replace("${id}", Long.toString(this.id));
+	}
 }

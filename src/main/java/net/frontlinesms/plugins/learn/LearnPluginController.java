@@ -20,7 +20,7 @@ public class LearnPluginController extends BasePluginController {
 
 	public void init(FrontlineSMS frontlineController, ApplicationContext applicationContext) throws PluginInitialisationException {
 		ctx = applicationContext;
-		scheduleHandler = new ScheduleHandler(ctx);
+		scheduleHandler = new ScheduleHandler(frontlineController, ctx);
 		messageProcessor = (LearnIncomingMessageProcessor) ctx.getBean("learnIncomingMessageProcessor");
 	}
 

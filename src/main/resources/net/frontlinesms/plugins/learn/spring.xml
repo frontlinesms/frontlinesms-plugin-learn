@@ -28,10 +28,4 @@
 	<bean id="gradebookService" class="net.frontlinesms.plugins.learn.data.gradebook.GradebookService"/>
 	
 	<bean id="learnIncomingMessageProcessor" class="net.frontlinesms.plugins.learn.LearnIncomingMessageProcessor"/>
-	
-	<bean id="scheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
-		<property name="applicationContextSchedulerContextKey">
-			<value>applicationContext</value>
-		</property>
-	</bean>
 </beans>

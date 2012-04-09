@@ -8,6 +8,7 @@ import org.hibernate.criterion.Restrictions;
 import net.frontlinesms.data.domain.Group;
 import net.frontlinesms.data.repository.hibernate.BaseHibernateDao;
 import net.frontlinesms.plugins.learn.data.domain.Assessment;
+import net.frontlinesms.plugins.learn.data.domain.AssessmentMessage;
 import net.frontlinesms.plugins.learn.data.domain.Topic;
 
 public class AssessmentDao extends BaseHibernateDao<Assessment> {
@@ -52,5 +53,14 @@ public class AssessmentDao extends BaseHibernateDao<Assessment> {
 		criteria.add(Restrictions.eq("group", g));
 		criteria.add(Restrictions.eq("topic", t));
 		return super.getList(criteria);
+	}
+	
+	public Assessment findByMessage(AssessmentMessage m) {
+		List<Assessment> all = findAllByTopic(m.getTopicItem().getTopic());
+		for(Assessment a : all) {
+			AssessmentMessage am = a.getMessage(m.getTopicItem());
+			if(am != null && am.getId() == m.getId()) return a;
+		}
+		return null;
 	}
 }
