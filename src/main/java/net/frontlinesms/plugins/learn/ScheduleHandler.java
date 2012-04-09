@@ -33,6 +33,8 @@ public class ScheduleHandler implements EventObserver {
 	private EventBus eventBus;
 	private Scheduler scheduler;
 	
+	ScheduleHandler() {}
+	
 	public ScheduleHandler(ApplicationContext ctx) throws PluginInitialisationException {
 		eventBus = (EventBus) ctx.getBean("eventBus");
 		assessmentDao = (AssessmentDao) ctx.getBean("assessmentDao");
