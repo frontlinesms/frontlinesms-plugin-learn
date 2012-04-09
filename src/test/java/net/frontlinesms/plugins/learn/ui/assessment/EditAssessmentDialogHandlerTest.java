@@ -6,6 +6,7 @@ import net.frontlinesms.data.domain.Group;
 import net.frontlinesms.data.repository.GroupDao;
 import net.frontlinesms.plugins.learn.data.domain.Assessment;
 import net.frontlinesms.plugins.learn.data.domain.AssessmentMessage;
+import net.frontlinesms.plugins.learn.data.domain.Frequency;
 import net.frontlinesms.plugins.learn.data.domain.Topic;
 import net.frontlinesms.plugins.learn.data.domain.TopicItem;
 import net.frontlinesms.plugins.learn.data.repository.AssessmentDao;
@@ -16,6 +17,7 @@ import net.frontlinesms.test.ui.ThinletComponent;
 
 import static org.mockito.Mockito.*;
 import static net.frontlinesms.plugins.learn.LearnTestUtils.*;
+import static net.frontlinesms.plugins.learn.data.domain.Frequency.*;
 
 public class EditAssessmentDialogHandlerTest extends TopicChoosingDialogHandlerTest<EditAssessmentDialogHandler> {
 	@MockBean private AssessmentDao dao;
@@ -42,9 +44,9 @@ public class EditAssessmentDialogHandlerTest extends TopicChoosingDialogHandlerT
 		topicItems = asList(ti);
 
 		assessmentMessages = asList(
-				mockAssessmentWithTopicItem(ti[0]),
-				mockAssessmentWithTopicItem(ti[2]),
-				mockAssessmentWithTopicItem(ti[4]));
+				mockMessageWithTopicItem(ti[0], Frequency.ONCE, "25/12/2011", null),
+				mockMessageWithTopicItem(ti[2], Frequency.DAILY, "1/1/2012", "8/1/2012"),
+				mockMessageWithTopicItem(ti[4], Frequency.WEEKLY, "2/1/2012", "30/1/2012"));
 		a.setMessages(assessmentMessages);
 		
 		super.setUp();
@@ -100,7 +102,26 @@ public class EditAssessmentDialogHandlerTest extends TopicChoosingDialogHandlerT
 				$("tbMessages").getColumnTitles());
 	}
 	
-	public void testMessageTableInitialisation() {
+	public void testMessageTableContentInitialisation() {
+		// expect
+		assertEquals("Row 0",
+				array("mock topic item: 0", "25/12/2011", ONCE.getI18nKey(), ""),
+				$("tbMessages").getRowText(0));
+		assertEquals("Row 1",
+				array("mock topic item: 1"),
+				$("tbMessages").getRowText(1));
+		assertEquals("Row 2",
+				array("mock topic item: 2", "1/1/2012", DAILY.getI18nKey(), "8/1/2012"),
+				$("tbMessages").getRowText(2));
+		assertEquals("Row 3",
+				array("mock topic item: 3"),
+				$("tbMessages").getRowText(3));
+		assertEquals("Row 4",
+				array("mock topic item: 4", "2/1/2012", WEEKLY.getI18nKey(), "30/1/2012"),
+				$("tbMessages").getRowText(4));
+	}
+	
+	public void testMessageTableAttachmentInitialisation() {
 		ThinletComponent[] rows = $("tbMessages").getRows();
 		
 		assertEquals(topicItems.size(), rows.length);

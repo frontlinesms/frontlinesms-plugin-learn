@@ -7,6 +7,7 @@ import net.frontlinesms.data.domain.Group;
 import net.frontlinesms.data.repository.GroupDao;
 import net.frontlinesms.plugins.learn.data.domain.Assessment;
 import net.frontlinesms.plugins.learn.data.domain.AssessmentMessage;
+import net.frontlinesms.plugins.learn.data.domain.Frequency;
 import net.frontlinesms.plugins.learn.data.domain.TopicItem;
 import net.frontlinesms.plugins.learn.data.repository.AssessmentDao;
 import net.frontlinesms.plugins.learn.data.repository.TopicDao;
@@ -17,7 +18,9 @@ import net.frontlinesms.plugins.learn.ui.topic.TopicChoosingDialogHandler;
 import net.frontlinesms.ui.FrontlineUI;
 import net.frontlinesms.ui.handler.contacts.GroupSelecterDialog;
 import net.frontlinesms.ui.handler.contacts.SingleGroupSelecterDialogOwner;
-import net.frontlinesms.ui.i18n.InternationalisationUtils;
+
+import static net.frontlinesms.ui.i18n.InternationalisationUtils.getI18nString;
+import static net.frontlinesms.ui.i18n.InternationalisationUtils.formatDate;
 
 public class EditAssessmentDialogHandler extends TopicChoosingDialogHandler<Assessment> implements SingleGroupSelecterDialogOwner, EditAssessmentMessageDialogOwner {
 	private final AssessmentDao assessmentDao;
@@ -113,11 +116,10 @@ public class EditAssessmentDialogHandler extends TopicChoosingDialogHandler<Asse
 	}
 
 	private Object createTableRow(AssessmentMessage m) {
-		Long endDate = m.getEndDate();
 		return ui.createTableRow(m, m.getTopicItem().getMessageText(),
-				InternationalisationUtils.formatDate(m.getStartDate()),
-				InternationalisationUtils.getI18nString(m.getFrequency().getI18nKey()),
-				endDate==null?"":InternationalisationUtils.formatDate(endDate));
+				formatDate(m.getStartDate()),
+				getI18nString(m.getFrequency().getI18nKey()),
+				m.getFrequency()==Frequency.ONCE? "": formatDate(m.getEndDate()));
 	}
 	
 //> GROUP SELECTION METHODS

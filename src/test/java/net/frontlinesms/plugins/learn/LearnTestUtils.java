@@ -87,10 +87,12 @@ public class LearnTestUtils {
 		return c;
 	}
 	
-	public static AssessmentMessage mockAssessmentWithTopicItem(TopicItem i) {
+	public static AssessmentMessage mockMessageWithTopicItem(TopicItem i, Frequency f, String startDate, String endDate) {
 		AssessmentMessage m = mock(AssessmentMessage.class);
 		when(m.getTopicItem()).thenReturn(i);
-		when(m.getFrequency()).thenReturn(Frequency.ONCE);
+		when(m.getFrequency()).thenReturn(f);
+		when(m.getStartDate()).thenReturn(parseDate(startDate));
+		when(m.getEndDate()).thenReturn(parseDate(endDate==null? startDate: endDate));
 		return m;
 	}
 	
