@@ -25,4 +25,28 @@ public class AssessmentTest extends BaseTestCase {
 		assertEquals(YESTERDAY, a.getStartDate());
 		assertEquals(TOMORROW, a.getEndDate());
 	}
+	
+	public void testGetMessagesIsNeverNull() {
+		// given
+		Assessment a = new Assessment();
+		
+		// then
+		assertNotNull(a.getMessages());
+	}
+	
+	public void testGetStartDateNullWhenNoMessages() {
+		// given
+		Assessment a = new Assessment();
+		
+		// then
+		assertNull(a.getStartDate());
+	}
+	
+	public void testGetEndDateNullWhenNoMessages() {
+		// given
+		Assessment a = new Assessment();
+		
+		// then
+		assertNull(a.getEndDate());
+	}
 }

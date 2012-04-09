@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import net.frontlinesms.data.domain.Group;
 import net.frontlinesms.data.repository.GroupDao;
+import net.frontlinesms.junit.BaseTestCase;
 import net.frontlinesms.junit.HibernateTestCase;
 import net.frontlinesms.plugins.learn.data.domain.Assessment;
 import net.frontlinesms.plugins.learn.data.domain.AssessmentMessage;
@@ -35,6 +36,24 @@ public class AssessmentDaoTest extends HibernateTestCase {
 		
 		// then
 		assertEquals(1, dao.count());
+	}
+	
+	public void testMultipleCallsToSaveWillUpdate() throws Exception {
+		// given
+		Assessment a = new Assessment();
+		dao.save(a);
+		assertEquals(1, dao.count());
+		
+		// when
+		Topic topic = createTopics("mytopic")[0];
+		a.setTopic(topic);
+		dao.save(a);
+
+		// then
+		assertEquals(1, dao.count());
+		
+		// and
+		assertEquals(1, dao.findAllByTopic(topic).size());
 	}
 	
 	public void testSaveWithNewMessages() throws Exception {
@@ -170,6 +189,26 @@ public class AssessmentDaoTest extends HibernateTestCase {
 			assertEquals(asList(a2), a);
 		}
 	}
+
+	public void testFindAllByGroupAndTopic() throws Exception {
+		// given
+		Group[] groups = createGroups("Zero", "One", "Two");
+		Topic[] topics = createTopics("topic1", "topic2", "topic3");
+		Assessment a1 = createAssessment(groups[1], topics[1]);
+		Assessment a2 = createAssessment(groups[1], topics[2]);
+		Assessment a3 = createAssessment(groups[2], topics[2]);
+
+		assertEquals(0, dao.findAllByGroupAndTopic(groups[0], topics[0]).size());
+		assertEquals(0, dao.findAllByGroupAndTopic(groups[0], topics[1]).size());
+		assertEquals(0, dao.findAllByGroupAndTopic(groups[0], topics[2]).size());
+		assertEquals(0, dao.findAllByGroupAndTopic(groups[0], topics[0]).size());
+		assertEquals(0, dao.findAllByGroupAndTopic(groups[1], topics[0]).size());
+		assertEquals(0, dao.findAllByGroupAndTopic(groups[2], topics[0]).size());
+
+		assertEquals(asList(a1), dao.findAllByGroupAndTopic(groups[1], topics[1]));
+		assertEquals(asList(a2), dao.findAllByGroupAndTopic(groups[1], topics[2]));
+		assertEquals(asList(a3), dao.findAllByGroupAndTopic(groups[2], topics[2]));
+	}
 	
 	public void testMessagesEagerLoading() {
 		// given
@@ -258,6 +297,14 @@ public class AssessmentDaoTest extends HibernateTestCase {
 	private Assessment createAssessment(Group g) {
 		Assessment a = new Assessment();
 		a.setGroup(g);
+		dao.save(a);
+		return a;
+	}
+	
+	private Assessment createAssessment(Group g, Topic t) {
+		Assessment a = new Assessment();
+		a.setGroup(g);
+		a.setTopic(t);
 		dao.save(a);
 		return a;
 	}

@@ -15,7 +15,7 @@
 	<combobox name="cbRepeat" editable="false" text="i18n.plugins.learn.frequency.once" action="validate"/>
 	
 	<label text="i18n.plugins.learn.message.date.end"/>
-	<panel name="pnEndDate" gap="8">
+	<panel name="pnEndDate" gap="0">
 		<textfield name="tfEndDate" tooltip="i18n.tooltip.end.date" action="validate"/>
 		<button action="showDateSelecter(tfEndDate)" icon="/icons/date_end.png" name="btShowEndDatePicker"/>
 	</panel>

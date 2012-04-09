@@ -34,6 +34,7 @@ public class EditAssessmentMessageDialogHandler implements ThinletUiEventHandler
 			ui.add(repeatCombobox, choice);
 			if(f == assessmentMessage.getFrequency()) {
 				ui.setSelectedIndex(repeatCombobox, i);
+				ui.setText(repeatCombobox, getI18nString(f));
 			}
 		}
 		
@@ -41,7 +42,7 @@ public class EditAssessmentMessageDialogHandler implements ThinletUiEventHandler
 		
 		setStartDate(assessmentMessage.getStartDate());
 		if(assessmentMessage.getFrequency() != Frequency.ONCE) setEndDate(assessmentMessage.getEndDate());
-		ui.setEnabledRecursively(find(dialog, "pnEndDate"), assessmentMessage.getFrequency() != Frequency.ONCE);
+		validate();
 	}
 
 	public Object getDialog() {
