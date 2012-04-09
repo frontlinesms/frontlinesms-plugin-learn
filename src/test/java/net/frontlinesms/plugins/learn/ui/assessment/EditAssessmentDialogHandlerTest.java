@@ -20,6 +20,15 @@ import static net.frontlinesms.plugins.learn.LearnTestUtils.*;
 import static net.frontlinesms.plugins.learn.data.domain.Frequency.*;
 
 public class EditAssessmentDialogHandlerTest extends TopicChoosingDialogHandlerTest<EditAssessmentDialogHandler> {
+//> STATIC TEST DATA
+	private static final String[][] MESSAGE_TABLE_INITIAL_CONTENT = { 
+			array("mock topic item: 0", "25/12/2011", ONCE.getI18nKey(), ""),
+			array("mock topic item: 1"),
+			array("mock topic item: 2", "1/1/2012", DAILY.getI18nKey(), "8/1/2012"),
+			array("mock topic item: 3"),
+			array("mock topic item: 4", "2/1/2012", WEEKLY.getI18nKey(), "30/1/2012")};
+	
+//> MOCKS
 	@MockBean private AssessmentDao dao;
 	@MockBean private GroupDao groupDao;
 	@MockBean private TopicItemDao topicItemDao;
@@ -104,21 +113,45 @@ public class EditAssessmentDialogHandlerTest extends TopicChoosingDialogHandlerT
 	
 	public void testMessageTableContentInitialisation() {
 		// expect
+		for(int i=0; i<5; ++i) {
+			assertRowContentAsInitialised(i);
+		}
+	}
+
+	public void testTableUpdatesCorrectlyAfterAssessmentMessageUpdate() {
+		// given
+		AssessmentMessage m = assessmentMessages.get(0);
+		when(m.getFrequency()).thenReturn(MONTHLY);
+		when(m.getEndDate()).thenReturn(parseDate("25/12/2012"));
+		
+		// when
+		h.notifyAssessmentMessageSaved(m);
+		
+		// then
 		assertEquals("Row 0",
-				array("mock topic item: 0", "25/12/2011", ONCE.getI18nKey(), ""),
+				array("mock topic item: 0", "25/12/2011", MONTHLY.getI18nKey(), "25/12/2012"),
 				$("tbMessages").getRowText(0));
+		for(int i=1; i<5; ++i) {
+			assertRowContentAsInitialised(i);
+		}
+	}
+	
+	public void testTableUpdatesCorrectlyAfterAssessmentMessageSave() {
+		// given
+		AssessmentMessage m = mockMessageWithTopicItem(topicItems.get(1), ONCE, "3/10/2012", null);
+		
+		// when
+		h.notifyAssessmentMessageSaved(m);
+		
+		// then
 		assertEquals("Row 1",
-				array("mock topic item: 1"),
+				array("mock topic item: 1", "3/10/2012", ONCE.getI18nKey(), ""),
 				$("tbMessages").getRowText(1));
-		assertEquals("Row 2",
-				array("mock topic item: 2", "1/1/2012", DAILY.getI18nKey(), "8/1/2012"),
-				$("tbMessages").getRowText(2));
-		assertEquals("Row 3",
-				array("mock topic item: 3"),
-				$("tbMessages").getRowText(3));
-		assertEquals("Row 4",
-				array("mock topic item: 4", "2/1/2012", WEEKLY.getI18nKey(), "30/1/2012"),
-				$("tbMessages").getRowText(4));
+
+		assertRowContentAsInitialised(0);
+		for(int i=2; i<5; ++i) {
+			assertRowContentAsInitialised(i);
+		}
 	}
 	
 	public void testMessageTableAttachmentInitialisation() {
@@ -143,5 +176,12 @@ public class EditAssessmentDialogHandlerTest extends TopicChoosingDialogHandlerT
 
 		assertEquals(0, topicItems.size());
 		assertEquals(0, assessmentMessages.size());
+	}
+	
+//> ASSERT METHODS
+	private void assertRowContentAsInitialised(int i) {
+		assertEquals("Row " + i,
+				MESSAGE_TABLE_INITIAL_CONTENT[i],
+				$("tbMessages").getRowText(i));
 	}
 }

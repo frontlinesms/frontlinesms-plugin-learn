@@ -100,6 +100,7 @@ public class LearnTestUtils {
 		TopicItem[] items = new TopicItem[count];
 		for (int i = 0; i < items.length; i++) {
 			items[i] = mock(TopicItem.class);
+			when(items[i].getId()).thenReturn((long) i);
 			when(items[i].getMessageText()).thenReturn("mock topic item: " + i);
 		}
 		return items;

@@ -142,7 +142,7 @@ public class EditAssessmentDialogHandler extends TopicChoosingDialogHandler<Asse
 			} else if (attachment instanceof AssessmentMessage) {
 				ti = ((AssessmentMessage) attachment).getTopicItem();
 			}
-			if(ti != null) {
+			if(ti != null && ti.getId()==assessmentMessage.getTopicItem().getId()) {
 				ui.remove(row);
 				ui.add(table, createTableRow(assessmentMessage), i);
 			}
