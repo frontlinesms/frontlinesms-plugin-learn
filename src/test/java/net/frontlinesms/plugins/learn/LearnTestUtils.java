@@ -19,6 +19,7 @@ import net.frontlinesms.data.domain.FrontlineMessage;
 import net.frontlinesms.data.domain.Group;
 import net.frontlinesms.data.events.EntityDeletedNotification;
 import net.frontlinesms.data.events.EntitySavedNotification;
+import net.frontlinesms.data.events.EntityUpdatedNotification;
 import net.frontlinesms.data.repository.ContactDao;
 import net.frontlinesms.events.EventObserver;
 import net.frontlinesms.events.FrontlineEventNotification;
@@ -510,6 +511,10 @@ public class LearnTestUtils {
 
 	public static <T> FrontlineEventNotification mockEntitySavedNotification(Class<T> clazz) {
 		return new EntitySavedNotification<T>(mock(clazz));
+	}
+
+	public static <T> FrontlineEventNotification mockEntityUpdatedNotification(Class<T> clazz) {
+		return new EntityUpdatedNotification<T>(mock(clazz));
 	}
 
 	public static <T> FrontlineEventNotification mockEntityDeletedNotification(Class<T> clazz) {

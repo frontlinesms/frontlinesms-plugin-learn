@@ -5,7 +5,6 @@ import java.util.List;
 import net.frontlinesms.data.domain.Group;
 import net.frontlinesms.data.repository.GroupDao;
 import net.frontlinesms.events.EventBus;
-import net.frontlinesms.plugins.learn.LearnTestUtils;
 import net.frontlinesms.plugins.learn.data.domain.Assessment;
 import net.frontlinesms.plugins.learn.data.domain.Topic;
 import net.frontlinesms.plugins.learn.data.repository.*;
@@ -328,13 +327,46 @@ public class AssessmentTabHandlerTest extends ThinletEventHandlerTest<Assessment
 		mockTopics(topicDao, "Cookery", "Music", "Philately", "Tomfoolery");
 		
 		// when
-		h.notify(LearnTestUtils.mockEntitySavedNotification(Topic.class));
+		h.notify(mockEntitySavedNotification(Topic.class));
 		
 		// then
 		waitForUiEvents();
 		assertEquals("Displayed topics",
 				array("Cookery", "Music", "Philately", "Tomfoolery"),
 				$("cbTopic").getOptions());
+	}
+	
+	public void testUpdateOfAssessmentShouldUpdateAssessmentList() {
+		// given
+		TODO();
+		
+		// when
+		h.notify(mockEntityUpdatedNotification(Assessment.class));
+		
+		// then
+		TODO();
+	}
+	
+	public void testSaveOfAssessmentShouldUpdateAssessmentList() {
+		// given
+		TODO();
+		
+		// when
+		h.notify(mockEntitySavedNotification(Assessment.class));
+		
+		// then
+		TODO();
+	}
+	
+	public void testDeleteOfAssessmentShouldUpdateAssessmentList() {
+		// given
+		TODO();
+		
+		// when
+		h.notify(mockEntityDeletedNotification(Assessment.class));
+		
+		// then
+		TODO();
 	}
 	
 //> TEST HELPER METHODS
