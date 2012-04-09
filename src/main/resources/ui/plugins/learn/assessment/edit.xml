@@ -6,7 +6,14 @@
 	<textfield name="tfGroup" editable="false"/>
 	<button name="btSelectGroup" action="selectGroup" icon="/icons/group.png"/>
 	
-	<table name="tbMessages" perform="editMessage(this)" colspan="3"/>
+	<table name="tbMessages" perform="editMessage(this)" colspan="3" weightx="1">
+		<header>
+			<column text="i18n.plugins.learn.message.summary"/>
+			<column text="i18n.plugins.learn.message.date.start"/>
+			<column text="i18n.plugins.learn.message.repeat"/>
+			<column text="i18n.plugins.learn.message.date.end"/>
+		</header>
+	</table>
 
 	<panel colspan="3" columns="2" gap="8" halign="center">
 		<button name="btSave" text="i18n.action.save" icon="/icons/tick.png" action="save"/>

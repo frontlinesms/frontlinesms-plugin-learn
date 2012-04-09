@@ -90,6 +90,16 @@ public class EditAssessmentDialogHandlerTest extends TopicChoosingDialogHandlerT
 		assertEquals("the topic", $("cbTopic").getText());
 	}
 	
+	public void testMessageTableHeader() {
+		// expect
+		assertEquals("Assessment message table headers.",
+				array("plugins.learn.message.summary",
+						"plugins.learn.message.date.start",
+						"plugins.learn.message.repeat",
+						"plugins.learn.message.date.end"),
+				$("tbMessages").getColumnTitles());
+	}
+	
 	public void testMessageTableInitialisation() {
 		ThinletComponent[] rows = $("tbMessages").getRows();
 		
