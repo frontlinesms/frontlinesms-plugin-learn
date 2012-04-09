@@ -5,22 +5,19 @@
 	<label text="i18n.plugins.learn.message.date.start"/>
 	<panel gap="8">
 		<panel>
-			<textfield name="tfStartDate" tooltip="i18n.tooltip.start.date"/>
+			<textfield name="tfStartDate" tooltip="i18n.tooltip.start.date" action="validate"/>
 			<button action="showDateSelecter(tfStartDate)" icon="/icons/date_start.png" name="btShowStartDatePicker"/>
 		</panel>
-		<textfield name="tfStartTime"/>
+		<textfield name="tfStartTime" action="validate"/>
 	</panel>
 	
 	<label text="i18n.plugins.learn.message.repeat"/>
-	<combobox name="cbRepeat" editable="false" text="i18n.plugins.learn.frequency.once" action="repeatFrequencyChanged"/>
+	<combobox name="cbRepeat" editable="false" text="i18n.plugins.learn.frequency.once" action="validate"/>
 	
 	<label text="i18n.plugins.learn.message.date.end"/>
 	<panel name="pnEndDate" gap="8">
-		<panel>
-			<textfield name="tfEndDate" tooltip="i18n.tooltip.end.date"/>
-			<button action="showDateSelecter(tfEndDate)" icon="/icons/date_end.png" name="btShowEndDatePicker"/>
-		</panel>
-		<textfield name="tfEndTime"/>
+		<textfield name="tfEndDate" tooltip="i18n.tooltip.end.date" action="validate"/>
+		<button action="showDateSelecter(tfEndDate)" icon="/icons/date_end.png" name="btShowEndDatePicker"/>
 	</panel>
 	
 	<panel colspan="2" columns="2" gap="8" halign="center">

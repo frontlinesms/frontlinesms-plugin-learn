@@ -1,5 +1,7 @@
 package net.frontlinesms.plugins.learn;
 
+import org.quartz.Scheduler;
+
 import net.frontlinesms.events.EventBus;
 import net.frontlinesms.plugins.BasePluginControllerTests;
 import net.frontlinesms.plugins.PluginInitialisationException;
@@ -10,15 +12,13 @@ import net.frontlinesms.ui.UiGeneratorController;
 
 import static org.mockito.Mockito.*;
 
+@SuppressWarnings("unused")
 public class LearnPluginControllerTest extends BasePluginControllerTests<LearnPluginController> {
-	@SuppressWarnings("unused")
 	@MockBean private EventBus eventBus;
-	@SuppressWarnings("unused")
 	@MockBean private TopicDao topicDao;
-	@SuppressWarnings("unused")
 	@MockBean private AssessmentDao assessmentDao;
-	@SuppressWarnings("unused")
 	@MockBean private LearnIncomingMessageProcessor learnIncomingMessageProcessor;
+	@MockBean private Scheduler scheduler;
 	
 	public Class<LearnPluginController> getControllerClass() {
 		return LearnPluginController.class;

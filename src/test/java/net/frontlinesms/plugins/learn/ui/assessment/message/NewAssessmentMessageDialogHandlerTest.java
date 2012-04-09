@@ -66,6 +66,11 @@ public class NewAssessmentMessageDialogHandlerTest extends ThinletEventHandlerTe
 		$("btShowEndDatePicker").exists();
 	}
 	
+	public void testEndDateDoesNotHaveTimeField() {
+		// expect
+		assertFalse($("tfEndTime").isVisible());
+	}
+	
 	public void testDatePickerLaunchForStartDate() {
 		// when
 		$("btShowStartDatePicker").click();
@@ -163,6 +168,84 @@ public class NewAssessmentMessageDialogHandlerTest extends ThinletEventHandlerTe
 		assertFalse($().isVisible());
 	}
 	
+	public void testSaveButtonEnabledWithNoEndDateIfFrequencyIsOnce() {
+		// expect
+		assertTrue($("btSave").isEnabled());
+	}
+	
+	public void testSaveButtonDisabledWithNoEndDateIfFrequencyIsNotOnce() {
+		// given
+		$("tfEndDate").setText("");
+		for(Frequency f : array(DAILY, WEEKLY, MONTHLY)) {
+			// when
+			setFrequency(f);
+			
+			// then
+			assertFalse($("btSave").isEnabled());
+		}
+	}
+	
+	public void testSaveButtonReenabledWhenFrequencyResetToOnceWithNoEndDate() {
+		// given
+		$("tfEndDate").setText("");
+		setFrequency(DAILY);
+		assertFalse($("btSave").isEnabled());
+		
+		// when
+		setFrequency(ONCE);
+		
+		// then
+		assertTrue($("btSave").isEnabled());
+	}
+	
+	public void testSaveButtonEnabledForAllFrequenciesIfEndDateSet() {
+		for(Frequency f : Frequency.values()) {
+			// when
+			setFrequency(f);
+			
+			// then
+			assertTrue($("btSave").isEnabled());
+		}
+	}
+	
+	public void testSaveButtoneTogglesWithEndDateIfFrequencyNotOnce() {
+
+		for(Frequency f : array(DAILY, WEEKLY, MONTHLY)) {
+			// given
+			$("tfEndDate").setText("");
+			$("cbRepeat").setSelected(f);
+			assertFalse($("btSave").isEnabled());
+			
+			// when
+			$("tfEndDate").setText("25/12/2012");
+			
+			// then
+			assertTrue($("btSave").isEnabled());
+			
+			// when
+			$("tfEndDate").setText("");
+			
+			// then
+			assertFalse($("btSave").isEnabled());
+		}
+	}
+	
+	public void testSaveButtonDisabledIfStartDateNotSet() {
+		// when
+		$("tfStartDate").setText("");
+		
+		// then
+		assertFalse($("btSave").isEnabled());
+	}
+	
+	public void testSaveButtonDisabledIfStartTimeNotSet() {
+		// when
+		$("tfStartTime").setText("");
+		
+		// then
+		assertFalse($("btSave").isEnabled());
+	}
+	
 	public void testSaveButton() {
 		// when
 		$("btSave").click();
@@ -171,6 +254,36 @@ public class NewAssessmentMessageDialogHandlerTest extends ThinletEventHandlerTe
 		assertFalse($().isVisible());
 		verify(dialogOwner).notifyAssessmentMessageSaved(assessmentMessageWithTopicItemAndStartDateAndRepeat(topicItem,
 				TEST_DATE, Frequency.ONCE));
+	}
+	
+	public void testSaveButtonWithChangedStartDate() {
+		// given
+		setFrequency(MONTHLY);
+		$("tfStartDate").setText("1/1/2012");
+		$("tfStartTime").setText("13:00");
+		$("tfEndDate").setText("30/6/2012");
+		
+		// when
+		$("btSave").click();
+		
+		// then
+		assertFalse($().isVisible());
+		verify(dialogOwner).notifyAssessmentMessageSaved(assessmentMessageWithTopicItemAndStartDateAndRepeatAndEndDate(topicItem,
+				"1/1/2012 13:00", MONTHLY, "30/6/2012 13:00"));
+	}
+	
+	public void testSaveButtonWithChangedFrequency() {
+		// given
+		setFrequency(MONTHLY);
+		$("tfEndDate").setText("25/12/2012");
+		
+		// when
+		$("btSave").click();
+		
+		// then
+		assertFalse($().isVisible());
+		verify(dialogOwner).notifyAssessmentMessageSaved(assessmentMessageWithTopicItemAndStartDateAndRepeatAndEndDate(topicItem,
+				TEST_DATE, Frequency.MONTHLY, "25/12/2012 09:00"));
 	}
 	
 //> TEST HELPER METHODS
@@ -185,6 +298,12 @@ public class NewAssessmentMessageDialogHandlerTest extends ThinletEventHandlerTe
 		Calendar c = Calendar.getInstance();
 		c.setTimeInMillis(expectedTime);
 		assertEquals(InternationalisationUtils.formatDate(expectedTime), $("tf" + fieldName + "Date").getText());
-		assertEquals(InternationalisationUtils.formatTime(expectedTime), $("tf" + fieldName + "Time").getText());
+		if(fieldName == "Start") {
+			assertEquals(InternationalisationUtils.formatTime(expectedTime), $("tf" + fieldName + "Time").getText());
+		}
+	}
+	
+	private void setFrequency(Frequency f) {
+		$("cbRepeat").setSelected(f.getI18nKey());
 	}
 }

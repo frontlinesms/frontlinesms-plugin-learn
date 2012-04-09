@@ -100,8 +100,8 @@ public class EditAssessmentDialogHandler extends TopicChoosingDialogHandler<Asse
 	public void editMessage(Object table) {
 		Object att = ui.getAttachedObject(ui.getSelectedItem(table));
 		if(att instanceof TopicItem) {
-			ui.add(new NewAssessmentMessageDialogHandler(ui, this, /*assessmentMessageDao, */(TopicItem) att).getDialog());
-		} else throw new RuntimeException();
+			ui.add(new NewAssessmentMessageDialogHandler(ui, this, (TopicItem) att).getDialog());
+		} else throw new RuntimeException("Failed to open editor for attachment: " + att);
 	}
 	
 	public void selectGroup() {

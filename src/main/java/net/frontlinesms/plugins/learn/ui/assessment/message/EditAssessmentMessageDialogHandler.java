@@ -2,7 +2,7 @@ package net.frontlinesms.plugins.learn.ui.assessment.message;
 
 import java.io.IOException;
 import java.text.ParseException;
-import java.util.Calendar;
+import java.util.Date;
 
 import net.frontlinesms.plugins.learn.data.domain.AssessmentMessage;
 import net.frontlinesms.plugins.learn.data.domain.Frequency;
@@ -27,8 +27,14 @@ public class EditAssessmentMessageDialogHandler implements ThinletUiEventHandler
 		
 		// init fields
 		Object repeatCombobox = find(dialog, "cbRepeat");
-		for(Frequency f : Frequency.values()) {
-			ui.add(repeatCombobox, ui.createComboboxChoice(getI18nString(f), f));
+		Frequency[] frequencies = Frequency.values();
+		for(int i=0; i<frequencies.length; ++i) {
+			Frequency f = frequencies[i];
+			Object choice = ui.createComboboxChoice(getI18nString(f), f);
+			ui.add(repeatCombobox, choice);
+			if(f == assessmentMessage.getFrequency()) {
+				ui.setSelectedIndex(repeatCombobox, i);
+			}
 		}
 		
 		ui.setText(find(dialog, "taSummary"), am.getTopicItem().getMessageText());
@@ -49,18 +55,57 @@ public class EditAssessmentMessageDialogHandler implements ThinletUiEventHandler
 	}
 	
 //> UI EVENT METHODS
-	public void repeatFrequencyChanged() {
-		Frequency f = ui.getAttachedObject(ui.getSelectedItem(find(dialog, "cbRepeat")), Frequency.class);
-		ui.setEnabledRecursively(find(dialog, "pnEndDate"), !f.equals(Frequency.ONCE));
+	private Frequency getSelectedFrequency() {
+		Frequency frequency = ui.getAttachedObject(ui.getSelectedItem(find(dialog, "cbRepeat")), Frequency.class);
+		return frequency;
+	}
+	
+	private long getEnteredStartDate() throws ParseException {
+		String startTime = ui.getText(find(dialog, "tfStartTime"));
+		Date startDate = parseDate(ui.getText(find(dialog, "tfStartDate")));
+		return parseTime(startDate, startTime).getTime();
+	}
+	
+	private long getEnteredEndDate() throws ParseException {
+		String startTime = ui.getText(find(dialog, "tfStartTime"));
+		String endDateAsText = ui.getText(find(dialog, "tfEndDate"));
+		Date endDate = parseDate(endDateAsText);
+		Date endDateTime = parseTime(endDate, startTime);
+		return endDateTime.getTime();
+	}
+	
+	public void validate() {
+		boolean valid = true;
+		
+		// check start time & date
+		try {
+			getEnteredStartDate();
+		} catch(ParseException ex) {
+			valid = false;
+		}
+
+		// check frequency
+		Frequency f = getSelectedFrequency();
+		ui.setEnabledRecursively(find(dialog, "pnEndDate"), f != Frequency.ONCE);
+		
+		// check end date
+		if(f != Frequency.ONCE) {
+			try {
+				getEnteredEndDate();
+			} catch(ParseException ex) {
+				valid = false;
+			}
+		}
+		
+		ui.setEnabled(find(dialog, "btSave"), valid);
 	}
 	
 	public void save() {
 		try {
-			Calendar c = Calendar.getInstance();
-			c.setTime(parseTime(parseDate(getText("tfStartDate")), getText("tfStartTime")));
-			
-			assessmentMessage.setStartDate(c.getTimeInMillis());
-			
+			assessmentMessage.setStartDate(getEnteredStartDate());
+			assessmentMessage.setFrequency(getSelectedFrequency());
+			assessmentMessage.setEndDate(getEnteredEndDate());
+
 			close();
 			
 			dialogOwner.notifyAssessmentMessageSaved(assessmentMessage);
@@ -82,7 +127,8 @@ public class EditAssessmentMessageDialogHandler implements ThinletUiEventHandler
 		String formattedDate = formatDate(date);
 		String formattedTime = formatTime(date);
 		setText("tf" + name + "Date", formattedDate);
-		setText("tf" + name + "Time", formattedTime);
+		Object timeField = find(dialog, "tf" + name + "Time");
+		if(timeField != null) ui.setText(timeField, formattedTime);
 	}
 	
 	private void setText(String componentName, Object value) {

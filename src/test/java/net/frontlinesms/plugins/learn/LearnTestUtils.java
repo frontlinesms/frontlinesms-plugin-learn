@@ -146,6 +146,11 @@ public class LearnTestUtils {
 	public static Long parseDate(String date) {
 		if(date == null) return null;
 		try {
+			return DATE_FORMAT.parse(date).getTime();
+		} catch (ParseException ex) {
+			// try the next format
+		}
+		try {
 			return new SimpleDateFormat("d/M/y").parse(date).getTime();
 		} catch (ParseException ex) {
 			throw new RuntimeException(ex);
@@ -238,15 +243,44 @@ public class LearnTestUtils {
 	}
 	
 	public static AssessmentMessage assessmentMessageWithTopicItemAndStartDateAndRepeat(
+			final TopicItem expectedTopicItem, final String expectedStartDate,
+			final Frequency expectedFrequency) {
+		return assessmentMessageWithTopicItemAndStartDateAndRepeat(expectedTopicItem, parseDate(expectedStartDate), expectedFrequency);
+	}
+	
+	public static AssessmentMessage assessmentMessageWithTopicItemAndStartDateAndRepeat(
 			final TopicItem expectedTopicItem, final long expectedStartDate,
 			final Frequency expectedFrequency) {
+		return assessmentMessageWithTopicItemAndStartDateAndRepeatAndEndDate(expectedTopicItem,
+				expectedStartDate, expectedFrequency, expectedStartDate);
+	}
+	
+	public static AssessmentMessage assessmentMessageWithTopicItemAndStartDateAndRepeatAndEndDate(
+			final TopicItem expectedTopicItem, final long expectedStartDate,
+			final Frequency expectedFrequency, final String expectedEndDate) {
+		return assessmentMessageWithTopicItemAndStartDateAndRepeatAndEndDate(expectedTopicItem, expectedStartDate, expectedFrequency, parseDate(expectedEndDate));
+	}
+	
+	public static AssessmentMessage assessmentMessageWithTopicItemAndStartDateAndRepeatAndEndDate(
+			final TopicItem expectedTopicItem, final String expectedStartDate,
+			final Frequency expectedFrequency, final String expectedEndDate) {
+		return assessmentMessageWithTopicItemAndStartDateAndRepeatAndEndDate(
+				expectedTopicItem,
+				parseDate(expectedStartDate),
+				expectedFrequency,
+				parseDate(expectedEndDate));
+	}
+	
+	public static AssessmentMessage assessmentMessageWithTopicItemAndStartDateAndRepeatAndEndDate(
+			final TopicItem expectedTopicItem, final long expectedStartDate,
+			final Frequency expectedFrequency, final long expectedEndDate) {
 		return argThat(new ArgumentMatcher<AssessmentMessage>() {
 			@Override
 			public boolean matches(Object o) {
-				return match("assessmentMessageWithTopicItemAndStartDateAndRepeat", o,
+				return match("assessmentMessageWithTopicItemAndStartDateAndRepeatAndEndDate", o,
 						"topicItem", expectedTopicItem,
 						"startDate", expectedStartDate,
-						"endDate", expectedStartDate,
+						"endDate", expectedEndDate,
 						"frequency", expectedFrequency);
 			}
 		});
@@ -385,7 +419,7 @@ public class LearnTestUtils {
 	}
 	
 	public static long today9am() {
-		Calendar c = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+		Calendar c = Calendar.getInstance();
 		c.set(Calendar.HOUR_OF_DAY, 9);
 		c.set(Calendar.MINUTE, 0);
 		c.set(Calendar.SECOND, 0);
@@ -394,7 +428,7 @@ public class LearnTestUtils {
 	}
 	
 	public static long firstOfTheMonth9am() {
-		Calendar c = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+		Calendar c = Calendar.getInstance();
 		c.set(Calendar.DAY_OF_MONTH, 1);
 		c.set(Calendar.HOUR_OF_DAY, 9);
 		c.set(Calendar.MINUTE, 0);
@@ -409,7 +443,13 @@ public class LearnTestUtils {
 		for(int i=0; matches && i<fieldNamesAndExpectedValues.length; i+=2) {
 			String fieldName = (String) fieldNamesAndExpectedValues[i];
 			Object expectedValue = fieldNamesAndExpectedValues[i + 1];
-			matches = getValue(o, fieldName).equals(expectedValue);
+			Object actualValue = getValue(o, fieldName);
+			if(expectedValue == null) {
+				matches = (actualValue == null);
+			} else {
+				matches = actualValue != null &&
+						actualValue.equals(expectedValue);
+			}
 		}
 		
 		if(!matches) {
