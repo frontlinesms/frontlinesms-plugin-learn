@@ -1,14 +1,17 @@
-<dialog name="dgEditAssessment" columns="3" gap="8" close="close" text="i18n.plugins.learn.assessment.edit" left="8" right="8" top="8" bottom="8" modal="true">
+<dialog name="dgEditAssessment"
+		width="480" height="240" scrollable="true"
+		columns="3" gap="8" close="close"
+		text="i18n.plugins.learn.assessment.edit" left="8" right="8" top="8" bottom="8" modal="true">
  	<label text="i18n.plugins.learn.topic"/>
 	<combobox name="cbTopic" action="validate(this)" text="i18n.plugins.learn.topic.choose" editable="false" colspan="2"/>
 	
 	<label text="i18n.plugins.learn.assessment.class"/>
-	<textfield name="tfGroup" editable="false"/>
+	<textfield name="tfGroup" editable="false" weightx="1"/>
 	<button name="btSelectGroup" action="selectGroup" icon="/icons/group.png"/>
 	
 	<table name="tbMessages" perform="editMessage(this)" colspan="3" weightx="1">
 		<header>
-			<column text="i18n.plugins.learn.message.summary"/>
+			<column text="i18n.plugins.learn.message.summary" width="180"/>
 			<column text="i18n.plugins.learn.message.date.start"/>
 			<column text="i18n.plugins.learn.message.repeat"/>
 			<column text="i18n.plugins.learn.message.date.end"/>
