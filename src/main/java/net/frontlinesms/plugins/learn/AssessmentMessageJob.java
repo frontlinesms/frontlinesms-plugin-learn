@@ -1,11 +1,12 @@
 package net.frontlinesms.plugins.learn;
 
 import java.util.List;
-import java.util.Map.Entry;
 
 import net.frontlinesms.FrontlineSMS;
 import net.frontlinesms.data.domain.Contact;
+import net.frontlinesms.data.domain.Group;
 import net.frontlinesms.data.repository.GroupMembershipDao;
+import net.frontlinesms.plugins.learn.data.domain.Assessment;
 import net.frontlinesms.plugins.learn.data.domain.AssessmentMessage;
 import net.frontlinesms.plugins.learn.data.repository.AssessmentDao;
 import net.frontlinesms.plugins.learn.data.repository.AssessmentMessageDao;
@@ -23,11 +24,7 @@ public class AssessmentMessageJob implements Job {
 	public void execute(JobExecutionContext context) throws JobExecutionException {
 		try {
 			System.out.println("AssessmentMessageJob.execute() : ENTRY");
-			
 			JobDataMap data = context.getMergedJobDataMap();
-			for(Entry<String, Object> e : data.entrySet()) {
-				System.out.println("AssessmentMessageJob.execute() : \t" + e.getKey() + " -> " + e.getValue() + " (" + e.getValue().getClass() + ")");
-			}
 			
 			long id = data.getLongValue("assessmentMessageId");
 			System.out.println("AssessmentMessageJob.execute() : id=" + id);
@@ -52,7 +49,11 @@ public class AssessmentMessageJob implements Job {
 	}
 	
 	private List<Contact> getGroupMembers(JobExecutionContext context, AssessmentMessage m) throws SchedulerException {
-		return getGroupMembershipDao(context).getMembers(getAssessmentDao(context).findByMessage(m).getGroup());
+		GroupMembershipDao groupMembershipDao = getGroupMembershipDao(context);
+		AssessmentDao assessmentDao = getAssessmentDao(context);
+		Assessment assessment = assessmentDao.findByMessage(m);
+		Group group = assessment.getGroup();
+		return groupMembershipDao.getMembers(group);
 	}
 
 	private GroupMembershipDao getGroupMembershipDao(JobExecutionContext context) throws SchedulerException {

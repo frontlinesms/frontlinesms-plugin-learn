@@ -1,6 +1,7 @@
 package net.frontlinesms.plugins.learn;
 
 import org.quartz.Scheduler;
+import org.quartz.SchedulerException;
 
 import net.frontlinesms.events.EventBus;
 import net.frontlinesms.plugins.BasePluginControllerTests;
@@ -29,6 +30,22 @@ public class LearnPluginControllerTest extends BasePluginControllerTests<LearnPl
 		UiGeneratorController ui = mock(UiGeneratorController.class);
 		inject(controller, "ctx", ctx);
 		assertNotNull(controller.getTab(ui));
+	}
+	
+	public void testDeInitShutsDownScheduler() throws Exception {
+		// when
+		controller.deinit();
+		
+		// then
+		verify(scheduler).shutdown();
+	}
+	
+	public void testDeInitShutsDownMessageProcessor() {
+		// when
+		controller.deinit();
+		
+		// then
+		verify(learnIncomingMessageProcessor).shutdown();
 	}
 }
 

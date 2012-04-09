@@ -121,6 +121,14 @@ public class LearnIncomingMessageProcessorTest extends ApplicationContextAwareTe
 		assertEquals(expected, actual);
 	}
 	
+	public void testGetAnswer_badInput() {
+		// when
+		int answer = limp.getAnswer(mockMessage("something random"));
+		
+		// then
+		assertEquals(-1, answer);
+	}
+	
 //> SETUP
 	private void mockAssessmentMessageDao() {
 		when(assessmentMessageDao.get(anyLong())).thenAnswer(new Answer<AssessmentMessage>() {

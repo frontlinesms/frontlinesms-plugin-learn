@@ -69,8 +69,7 @@ public class LearnIncomingMessageProcessor implements EventObserver {
 		if(matcher.find()) {
 			String trueOrFalse = matcher.group(2);
 			if(trueOrFalse != null) {
-				if(trueOrFalse.equals("true")) return 0;
-				if(trueOrFalse.equals("false")) return 1;
+				return trueOrFalse.equals("true")? 0: 1;
 			}
 			try {
 				return ALPHABET.indexOf(matcher.group(3));
