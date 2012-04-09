@@ -88,7 +88,7 @@ public class Assessment implements HasTopic {
 
 	public AssessmentMessage getMessage(TopicItem topicItem) {
 		for(AssessmentMessage m : messages) {
-			if(m.getTopicItem().equals(topicItem)) {
+			if(m.getTopicItem().getId() == topicItem.getId()) {
 				return m;
 			}
 		}
