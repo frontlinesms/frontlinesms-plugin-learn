@@ -18,13 +18,14 @@ import net.frontlinesms.plugins.learn.data.repository.AssessmentDao;
 import org.apache.log4j.Logger;
 import org.quartz.CalendarIntervalScheduleBuilder;
 import org.quartz.DailyTimeIntervalScheduleBuilder;
+import org.quartz.JobBuilder;
+import org.quartz.JobDetail;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.SimpleScheduleBuilder;
 import org.quartz.Trigger;
 import org.quartz.TriggerBuilder;
 import org.quartz.TriggerKey;
-import org.quartz.impl.StdSchedulerFactory;
 import org.springframework.context.ApplicationContext;
 
 public class ScheduleHandler implements EventObserver {
@@ -38,11 +39,7 @@ public class ScheduleHandler implements EventObserver {
 	public ScheduleHandler(ApplicationContext ctx) throws PluginInitialisationException {
 		eventBus = (EventBus) ctx.getBean("eventBus");
 		assessmentDao = (AssessmentDao) ctx.getBean("assessmentDao");
-		try {
-			scheduler = new StdSchedulerFactory().getScheduler();
-		} catch (SchedulerException ex) {
-			throw new PluginInitialisationException(ex);
-		}
+		scheduler = (Scheduler) ctx.getBean("scheduler");
 	}
 	
 	public void start() {
@@ -92,11 +89,17 @@ public class ScheduleHandler implements EventObserver {
 //> SCHEDULE METHODS
 	private void scheduleJob(AssessmentMessage m) {
 		try {
-			scheduler.scheduleJob(createTrigger(m));
+			scheduler.scheduleJob(createJob(m), createTrigger(m));
 		} catch (SchedulerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	private JobDetail createJob(AssessmentMessage m) {
+		return JobBuilder.newJob(AssessmentMessageJob.class)
+				.usingJobData("assessmentMessageId", m.getId())
+				.build();
 	}
 
 	private void rescheduleJob(AssessmentMessage m) {
