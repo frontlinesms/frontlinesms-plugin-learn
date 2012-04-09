@@ -1,4 +1,4 @@
-<dialog name="dgEditAssessmentMessage" columns="2" gap="8" close="close" text="i18n.plugins.learn.frequency.once" left="8" right="8" top="8" bottom="8" modal="true">
+<dialog name="dgEditAssessmentMessage" columns="2" gap="8" close="close" text="i18n.plugins.learn.message.edit" left="8" right="8" top="8" bottom="8" modal="true">
 	<label text="i18n.plugins.learn.message.summary" valign="top"/>
 	<textarea name="taSummary" editable="false"/>
 	

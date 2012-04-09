@@ -12,6 +12,7 @@ import net.frontlinesms.plugins.learn.data.domain.TopicItem;
 import net.frontlinesms.plugins.learn.data.repository.AssessmentDao;
 import net.frontlinesms.plugins.learn.data.repository.TopicDao;
 import net.frontlinesms.plugins.learn.data.repository.TopicItemDao;
+import net.frontlinesms.plugins.learn.ui.assessment.message.EditAssessmentMessageDialogHandler;
 import net.frontlinesms.plugins.learn.ui.assessment.message.EditAssessmentMessageDialogOwner;
 import net.frontlinesms.plugins.learn.ui.assessment.message.NewAssessmentMessageDialogHandler;
 import net.frontlinesms.plugins.learn.ui.topic.TopicChoosingDialogHandler;
@@ -101,6 +102,8 @@ public class EditAssessmentDialogHandler extends TopicChoosingDialogHandler<Asse
 		Object att = ui.getAttachedObject(ui.getSelectedItem(table));
 		if(att instanceof TopicItem) {
 			ui.add(new NewAssessmentMessageDialogHandler(ui, this, (TopicItem) att).getDialog());
+		} else if(att instanceof AssessmentMessage) {
+			ui.add(new EditAssessmentMessageDialogHandler(ui, this, (AssessmentMessage) att).getDialog());
 		} else throw new RuntimeException("Failed to open editor for attachment: " + att);
 	}
 	

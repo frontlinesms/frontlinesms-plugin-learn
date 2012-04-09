@@ -178,6 +178,22 @@ public class EditAssessmentDialogHandlerTest extends TopicChoosingDialogHandlerT
 		assertEquals(0, assessmentMessages.size());
 	}
 	
+	public void testDoubleClickingTopicItemTriggersNewMessageWindow() {
+		// when
+		$("tbMessages").getRow(1).doubleClick();
+		
+		// then
+		assertEquals("plugins.learn.message.new", $("dgEditAssessmentMessage").getText());
+	}
+	
+	public void testDoubleClickingAssessmentMessageTriggersEditMessageWindow() {
+		// when
+		$("tbMessages").getRow(0).doubleClick();
+		
+		// then
+		assertEquals("plugins.learn.message.edit", $("dgEditAssessmentMessage").getText());
+	}
+	
 //> ASSERT METHODS
 	private void assertRowContentAsInitialised(int i) {
 		assertEquals("Row " + i,

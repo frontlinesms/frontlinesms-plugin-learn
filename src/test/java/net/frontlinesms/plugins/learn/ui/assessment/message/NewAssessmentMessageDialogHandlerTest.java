@@ -24,7 +24,6 @@ public class NewAssessmentMessageDialogHandlerTest extends ThinletEventHandlerTe
 		when(topicItem.getMessageText()).thenReturn("Message text.");
 		NewAssessmentMessageDialogHandler dialogHandler = new NewAssessmentMessageDialogHandler(ui, dialogOwner, topicItem);
 		dialogHandler.setStartDate(TEST_DATE);
-		dialogHandler.setEndDate(TEST_DATE);
 		return dialogHandler;
 	}
 
@@ -54,8 +53,8 @@ public class NewAssessmentMessageDialogHandlerTest extends ThinletEventHandlerTe
 		assertTimeEquals(TEST_DATE, "Start");
 	}
 	
-	public void testEndDateInitialisedToNowishInLocalTimezone() {
-		assertTimeEquals(TEST_DATE, "End");
+	public void testEndDateNotInitialisedForRepeatOnce() {
+		assertEquals("", $("tfEndDate").getText());
 	}
 	
 	public void testDatePickerButtonAvailableForStartDate() {
@@ -175,7 +174,6 @@ public class NewAssessmentMessageDialogHandlerTest extends ThinletEventHandlerTe
 	
 	public void testSaveButtonDisabledWithNoEndDateIfFrequencyIsNotOnce() {
 		// given
-		$("tfEndDate").setText("");
 		for(Frequency f : array(DAILY, WEEKLY, MONTHLY)) {
 			// when
 			setFrequency(f);
@@ -187,7 +185,6 @@ public class NewAssessmentMessageDialogHandlerTest extends ThinletEventHandlerTe
 	
 	public void testSaveButtonReenabledWhenFrequencyResetToOnceWithNoEndDate() {
 		// given
-		$("tfEndDate").setText("");
 		setFrequency(DAILY);
 		assertFalse($("btSave").isEnabled());
 		
@@ -199,6 +196,8 @@ public class NewAssessmentMessageDialogHandlerTest extends ThinletEventHandlerTe
 	}
 	
 	public void testSaveButtonEnabledForAllFrequenciesIfEndDateSet() {
+		$("tfEndDate").setText("1/1/1");
+		
 		for(Frequency f : Frequency.values()) {
 			// when
 			setFrequency(f);
@@ -212,7 +211,6 @@ public class NewAssessmentMessageDialogHandlerTest extends ThinletEventHandlerTe
 
 		for(Frequency f : array(DAILY, WEEKLY, MONTHLY)) {
 			// given
-			$("tfEndDate").setText("");
 			$("cbRepeat").setSelected(f);
 			assertFalse($("btSave").isEnabled());
 			
