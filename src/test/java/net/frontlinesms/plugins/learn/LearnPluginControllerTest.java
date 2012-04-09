@@ -33,14 +33,24 @@ public class LearnPluginControllerTest extends BasePluginControllerTests<LearnPl
 	}
 	
 	public void testDeInitShutsDownScheduler() throws Exception {
+		// given
+		ScheduleHandler scheduleHandler = mock(ScheduleHandler.class);
+		inject(controller, "scheduleHandler", scheduleHandler);
+		inject(controller, "messageProcessor", learnIncomingMessageProcessor);
+		
 		// when
 		controller.deinit();
 		
 		// then
-		verify(scheduler).shutdown();
+		verify(scheduleHandler).shutdown();
 	}
 	
 	public void testDeInitShutsDownMessageProcessor() {
+		// given
+		ScheduleHandler scheduleHandler = mock(ScheduleHandler.class);
+		inject(controller, "scheduleHandler", scheduleHandler);
+		inject(controller, "messageProcessor", learnIncomingMessageProcessor);
+		
 		// when
 		controller.deinit();
 		
