@@ -7,7 +7,9 @@ import thinlet.Thinlet;
 import net.frontlinesms.data.domain.Group;
 import net.frontlinesms.data.events.DatabaseEntityNotification;
 import net.frontlinesms.data.events.EntityDeleteWarning;
+import net.frontlinesms.data.events.EntityDeletedNotification;
 import net.frontlinesms.data.events.EntitySavedNotification;
+import net.frontlinesms.data.events.EntityUpdatedNotification;
 import net.frontlinesms.data.repository.GroupDao;
 import net.frontlinesms.events.EventBus;
 import net.frontlinesms.events.EventObserver;
@@ -188,7 +190,7 @@ public class AssessmentTabHandler implements ThinletUiEventHandler, SingleGroupS
 	
 //> EVENT BUS HANDLER METHODS
 	public void notify(FrontlineEventNotification n) {
-		if(n instanceof EntitySavedNotification<?>) {
+		if(n instanceof DatabaseEntityNotification<?>) {
 			handleDatabaseEntityNotification((DatabaseEntityNotification<?>) n);
 		} else if(n instanceof UiDestroyEvent) {
 			this.eventBus.unregisterObserver(this);
@@ -199,6 +201,57 @@ public class AssessmentTabHandler implements ThinletUiEventHandler, SingleGroupS
 		if(n instanceof EntityDeleteWarning<?>) return;
 		if(n.getDatabaseEntity() instanceof Topic) {
 			refreshTopicsThreadSafe();
+		} else if(n.getDatabaseEntity() instanceof Assessment) {
+			if(n instanceof EntitySavedNotification<?>) {
+				addToAssessmentList((Assessment) n.getDatabaseEntity());
+			} else if(n instanceof EntityDeletedNotification<?>) {
+				deleteFromAssessmentList((Assessment) n.getDatabaseEntity());
+			} else if(n instanceof EntityUpdatedNotification<?>) {
+				updateAssessmentList((Assessment) n.getDatabaseEntity());
+			}
 		}
+	}
+
+	private void updateAssessmentList(final Assessment a) {
+		new FrontlineUiUpdateJob() {
+			public void run() {
+				Object table = find("tblAssessments");
+				for(int index = ui.getItems(table).length-1; index>=0; --index) {
+					Object row = ui.getItem(table, index);
+					if(ui.getAttachedObject(row, Assessment.class).getId() == a.getId()) {
+						ui.remove(row);
+						ui.add(table, createRow(a, ui.isSelected(find("cbViewBy_topic"))), index);
+						break;
+					}
+				}
+			}
+		}.execute();
+	}
+
+	private void deleteFromAssessmentList(final Assessment a) {
+		System.out
+				.println("AssessmentTabHandler.deleteFromAssessmentList(...).new FrontlineUiUpdateJob() {...}.deleteFromAssessmentList()");
+		new FrontlineUiUpdateJob() {
+			public void run() {
+				Object table = find("tblAssessments");
+				for(int index = ui.getItems(table).length-1; index>=0; --index) {
+					Object row = ui.getItem(table, index);
+					Assessment attachment = ui.getAttachedObject(row, Assessment.class);
+					if(attachment.getId() == a.getId()) {
+						ui.remove(row);
+						break;
+					}
+				}
+			}
+		}.execute();
+	}
+
+	private void addToAssessmentList(final Assessment a) {
+		new FrontlineUiUpdateJob() {
+			public void run() {
+				Object table = find("tblAssessments");
+				ui.add(table, createRow(a, ui.isSelected(find("cbViewBy_topic"))));
+			}
+		}.execute();
 	}
 }

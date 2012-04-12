@@ -122,12 +122,24 @@ public class LearnTestUtils {
 		return a;
 	}
 	
+	public static Assessment mockAssessmentWithId(long id) {
+		Assessment a = mock(Assessment.class);
+		when(a.getId()).thenReturn(id);
+		return a;
+	}
+	
 	public static Assessment mockAssessmentWithTopic(String topicName, String startDate, String endDate) {
 		Assessment a = mock(Assessment.class);
 		Topic t = mockTopic(topicName);
 		when(a.getTopic()).thenReturn(t);
 		when(a.getStartDate()).thenReturn(parseDate(startDate));
 		when(a.getEndDate()).thenReturn(parseDate(endDate));
+		return a;
+	}
+	
+	public static Assessment mockAssessmentWithTopicAndId(long id, String topicName, String startDate, String endDate) {
+		Assessment a = mockAssessmentWithTopic(topicName, startDate, endDate);
+		when(a.getId()).thenReturn(id);
 		return a;
 	}
 	
@@ -519,5 +531,17 @@ public class LearnTestUtils {
 
 	public static <T> FrontlineEventNotification mockEntityDeletedNotification(Class<T> clazz) {
 		return new EntityDeletedNotification<T>(mock(clazz));
+	}
+
+	public static <T> FrontlineEventNotification mockEntitySavedNotification(T instance) {
+		return new EntitySavedNotification<T>(instance);
+	}
+
+	public static <T> FrontlineEventNotification mockEntityUpdatedNotification(T instance) {
+		return new EntityUpdatedNotification<T>(instance);
+	}
+
+	public static <T> FrontlineEventNotification mockEntityDeletedNotification(T instance) {
+		return new EntityDeletedNotification<T>(instance);
 	}
 }

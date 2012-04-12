@@ -338,35 +338,81 @@ public class AssessmentTabHandlerTest extends ThinletEventHandlerTest<Assessment
 	
 	public void testUpdateOfAssessmentShouldUpdateAssessmentList() {
 		// given
-		TODO();
+		List<Assessment> assessments = asList(
+				mockAssessmentWithTopicAndId(99, "Topicana", "20/12/11", "13/12/12"));
+		when(assessmentDao.findAllByGroup(any(Group.class))).thenReturn(assessments);
+		$("cbViewBy_class").select();
+		h.groupSelectionCompleted(mock(Group.class));
+		assertEquals("Assessments displayed", 1, $("tblAssessments").getRowCount());
+		assertEquals("Initial first row contents.",
+				new String[]{ "Topicana", "20/12/2011", "13/12/2012" },
+				$("tblAssessments").getRowText(0));
 		
 		// when
-		h.notify(mockEntityUpdatedNotification(Assessment.class));
+		h.notify(mockEntityUpdatedNotification(
+				mockAssessmentWithTopicAndId(99, "Umbongo", "3/4/12", "14/4/12")));
 		
 		// then
-		TODO();
+		waitForUiEvents();
+		assertEquals("Assessments displayed", 1, $("tblAssessments").getRowCount());
+		assertEquals("Final first row contents.",
+				new String[]{ "Umbongo", "3/4/2012", "14/4/2012" },
+				$("tblAssessments").getRowText(0));
 	}
 	
 	public void testSaveOfAssessmentShouldUpdateAssessmentList() {
 		// given
-		TODO();
+		List<Assessment> assessments = asList(
+				mockAssessmentWithTopicAndId(99, "Topicana", "20/12/11", "13/12/12"));
+		when(assessmentDao.findAllByGroup(any(Group.class))).thenReturn(assessments);
+		$("cbViewBy_class").select();
+		h.groupSelectionCompleted(mock(Group.class));
+		assertEquals("Assessments displayed", 1, $("tblAssessments").getRowCount());
+		assertEquals("Initial first row contents.",
+				new String[]{ "Topicana", "20/12/2011", "13/12/2012" },
+				$("tblAssessments").getRowText(0));
 		
 		// when
-		h.notify(mockEntitySavedNotification(Assessment.class));
+		h.notify(mockEntitySavedNotification(
+				mockAssessmentWithTopicAndId(100, "Umbongo", "3/4/12", "14/4/12")));
 		
 		// then
-		TODO();
+		waitForUiEvents();
+		assertEquals("Assessments displayed", 2, $("tblAssessments").getRowCount());
+		assertEquals("Final first row contents.",
+				new String[]{ "Topicana", "20/12/2011", "13/12/2012" },
+				$("tblAssessments").getRowText(0));
+		assertEquals("Final second row contents.",
+				new String[]{ "Umbongo", "3/4/2012", "14/4/2012" },
+				$("tblAssessments").getRowText(1));
 	}
 	
 	public void testDeleteOfAssessmentShouldUpdateAssessmentList() {
 		// given
-		TODO();
+		List<Assessment> assessments = asList(
+				mockAssessmentWithTopicAndId(99, "Topicana", "20/12/11", "13/12/12"),
+				mockAssessmentWithTopicAndId(100, "Umbongo", "3/4/12", "14/4/12"));
+		when(assessmentDao.findAllByGroup(any(Group.class))).thenReturn(assessments);
+		$("cbViewBy_class").select();
+		h.groupSelectionCompleted(mock(Group.class));
+		assertEquals("Assessments displayed", 2, $("tblAssessments").getRowCount());
+		assertEquals("Initial first row contents.",
+				new String[]{ "Topicana", "20/12/2011", "13/12/2012" },
+				$("tblAssessments").getRowText(0));
+		assertEquals("Initial second row contents.",
+				new String[]{ "Umbongo", "3/4/2012", "14/4/2012" },
+				$("tblAssessments").getRowText(1));
 		
 		// when
-		h.notify(mockEntityDeletedNotification(Assessment.class));
+		h.notify(mockEntityDeletedNotification(
+				mockAssessmentWithId(100)));
 		
 		// then
-		TODO();
+		waitForUiEvents();
+		assertEquals("Assessments displayed", 1, $("tblAssessments").getRowCount());
+		assertEquals("Final first row contents.",
+				new String[]{ "Topicana", "20/12/2011", "13/12/2012" },
+				$("tblAssessments").getRowText(0));
 	}
 	
 //> TEST HELPER METHODS
