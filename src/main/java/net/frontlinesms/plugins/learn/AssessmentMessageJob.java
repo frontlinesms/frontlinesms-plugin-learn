@@ -36,6 +36,7 @@ public class AssessmentMessageJob implements Job {
 				System.out.println("AssessmentMessageJob.execute() : Sending message:");
 				System.out.println("AssessmentMessageJob.execute() :     #:" + c.getPhoneNumber());
 				System.out.println("AssessmentMessageJob.execute() :     t:" + m.getMessageText());
+				System.out.println("AssessmentMessageJob.execute() :     f:" + m.getFrequency());
 				frontlineController.sendTextMessage(c.getPhoneNumber(), m.getMessageText());
 			}
 			

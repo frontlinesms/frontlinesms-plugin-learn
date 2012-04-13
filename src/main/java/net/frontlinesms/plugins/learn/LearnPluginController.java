@@ -2,10 +2,12 @@ package net.frontlinesms.plugins.learn;
 
 import org.springframework.context.ApplicationContext;
 
+import net.frontlinesms.BuildProperties;
 import net.frontlinesms.FrontlineSMS;
 import net.frontlinesms.plugins.BasePluginController;
 import net.frontlinesms.plugins.PluginControllerProperties;
 import net.frontlinesms.plugins.PluginInitialisationException;
+import net.frontlinesms.plugins.learn.ui.LearnDebugMenuController;
 import net.frontlinesms.plugins.learn.ui.topic.LearnPluginTabHandler;
 import net.frontlinesms.ui.UiGeneratorController;
 
@@ -36,6 +38,11 @@ public class LearnPluginController extends BasePluginController {
 		
 		LearnPluginTabHandler tabHandler = new LearnPluginTabHandler();
 		tabHandler.init(ui, ctx);
+		
+		if(BuildProperties.getInstance().isSnapshot()) {
+			new LearnDebugMenuController().init(ui, scheduleHandler);
+		}
+		
 		return tabHandler.getTab();
 	}
 }
