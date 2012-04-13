@@ -14,7 +14,7 @@ import net.frontlinesms.plugins.learn.data.repository.*;
 
 import static net.frontlinesms.junit.BaseTestCase.*;
 
-public class AssessmentGradebookTest extends HibernateTestCase {
+public class GradebookServiceTest extends HibernateTestCase {
 	@Autowired private GradebookService gradebookService;
 	
 	@Autowired private AssessmentDao assessmentDao;
@@ -228,6 +228,30 @@ public class AssessmentGradebookTest extends HibernateTestCase {
 		BaseTestCase.assertEquals(3, g.getQuestionCount());
 		BaseTestCase.assertEquals("averages", array(100, 0, 0, 33), g.getAverages());
 		assertResults(g, array(0, null, 1, 33));
+	}
+
+	public void testForMultiMemberClassWithAssessmentWithManyQuestionsAndReinforcementsAndSomeResponses() throws Exception {
+		// given
+		Group group = createClass(2);
+		Assessment a = createAssessment(group, 3, 7);
+
+		Contact c0 = getContacts(group)[0];
+		createResponse(c0, a, 0, true);
+		createResponse(c0, a, 2, false);
+
+		Contact c1 = getContacts(group)[1];
+		createResponse(c1, a, 1, false);
+		createResponse(c1, a, 2, false);
+
+		// when
+		AssessmentGradebook g = gradebookService.getForAssessment(a);
+		
+		// then
+		BaseTestCase.assertEquals(3, g.getQuestionCount());
+		BaseTestCase.assertEquals("averages", array(50, 0, 0, 16), g.getAverages());
+		assertResults(g,
+				objectArray(0, null, 1, 33),
+				objectArray(null, 1, 1, 0));
 	}
 	
 //> ASSERT METHODS

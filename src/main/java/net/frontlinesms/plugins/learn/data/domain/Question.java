@@ -43,4 +43,26 @@ public class Question extends TopicItem {
 	public void setCorrectAnswer(int correctAnswer) {
 		this.correctAnswer = correctAnswer;
 	}
+
+//> FACTORY METHODS
+	public static Question createBinary(Topic topic, String text, boolean correct) {
+		Question q = new Question();
+		q.setType(Type.BINARY);
+		q.setCorrectAnswer(correct? 0: 1);
+		q.setQuestionText(text);
+		q.setMessageText(text);
+		q.setTopic(topic);
+		return q;
+	}
+	
+	public static Question createMultichoice(Topic topic, String text, int correctAnswer, String... answers) {
+		Question q = new Question();
+		q.setType(Type.MULTIPLE_CHOICE);
+		q.setCorrectAnswer(correctAnswer);
+		q.setQuestionText(text);
+		q.setMessageText(text);
+		q.setAnswers(answers);
+		q.setTopic(topic);
+		return q;
+	}
 }

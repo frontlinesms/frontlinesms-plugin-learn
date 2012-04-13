@@ -50,7 +50,7 @@ public class GradebookService {
 			List<AssessmentMessageResponse> amrs = assessmentMessageResponseDao.findAllByStudentAndAssessment(student, a);
 			AssessmentMessageResponse[] orderedResponses = new AssessmentMessageResponse[questionCount];
 			for(AssessmentMessageResponse amr : amrs) {
-				orderedResponses[questions.indexOf(amr.getAssessmentMessage().getTopicItem())] = amr;
+				orderedResponses[getIndex(questions, amr)] = amr;
 			}
 			StudentTopicResult str = new StudentTopicResult(student, orderedResponses);
 			results[i] = str;
@@ -76,6 +76,7 @@ public class GradebookService {
 		
 		return new AssessmentGradebook(averages, results);
 	}
+
 
 //> HELPERS
 	private StudentGrades createResult(Contact student,
@@ -119,6 +120,15 @@ public class GradebookService {
 			if(m.getTopicItem() instanceof Question) ++count;
 		}
 		return count;
+	}
+	
+	private int getIndex(List<Question> questions, AssessmentMessageResponse amr) {
+		for (int i = 0; i < questions.size(); i++) {
+			if(amr.getAssessmentMessage().getTopicItem().getId() == questions.get(i).getId()) {
+				return i;
+			}
+		}
+		return -1;
 	}
 }
 
