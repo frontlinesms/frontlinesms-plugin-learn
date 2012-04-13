@@ -252,14 +252,16 @@ public class GradebookTabHandler implements ThinletUiEventHandler, SingleGroupSe
 
 	private Object createRow(StudentTopicResult r) {
 		AssessmentMessageResponse[] responses = r.getResponses();
-		String[] text = new String[responses.length + 2];
-		text[0] = r.getContact().getName();
+		Object row = ui.createTableRow();
+		ui.add(row, ui.createTableCell(r.getContact().getName(), true));
 		for (int i = 0; i < responses.length; i++) {
 			AssessmentMessageResponse res = responses[i];
-			text[i + 1] = res==null? "": ""+(char)('A' + res.getAnswer());
+			Object cell = ui.createTableCell(res==null? "": ""+(char)('A' + res.getAnswer()));
+			ui.setIcon(cell, res.isCorrect()? "/icons/tick.png": "/icons/cross.png");
+			ui.add(row, cell);
 		}
-		text[text.length - 1] = r.getScore() + "%";
-		return ui.createTableRow(null, text);
+		ui.add(row, ui.createTableCell(r.getScore() + "%", true));
+		return row;
 	}
 	
 	private Object createComboboxChoice(Assessment a) {
