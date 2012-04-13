@@ -58,10 +58,12 @@ public class LearnIncomingMessageProcessorTest extends ApplicationContextAwareTe
 				33, "33 FALSE",
 				56, "56FALSE",
 				4747, "4747falSe",
+				123, "\r\n     123       \r   true",
 				
 				23, "23 A",
 				44, "44 b",
 				69, "69C",
+				123, "\r\n     123       \r   c"
 		};
 		for (int i = 0; i < PAIRS.length; i+=2) {
 			testGetAssessmentMessage((Integer) PAIRS[i], (String) PAIRS[i+1]);
@@ -103,6 +105,7 @@ public class LearnIncomingMessageProcessorTest extends ApplicationContextAwareTe
 			0, "33 TRUE",
 			0, "56TRUE",
 			0, "4747trUe",
+			0, "\r\n     123       \r   true",
 			1, "33 FALSE",
 			1, "56FALSE",
 			1, "4747falSe",
@@ -110,6 +113,7 @@ public class LearnIncomingMessageProcessorTest extends ApplicationContextAwareTe
 			0, "23 A",
 			1, "44 b",
 			2, "69C",
+			2, "\r\n     123       \r   c"
 		};
 		for (int i = 0; i < PAIRS.length; i+=2) {
 			testGetAnswer((Integer) PAIRS[i], (String) PAIRS[i+1]);
