@@ -21,7 +21,7 @@ import net.frontlinesms.plugins.learn.data.repository.AssessmentMessageResponseD
 
 public class LearnIncomingMessageProcessor implements EventObserver {
 	private static final String ALPHABET = "abc";
-	private static final Pattern ANSWER_PATTERN = Pattern.compile("\\s*(\\d+)\\s*(?:(true|false)|([a-z]))\\s*");
+	private static final Pattern ANSWER_PATTERN = Pattern.compile("\\s*(\\d+)\\s*(?:(t(?:rue)?|f(?:alse)?)|([a-c]))\\s*");
 	
 	@Autowired private EventBus eventBus;
 	@Autowired private ContactDao contactDao;
@@ -65,11 +65,12 @@ public class LearnIncomingMessageProcessor implements EventObserver {
 	}
 
 	int getAnswer(FrontlineMessage m) {
-		Matcher matcher = ANSWER_PATTERN.matcher(m.getTextContent().toLowerCase());
+		String messageText = m.getTextContent().toLowerCase();
+		Matcher matcher = ANSWER_PATTERN.matcher(messageText);
 		if(matcher.find()) {
 			String trueOrFalse = matcher.group(2);
 			if(trueOrFalse != null) {
-				return trueOrFalse.equals("true")? 0: 1;
+				return trueOrFalse.charAt(0)=='t'? 0: 1;
 			}
 			try {
 				return ALPHABET.indexOf(matcher.group(3));
