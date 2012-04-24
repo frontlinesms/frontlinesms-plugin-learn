@@ -3,12 +3,14 @@ package net.frontlinesms.plugins.learn;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
+import net.frontlinesms.FrontlineSMS;
 import net.frontlinesms.data.domain.Contact;
 import net.frontlinesms.data.domain.FrontlineMessage;
 import net.frontlinesms.data.repository.ContactDao;
 import net.frontlinesms.events.EventBus;
 import net.frontlinesms.plugins.learn.data.domain.AssessmentMessage;
 import net.frontlinesms.plugins.learn.data.domain.Question;
+import net.frontlinesms.plugins.learn.data.domain.Question.Type;
 import net.frontlinesms.plugins.learn.data.repository.AssessmentMessageDao;
 import net.frontlinesms.plugins.learn.data.repository.AssessmentMessageResponseDao;
 import net.frontlinesms.test.spring.ApplicationContextAwareTestCase;
@@ -26,6 +28,8 @@ public class LearnIncomingMessageProcessorTest extends ApplicationContextAwareTe
 	@MockBean AssessmentMessageDao assessmentMessageDao;
 	@MockBean AssessmentMessageResponseDao responseDao;
 	@MockBean ContactDao contactDao;
+	@MockBean LearnPluginProperties properties;
+	@MockBean FrontlineSMS frontlineController;
 	
 	@Override
 	protected void setUp() throws Exception {
@@ -133,24 +137,52 @@ public class LearnIncomingMessageProcessorTest extends ApplicationContextAwareTe
 		assertEquals(-1, answer);
 	}
 	
-	public void testIncorrectAnswerShouldNotGenerateReplyIfIncorrectResponseSet() {
-		TODO();
+	public void testIncorrectAnswerShouldNotGenerateReplyIfResponseNotSet() {
+		// given
+		when(properties.getIncorrectResponse()).thenReturn("");
+		mockBinaryQuestion(13, true);
+		
+		// when
+		limp.processMessage(mockMessage("13f"));
+
+		// then
+		verify(frontlineController, never()).sendTextMessage(anyString(), anyString());
+	}
+
+	public void testIncorrectAnswerShouldGenerateReplyIfResponseSet() {
+		// given
+		when(properties.getIncorrectResponse()).thenReturn("TOTALLY WRONG");
+		mockBinaryQuestion(13, true);
+		
+		// when
+		limp.processMessage(mockMessage("+1234567890", "13f"));
+
+		// then
+		verify(frontlineController).sendTextMessage("+1234567890", "TOTALLY WRONG");
 	}
 	
-	public void testIncorrectAnswerShouldGenerateReplyIfIncorrectResponseSet() {
-		TODO();
+	public void testCorrectAnswerShouldNotGenerateReplyIfResponseNotSet() {
+		// given
+		when(properties.getCorrectResponse()).thenReturn("");
+		mockBinaryQuestion(13, true);
+		
+		// when
+		limp.processMessage(mockMessage("13t"));
+
+		// then
+		verify(frontlineController, never()).sendTextMessage(anyString(), anyString());
 	}
 	
-	public void testCorrectAnswerShouldNotGenerateReplyIfIncorrectResponseSet() {
-		TODO();
-	}
-	
-	public void testCorrectAnswerShouldGenerateReplyIfIncorrectResponseSet() {
-		TODO();
-	}
-	
-	public void testAnyAnswerReceivedShouldCancelScheduledMessageResend() {
-		TODO();
+	public void testCorrectAnswerShouldGenerateReplyIfResponseSet() {
+		// given
+		when(properties.getCorrectResponse()).thenReturn("well done");
+		mockBinaryQuestion(13, true);
+		
+		// when
+		limp.processMessage(mockMessage("+1234567890", "13t"));
+
+		// then
+		verify(frontlineController, never()).sendTextMessage("+1234567890", "well done");
 	}
 	
 //> SETUP
@@ -163,5 +195,16 @@ public class LearnIncomingMessageProcessorTest extends ApplicationContextAwareTe
 				return m;
 			}
 		});
+	}
+	
+	private void mockBinaryQuestion(int id, boolean correctAnswer) {
+		Question q = mock(Question.class);
+		when(q.getType()).thenReturn(Type.BINARY);
+		when(q.getCorrectAnswer()).thenReturn(correctAnswer? 0: 1);
+		
+		AssessmentMessage m = mock(AssessmentMessage.class);
+		when(m.getTopicItem()).thenReturn(q);
+		
+		when(assessmentMessageDao.get(id)).thenReturn(m);
 	}
 }
