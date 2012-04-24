@@ -5,6 +5,7 @@ import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import net.frontlinesms.FrontlineSMS;
 import net.frontlinesms.data.domain.Contact;
 import net.frontlinesms.data.domain.FrontlineMessage;
 import net.frontlinesms.data.events.EntitySavedNotification;
@@ -22,11 +23,20 @@ import net.frontlinesms.plugins.learn.data.repository.AssessmentMessageResponseD
 public class LearnIncomingMessageProcessor implements EventObserver {
 	private static final String ALPHABET = "abc";
 	private static final Pattern ANSWER_PATTERN = Pattern.compile("\\s*(\\d+)\\s*(?:(t(?:rue)?|f(?:alse)?)|([a-c]))\\s*");
-	
+
+	private FrontlineSMS frontlineController;
+	private LearnPluginProperties properties;
 	@Autowired private EventBus eventBus;
 	@Autowired private ContactDao contactDao;
 	@Autowired private AssessmentMessageDao assessmentMessageDao;
 	@Autowired private AssessmentMessageResponseDao responseDao;
+	
+	public LearnIncomingMessageProcessor() {}
+	
+	public LearnIncomingMessageProcessor(FrontlineSMS frontlineController, LearnPluginProperties properties) {
+		this.frontlineController = frontlineController;
+		this.properties = properties;
+	}
 
 	public void start() {
 		eventBus.registerObserver(this);
@@ -62,6 +72,12 @@ public class LearnIncomingMessageProcessor implements EventObserver {
 		r.setCorrect(answer == q.getCorrectAnswer());
 		
 		responseDao.save(r);
+		
+		String response = r.isCorrect()? properties.getCorrectResponse(): properties.getIncorrectResponse();
+		if(response != null &&
+				response.length() > 0) {
+			frontlineController.sendTextMessage(m.getSenderMsisdn(), response);
+		}
 	}
 
 	int getAnswer(FrontlineMessage m) {

@@ -34,6 +34,8 @@ public class LearnIncomingMessageProcessorTest extends ApplicationContextAwareTe
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
+		inject(limp, "properties", properties);
+		inject(limp, "frontlineController", frontlineController);
 	}
 	
 //> TESTS
@@ -146,10 +148,10 @@ public class LearnIncomingMessageProcessorTest extends ApplicationContextAwareTe
 	public void testIncorrectAnswerShouldNotGenerateReplyIfResponseNotSet() {
 		// given
 		when(properties.getIncorrectResponse()).thenReturn("");
-		mockBinaryQuestion(13, true);
+		mockContact(contactDao, "+1234567890");
 		
 		// when
-		limp.processMessage(mockMessage("13f"));
+		limp.processMessage(mockMessage("+1234567890", "13f"));
 
 		// then
 		verify(frontlineController, never()).sendTextMessage(anyString(), anyString());
@@ -159,6 +161,7 @@ public class LearnIncomingMessageProcessorTest extends ApplicationContextAwareTe
 		// given
 		when(properties.getIncorrectResponse()).thenReturn("TOTALLY WRONG");
 		mockBinaryQuestion(13, true);
+		mockContact(contactDao, "+1234567890");
 		
 		// when
 		limp.processMessage(mockMessage("+1234567890", "13f"));
@@ -171,9 +174,10 @@ public class LearnIncomingMessageProcessorTest extends ApplicationContextAwareTe
 		// given
 		when(properties.getCorrectResponse()).thenReturn("");
 		mockBinaryQuestion(13, true);
+		mockContact(contactDao, "+1234567890");
 		
 		// when
-		limp.processMessage(mockMessage("13t"));
+		limp.processMessage(mockMessage("+1234567890", "13t"));
 
 		// then
 		verify(frontlineController, never()).sendTextMessage(anyString(), anyString());
@@ -183,6 +187,7 @@ public class LearnIncomingMessageProcessorTest extends ApplicationContextAwareTe
 		// given
 		when(properties.getCorrectResponse()).thenReturn("well done");
 		mockBinaryQuestion(13, true);
+		mockContact(contactDao, "+1234567890");
 		
 		// when
 		limp.processMessage(mockMessage("+1234567890", "13t"));
