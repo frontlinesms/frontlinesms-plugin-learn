@@ -1,0 +1,4 @@
+<panel>
+	<label text="plugins.learn.settings.resend.delay"/>
+	<textfield name="tfResendDelay" action="settingChanged(this.name, this.text)"/>
+</panel>

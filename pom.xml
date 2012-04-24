@@ -2,7 +2,7 @@
 	<parent>
 		<artifactId>frontlinesms-pom-parent</artifactId>
 		<groupId>net.frontlinesms.core</groupId>
-		<version>1.7.0-beta-10</version>
+		<version>1.7.0-beta-11-SNAPSHOT</version>
 		<relativePath>../pom-parent</relativePath>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>

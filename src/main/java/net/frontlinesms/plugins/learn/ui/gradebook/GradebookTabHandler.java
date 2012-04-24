@@ -257,7 +257,7 @@ public class GradebookTabHandler implements ThinletUiEventHandler, SingleGroupSe
 		for (int i = 0; i < responses.length; i++) {
 			AssessmentMessageResponse res = responses[i];
 			Object cell = ui.createTableCell(res==null? "": ""+(char)('A' + res.getAnswer()));
-			ui.setIcon(cell, res.isCorrect()? "/icons/tick.png": "/icons/cross.png");
+			if(res != null) ui.setIcon(cell, res.isCorrect()? "/icons/tick.png": "/icons/cross.png");
 			ui.add(row, cell);
 		}
 		ui.add(row, ui.createTableCell(r.getScore() + "%", true));

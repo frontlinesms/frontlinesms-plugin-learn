@@ -7,6 +7,7 @@ import net.frontlinesms.FrontlineSMS;
 import net.frontlinesms.plugins.BasePluginController;
 import net.frontlinesms.plugins.PluginControllerProperties;
 import net.frontlinesms.plugins.PluginInitialisationException;
+import net.frontlinesms.plugins.PluginSettingsController;
 import net.frontlinesms.plugins.learn.ui.LearnDebugMenuController;
 import net.frontlinesms.plugins.learn.ui.topic.LearnPluginTabHandler;
 import net.frontlinesms.ui.UiGeneratorController;
@@ -44,5 +45,11 @@ public class LearnPluginController extends BasePluginController {
 		}
 		
 		return tabHandler.getTab();
+	}
+	
+	@Override
+	public PluginSettingsController getSettingsController(
+			UiGeneratorController ui) {
+		return new LearnPluginSettingsController(ui);
 	}
 }

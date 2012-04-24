@@ -1,8 +1,11 @@
 package net.frontlinesms.plugins.learn;
 
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 
+import net.frontlinesms.FrontlineSMS;
 import net.frontlinesms.events.EventBus;
 import net.frontlinesms.plugins.BasePluginControllerTests;
 import net.frontlinesms.plugins.PluginInitialisationException;
@@ -26,12 +29,18 @@ public class LearnPluginControllerTest extends BasePluginControllerTests<LearnPl
 	}
 	
 	public void testTabAvailable() throws PluginInitialisationException {
+		// given
 		controller.init(null, ctx);
 		UiGeneratorController ui = mock(UiGeneratorController.class);
+		FrontlineSMS frontlineController = mock(FrontlineSMS.class);
+		when(ui.getFrontlineController()).thenReturn(frontlineController);
+		when(frontlineController.getBean(anyString(), any(Class.class))).then(returnMockBean());
 		inject(controller, "ctx", ctx);
+		
+		// expect
 		assertNotNull(controller.getTab(ui));
 	}
-	
+
 	public void testDeInitShutsDownScheduler() throws Exception {
 		// given
 		ScheduleHandler scheduleHandler = mock(ScheduleHandler.class);
