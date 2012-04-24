@@ -72,6 +72,14 @@ public class AssessmentMessageJobTest extends ApplicationContextAwareTestCase {
 		verify(frontlineController).sendTextMessage("+67890", "Got milk? Reply: 16TRUE or 16FALSE");
 	}
 	
+	public void testExecuteDoesNotScheduleResendIfResendTimeoutNotSet() {
+		TODO();
+	}
+	
+	public void testExecuteSchedulesResendIfResendTimeoutSet() {
+		TODO();
+	}
+	
 	private List<Contact> mockContacts(String... phoneNumbers) {
 		List<Contact> contacts = new ArrayList<Contact>();
 		for(String p : phoneNumbers) {

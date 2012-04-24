@@ -133,6 +133,26 @@ public class LearnIncomingMessageProcessorTest extends ApplicationContextAwareTe
 		assertEquals(-1, answer);
 	}
 	
+	public void testIncorrectAnswerShouldNotGenerateReplyIfIncorrectResponseSet() {
+		TODO();
+	}
+	
+	public void testIncorrectAnswerShouldGenerateReplyIfIncorrectResponseSet() {
+		TODO();
+	}
+	
+	public void testCorrectAnswerShouldNotGenerateReplyIfIncorrectResponseSet() {
+		TODO();
+	}
+	
+	public void testCorrectAnswerShouldGenerateReplyIfIncorrectResponseSet() {
+		TODO();
+	}
+	
+	public void testAnyAnswerReceivedShouldCancelScheduledMessageResend() {
+		TODO();
+	}
+	
 //> SETUP
 	private void mockAssessmentMessageDao() {
 		when(assessmentMessageDao.get(anyLong())).thenAnswer(new Answer<AssessmentMessage>() {
