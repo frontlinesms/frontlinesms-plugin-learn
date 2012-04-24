@@ -182,7 +182,7 @@ public class LearnIncomingMessageProcessorTest extends ApplicationContextAwareTe
 		limp.processMessage(mockMessage("+1234567890", "13t"));
 
 		// then
-		verify(frontlineController, never()).sendTextMessage("+1234567890", "well done");
+		verify(frontlineController).sendTextMessage("+1234567890", "well done");
 	}
 	
 //> SETUP

@@ -322,14 +322,9 @@ public class LearnTestUtils {
 	}
 	
 	public static Assessment assessmentWithTopicAndGroup(final String expectedTopicName, final String expectedGroupName) {
-		return argThat(new ArgumentMatcher<Assessment>() {
-			@Override
-			public boolean matches(Object o) {
-				return match("assessmentWithTopicAndGroup", o,
+		return full_match("assessmentWithTopicAndGroup",
 						"topic.name", expectedTopicName,
 						"group.name", expectedGroupName);
-			}
-		});
 	}
 	
 	public static Assessment assessmentWithTopicAndGroupAndMessageCount(final String expectedTopicName, final String expectedGroupName, final int expectedMessageCount) {
@@ -345,16 +340,11 @@ public class LearnTestUtils {
 	}
 	
 	public static AssessmentMessageResponse assessmentMessageResponseWithMessageAndStudentAndAnswerAndCorrect(final AssessmentMessage expectedAssessmentMessage, final Contact expectedStudent, final int expectedAnswer, final boolean expectedCorrect) {
-		return argThat(new ArgumentMatcher<AssessmentMessageResponse>() {
-			@Override
-			public boolean matches(Object o) {
-				return match("assessmentMessageResponseWithMessageAndStudentAndAnswerAndCorrect", o,
-						"assessmentMessage", expectedAssessmentMessage,
-						"student", expectedStudent,
-						"answer", expectedAnswer,
-						"correct", expectedCorrect);
-			}
-		});
+		return full_match("assessmentMessageResponseWithMessageAndStudentAndAnswerAndCorrect",
+				"assessmentMessage", expectedAssessmentMessage,
+				"student", expectedStudent,
+				"answer", expectedAnswer,
+				"correct", expectedCorrect);
 	}
 	
 	public static Topic topicWithName(final String expectedName) {
@@ -415,6 +405,17 @@ public class LearnTestUtils {
 	}
 	
 	public static Question questionWithMessage(final String expectedMessageText) {
+		return full_match("questionWithMessage",
+				"questionText", expectedMessageText);
+	}
+	
+	public static Question questionWithMessageAndAnswer(String expectedMessageText, int expectedAnswer) {
+		return full_match("questionWithMessage",
+				"messageText", expectedMessageText,
+				"correctAnswer", expectedAnswer);
+	}
+	
+	public static Question questionWithMessageAndCorrectResponse(final String expectedMessageText, int correctResponse) {
 		return argThat(new ArgumentMatcher<Question>() {
 			@Override
 			public boolean matches(Object o) {
@@ -448,6 +449,15 @@ public class LearnTestUtils {
 		c.set(Calendar.SECOND, 0);
 		c.set(Calendar.MILLISECOND, 0);
 		return c.getTimeInMillis();
+	}
+
+	private static <T> T full_match(final String methodName, final Object... comparisons) {
+		return argThat(new ArgumentMatcher<T>() {
+			@Override
+			public boolean matches(Object o) {
+				return match(methodName, o, comparisons);
+			}
+		});
 	}
 	
 	private static boolean match(String methodName, Object o, Object... fieldNamesAndExpectedValues) {

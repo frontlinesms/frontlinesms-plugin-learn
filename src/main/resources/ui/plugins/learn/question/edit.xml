@@ -14,16 +14,26 @@
 		<checkbox group="rbType" name="rbType_multichoice" action="validate(this)" text="i18n.plugins.learn.question.type.multichoice"/>
 	</panel>
 	
-	<label text="i18n.plugins.learn.question.type.multichoice.options" valign="top"/>
+	<panel name="pnBinary" gap="8">
+			<checkbox group="rbBinaryCorrect" name="rbBinaryCorrect_true" selected="true"/>
+			<checkbox group="rbBinaryCorrect" name="rbBinaryCorrect_false"/>
+	</panel>
+	
 	<panel name="pnMultichoice" gap="8" columns="2">
-		<label text="A)"/>
-		<textfield name="tfMultichoice1" action="validate(this)"/>
-		
-		<label text="B)"/>
-		<textfield name="tfMultichoice2" action="validate(this)"/>
-		
-		<label text="C)"/>
-		<textfield name="tfMultichoice3" action="validate(this)"/>
+		<label text="i18n.plugins.learn.question.type.multichoice.options" valign="top"/>
+		<panel gap="8" columns="3">
+			<label text="A)"/>
+			<textfield name="tfMultichoice1" action="validate(this)"/>
+			<checkbox group="rbMultichoiceCorrect" name="rbMultichoiceCorrect_1" selected="true"/>
+			
+			<label text="B)"/>
+			<textfield name="tfMultichoice2" action="validate(this)"/>
+			<checkbox group="rbMultichoiceCorrect" name="rbMultichoiceCorrect_2"/>
+			
+			<label text="C)"/>
+			<textfield name="tfMultichoice3" action="validate(this)"/>
+			<checkbox group="rbMultichoiceCorrect" name="rbMultichoiceCorrect_3"/>
+		</panel>
 	</panel>
 	
 	<label text="i18n.plugins.learn.question.message.text" valign="top"/>

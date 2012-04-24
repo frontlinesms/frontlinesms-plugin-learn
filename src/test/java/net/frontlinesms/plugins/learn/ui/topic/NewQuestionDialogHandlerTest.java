@@ -79,22 +79,71 @@ public class NewQuestionDialogHandlerTest extends NewTopicChoosingDialogHandlerT
 		assertTrue($("btSave").isEnabled());
 	}
 	
-	public void testMultichoiceTextfieldsOnlyEnabledWhenMultichoiceSelected() {
-		// when
-		$("rbType_binary").select();
-		
-		// then
-		assertFalse($("tfMultichoice1").isEditable());
-		assertFalse($("tfMultichoice2").isEditable());
-		assertFalse($("tfMultichoice3").isEditable());
-		
+	public void testBinaryPanelVisibleByDefault() {
+		assertTrue($("pnBinary").isVisible());
+	}
+	
+	public void testBinaryPanelHiddenWhenTypeChangedToMultichoice() {
 		// when
 		$("rbType_multichoice").select();
 		
 		// then
-		assertTrue($("tfMultichoice1").isEditable());
-		assertTrue($("tfMultichoice2").isEditable());
-		assertTrue($("tfMultichoice3").isEditable());
+		assertFalse($("pnBinary").isVisible());
+	}
+	
+	public void testBinaryPanelReshownWhenTypeChangedBackToBinary() {
+		// given
+		$("rbType_multichoice").select();
+		assertFalse($("pnBinary").isVisible());
+		
+		// when
+		$("rbType_binary").select();
+		
+		// then
+		assertTrue($("pnBinary").isVisible());
+	}
+	
+	public void testBinaryPanelContainsCorrectAnswerRadios() {
+		$("pnBinary").find("rbBinaryCorrect_true").exists();
+		$("pnBinary").find("rbBinaryCorrect_false").exists();
+	}
+	
+	public void testBinaryCorrectTrueByDefault() {
+		assertTrue($("rbBinaryCorrect_true").isChecked());
+	}
+	
+	public void testMultichoicePanelHiddenByDefault() {
+		assertFalse($("pnMultichoice").isVisible());
+	}
+	
+	public void testMultichoicePanelVisibleWhenTypeChangedToMultichoice() {
+		// when
+		$("rbType_multichoice").select();
+		
+		// then
+		assertTrue($("pnMultichoice").isVisible());
+	}
+	
+	public void testMultichoicePanelRehiddenWhenTypeChangedToBinary() {
+		// given
+		$("rbType_multichoice").select();
+		assertTrue($("pnMultichoice").isVisible());
+
+		// when
+		$("rbType_binary").select();
+		
+		// then
+		assertFalse($("pnMultichoice").isVisible());
+	}
+	
+	public void testMultichoicePanelContainsCorrectAnswerRadios() {
+		$("pnMultichoice").find("rbMultichoiceCorrect_1").exists();
+		$("pnMultichoice").find("rbMultichoiceCorrect_2").exists();
+		$("pnMultichoice").find("rbMultichoiceCorrect_3").exists();
+	}
+	
+	public void testMultichoiceCorrectAByDefault() {
+		assertTrue($("rbMultichoiceCorrect_1").isChecked());
 	}
 	
 	public void testTypeMultichoiceValidation_mustEnterThreeAnswers() {
@@ -139,7 +188,7 @@ public class NewQuestionDialogHandlerTest extends NewTopicChoosingDialogHandlerT
 		
 		// then
 		assertEquals("African swallows are faster than European swallows.\n" +
-				"Reply 1TRUE or 1FALSE",
+				"Reply 1T or 1F",
 				$("taMessage").getText());
 	}
 	
@@ -169,16 +218,18 @@ public class NewQuestionDialogHandlerTest extends NewTopicChoosingDialogHandlerT
 		$("rbType_multichoice").select();
 		assertTrue($("rbType_multichoice").isChecked());
 		setAllFieldsValid();
+		$("rbMultichoiceCorrect_2").click();
 		
 		// when 
 		$("btSave").click();
 		
 		// then
 		assertFalse($().isVisible());
-		verify(dao).save(questionWithMessage("What is your fave colour?\n" +
-				"A) Puce\n" +
-				"B) Green\n" +
-				"C) All of the above\n" +
-				"Reply ${id}A, ${id}B or ${id}C"));
+		verify(dao).save(questionWithMessageAndAnswer("What is your fave colour?\n" +
+						"A) Puce\n" +
+						"B) Green\n" +
+						"C) All of the above\n" +
+						"Reply ${id}A, ${id}B or ${id}C",
+				1));
 	}
 }

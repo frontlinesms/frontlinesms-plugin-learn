@@ -40,10 +40,11 @@ public class EditQuestionDialogHandler extends TopicChoosingDialogHandler<Questi
 //> UI EVENT METHODS
 	public void save() {
 		editItem.setQuestionText(getText("tfQuestion"));
-		editItem.setType(ui.isSelected(find("rbType_binary"))? Type.BINARY: Type.MULTIPLE_CHOICE);
+		editItem.setType(isBinary()? Type.BINARY: Type.MULTIPLE_CHOICE);
 		editItem.setAnswers(getText("tfMultichoice1"), getText("tfMultichoice2"), getText("tfMultichoice3"));
 		editItem.setTopic(getSelectedTopic());
 		editItem.setMessageText(generateMessageText());
+		editItem.setCorrectAnswer(getCorrectAnswer());
 		
 		if(editItem.getId() > 0)
 			dao.update(editItem);
@@ -58,7 +59,7 @@ public class EditQuestionDialogHandler extends TopicChoosingDialogHandler<Questi
 				(isMultichoice()? "A) " + getText("tfMultichoice1") + "\n" +
 						"B) " + getText("tfMultichoice2") + "\n" +
 						"C) " + getText("tfMultichoice3") + "\n": "") +
-				"Reply " + (isMultichoice()? "${id}A, ${id}B or ${id}C": "1TRUE or 1FALSE");
+				"Reply " + (isMultichoice()? "${id}A, ${id}B or ${id}C": "${id}T or ${id}F");
 	}
 	
 	private String getText(String componentName) {
@@ -66,14 +67,30 @@ public class EditQuestionDialogHandler extends TopicChoosingDialogHandler<Questi
 	}
 	
 	private boolean isMultichoice() {
-		return ui.isSelected(find("rbType_multichoice"));
+		return !isBinary();
+	}
+	
+	private boolean isBinary() {
+		return ui.isSelected(find("rbType_binary"));
+	}
+	
+	private int getCorrectAnswer() {
+		if(isBinary()) {
+			return ui.isSelected(find("rbBinaryCorrect_true"))? 0: 1;
+		} else {
+			if(ui.isSelected(find("rbMultichoiceCorrect_1"))) return 0;
+			else if(ui.isSelected(find("rbMultichoiceCorrect_2"))) return 1;
+			else if(ui.isSelected(find("rbMultichoiceCorrect_3"))) return 2;
+			else throw new RuntimeException("Unknown correct answer for multichoice!");
+		}
 	}
 	
 	@Override
 	public boolean doValidate(Object component) {
 		ui.setText(find("taMessage"), generateMessageText().replace("${id}", "1"));
-		
-		ui.setChildrenEditable(find("pnMultichoice"), isMultichoice());
+
+		ui.setVisible(find("pnBinary"), !isMultichoice());
+		ui.setVisible(find("pnMultichoice"), isMultichoice());
 		
 		if(!isTopicValid()) return false;
 		
