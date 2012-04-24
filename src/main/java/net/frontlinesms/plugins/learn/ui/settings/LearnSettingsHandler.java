@@ -24,6 +24,7 @@ public class LearnSettingsHandler implements UiSettingsSectionHandler, ThinletUi
 	private EventBus eventBus;
 	protected Map<String, Object> originalValues;
 	
+//> INITIALISATION
 	public LearnSettingsHandler(FrontlineUI ui) {
 		this.ui = ui;
 	}
@@ -35,11 +36,22 @@ public class LearnSettingsHandler implements UiSettingsSectionHandler, ThinletUi
 		
 		// init fields
 		originalValues = new HashMap<String, Object>();
-		
-		ui.setText(find("tfResendDelay"), Integer.toString(properties.getResendDelay()));
-		originalValues.put("tfResendDelay", Integer.toString(properties.getResendDelay()));
+
+		init("tfResendDelay", properties.getResendDelay());
+		init("taCorrectResponse", properties.getCorrectResponse());
+		init("taIncorrectResponse", properties.getIncorrectResponse());
+	}
+	
+	private void init(String componentName, Integer value) {
+		init(componentName, Integer.toString(properties.getResendDelay()));
+	}
+	
+	private void init(String componentName, String value) {
+		ui.setText(find(componentName), value);
+		originalValues.put(componentName, value);
 	}
 
+//> ACCESSORS
 	public Object getPanel() {
 		return panel;
 	}
@@ -47,7 +59,9 @@ public class LearnSettingsHandler implements UiSettingsSectionHandler, ThinletUi
 	public void deinit() {}
 
 	public void save() {
-		properties.setResendDelay(Integer.parseInt(ui.getText(find("tfResendDelay"))));
+		properties.setResendDelay(getResendDelay());
+		properties.setCorrectResponse(getText("taCorrectResponse"));
+		properties.setIncorrectResponse(getText("taIncorrectResponse"));
 		properties.saveToDisk();
 	}
 
@@ -72,6 +86,10 @@ public class LearnSettingsHandler implements UiSettingsSectionHandler, ThinletUi
 
 	
 //> HELPER METHODS
+	private String getText(String componentName) {
+		return ui.getText(find(componentName));
+	}
+	
 	private Object find(String componentName) {
 		return Thinlet.find(panel, componentName);
 	}

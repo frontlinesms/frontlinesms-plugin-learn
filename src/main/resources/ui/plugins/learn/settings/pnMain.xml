@@ -1,4 +1,10 @@
 <panel>
 	<label text="plugins.learn.settings.resend.delay"/>
 	<textfield name="tfResendDelay" action="settingChanged(this.name, this.text)"/>
+	
+	<label text="plugins.learn.settings.response.correct"/>
+	<textarea name="taCorrectResponse" action="settingChanged(this.name, this.text)"/>
+	
+	<label text="plugins.learn.settings.response.incorrect"/>
+	<textarea name="taIncorrectResponse" action="settingChanged(this.name, this.text)"/>
 </panel>

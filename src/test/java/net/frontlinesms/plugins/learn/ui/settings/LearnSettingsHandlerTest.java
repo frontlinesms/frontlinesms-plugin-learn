@@ -19,6 +19,8 @@ public class LearnSettingsHandlerTest extends ThinletEventHandlerTest<LearnSetti
 	@Override
 	protected LearnSettingsHandler initHandler() {
 		when(properties.getResendDelay()).thenReturn(360);
+		when(properties.getCorrectResponse()).thenReturn("CORRECT!");
+		when(properties.getIncorrectResponse()).thenReturn("WRONG!");
 		
 		LearnSettingsHandler handler = new LearnSettingsHandler(ui);
 		handler.init(ctx, properties);
@@ -71,13 +73,61 @@ public class LearnSettingsHandlerTest extends ThinletEventHandlerTest<LearnSetti
 		verify(properties).saveToDisk();
 	}
 
-	public void testFieldForCorrectResponseIsPresent() { TODO(); }
-	public void testFieldForCorrectResponseIsInitialised() { TODO(); }
-	public void testChangingFieldForCorrectResponseEnablesSave() { TODO(); }
-	public void testSavingPropogatesChangeToCorrectResponse() { TODO(); }
+	public void testFieldForCorrectResponseIsPresent() {
+		$("taCorrectResponse").exists();
+	}
+	
+	public void testFieldForCorrectResponseIsInitialised() {
+		assertEquals("CORRECT!", $("taCorrectResponse").getText());
+	}
+	
+	public void testChangingFieldForCorrectResponseEnablesSave() {
+		// when
+		$("taCorrectResponse").setText("HAHA WRONG");
+		waitForUiEvents();
+		
+		// then
+		verify(eventBus, atLeastOnce()).notifyObservers(any(SettingsChangedEventNotification.class));
+	}
 
-	public void testFieldForIncorrectResponseIsPresent() { TODO(); }
-	public void testFieldForIncorrectResponseIsInitialised() { TODO(); }
-	public void testChangingFieldForIncorrectResponseEnablesSave() { TODO(); }
-	public void testSavingPropogatesChangeToIncorrectResponse() { TODO(); }
+	public void testSavingPropogatesChangeToCorrectResponse() {
+		// given
+		$("taCorrectResponse").setText("U GOT IT!");
+		
+		// when
+		h.save();
+		
+		// then
+		verify(properties).setCorrectResponse("U GOT IT!");
+		verify(properties).saveToDisk();
+	}
+
+	public void testFieldForIncorrectResponseIsPresent() {
+		$("taIncorrectResponse").exists();
+	}
+	
+	public void testFieldForIncorrectResponseIsInitialised() {
+		assertEquals("WRONG!", $("taIncorrectResponse").getText());
+	}
+	
+	public void testChangingFieldForIncorrectResponseEnablesSave() {
+		// when
+		$("taIncorrectResponse").setText("RIGHT?");
+		waitForUiEvents();
+		
+		// then
+		verify(eventBus, atLeastOnce()).notifyObservers(any(SettingsChangedEventNotification.class));
+	}
+
+	public void testSavingPropogatesChangeToIncorrectResponse() {
+		// given
+		$("taIncorrectResponse").setText("NOPE!");
+		
+		// when
+		h.save();
+		
+		// then
+		verify(properties).setIncorrectResponse("NOPE!");
+		verify(properties).saveToDisk();
+	}
 }
