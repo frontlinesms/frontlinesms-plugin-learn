@@ -8,6 +8,8 @@ import net.frontlinesms.ui.FrontlineUI;
 
 public class EditQuestionDialogHandler extends TopicChoosingDialogHandler<Question> {
 	private static final String LAYOUT_FILE = "/ui/plugins/learn/question/edit.xml";
+	private static final String TICK = "/icons/tick.png";
+	private static final String CROSS = "/icons/cross.png";
 	
 	private final QuestionDao dao;
 	
@@ -26,6 +28,8 @@ public class EditQuestionDialogHandler extends TopicChoosingDialogHandler<Questi
 			ui.setText(find("tfMultichoice2"), a[1]);
 			ui.setText(find("tfMultichoice3"), a[2]);
 		}
+		updateBinaryTicksAndCrosses();
+		updateMultichoiceTicksAndCrosses();
 		
 		validate(null);
 		
@@ -53,7 +57,29 @@ public class EditQuestionDialogHandler extends TopicChoosingDialogHandler<Questi
 		close();
 	}
 	
+	public void correctAnswerChanged() {
+		if(isBinary()) updateBinaryTicksAndCrosses();
+		else updateMultichoiceTicksAndCrosses();
+	}
+
 //> UI HELPER METHODS
+	private void updateMultichoiceTicksAndCrosses() {
+		int correctAnswerMultichoice = getCorrectMultichoiceAnswer();
+		setIcon("rbMultichoiceCorrect_1", correctAnswerMultichoice==0);
+		setIcon("rbMultichoiceCorrect_2", correctAnswerMultichoice==1);
+		setIcon("rbMultichoiceCorrect_3", correctAnswerMultichoice==2);
+	}
+
+	private void updateBinaryTicksAndCrosses() {
+		boolean correctAnswerBinary = ui.isSelected(find("rbBinaryCorrect_true"));
+		setIcon("rbBinaryCorrect_true", correctAnswerBinary);
+		setIcon("rbBinaryCorrect_false", !correctAnswerBinary);
+	}
+	
+	private void setIcon(String componentName, boolean tick) {
+		ui.setIcon(find(componentName), tick? TICK: CROSS);
+	}
+	
 	private String generateMessageText() {
 		return getText("tfQuestion") + "\n" +
 				(isMultichoice()? "A) " + getText("tfMultichoice1") + "\n" +
@@ -78,19 +104,26 @@ public class EditQuestionDialogHandler extends TopicChoosingDialogHandler<Questi
 		if(isBinary()) {
 			return ui.isSelected(find("rbBinaryCorrect_true"))? 0: 1;
 		} else {
-			if(ui.isSelected(find("rbMultichoiceCorrect_1"))) return 0;
-			else if(ui.isSelected(find("rbMultichoiceCorrect_2"))) return 1;
-			else if(ui.isSelected(find("rbMultichoiceCorrect_3"))) return 2;
-			else throw new RuntimeException("Unknown correct answer for multichoice!");
+			return getCorrectMultichoiceAnswer();
 		}
+	}
+	
+	private int getCorrectMultichoiceAnswer() {
+		if(ui.isSelected(find("rbMultichoiceCorrect_1"))) return 0;
+		else if(ui.isSelected(find("rbMultichoiceCorrect_2"))) return 1;
+		else if(ui.isSelected(find("rbMultichoiceCorrect_3"))) return 2;
+		else throw new RuntimeException("Unknown correct answer for multichoice!");
 	}
 	
 	@Override
 	public boolean doValidate(Object component) {
 		ui.setText(find("taMessage"), generateMessageText().replace("${id}", "1"));
 
-		ui.setVisible(find("pnBinary"), !isMultichoice());
-		ui.setVisible(find("pnMultichoice"), isMultichoice());
+		boolean multichoice = isMultichoice();
+		ui.setVisible(find("lbBinaryCorrect"), !multichoice);
+		ui.setVisible(find("pnBinary"), !multichoice);
+		ui.setVisible(find("lbMultichoiceOptions"), multichoice);
+		ui.setVisible(find("pnMultichoice"), multichoice);
 		
 		if(!isTopicValid()) return false;
 		
@@ -98,7 +131,7 @@ public class EditQuestionDialogHandler extends TopicChoosingDialogHandler<Questi
 			return false;
 		}
 		
-		if(isMultichoice() &&
+		if(multichoice &&
 				(getText("tfMultichoice1").length() == 0 ||
 						getText("tfMultichoice2").length() == 0 ||
 						getText("tfMultichoice3").length() == 0)) {

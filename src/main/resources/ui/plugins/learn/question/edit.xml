@@ -14,25 +14,33 @@
 		<checkbox group="rbType" name="rbType_multichoice" action="validate(this)" text="i18n.plugins.learn.question.type.multichoice"/>
 	</panel>
 	
-	<panel name="pnBinary" gap="8">
-			<checkbox group="rbBinaryCorrect" name="rbBinaryCorrect_true" selected="true"/>
-			<checkbox group="rbBinaryCorrect" name="rbBinaryCorrect_false"/>
+	<label name="lbBinaryCorrect" text="i18n.plugins.learn.question.answer.correct" valign="top"/>
+	<panel name="pnBinary" gap="8" columns="1">
+			<checkbox group="rbBinaryCorrect" name="rbBinaryCorrect_true" selected="true"
+					action="correctAnswerChanged"
+					text="i18n.plugins.learn.question.answer.true"/>
+			<checkbox group="rbBinaryCorrect" name="rbBinaryCorrect_false"
+					action="correctAnswerChanged"
+					text="i18n.plugins.learn.question.answer.false"/>
 	</panel>
 	
-	<panel name="pnMultichoice" gap="8" columns="2">
-		<label text="i18n.plugins.learn.question.type.multichoice.options" valign="top"/>
+	<label name="lbMultichoiceOptions" text="i18n.plugins.learn.question.type.multichoice.options" valign="top"/>
+	<panel name="pnMultichoice" gap="8" columns="1">
 		<panel gap="8" columns="3">
 			<label text="A)"/>
 			<textfield name="tfMultichoice1" action="validate(this)"/>
-			<checkbox group="rbMultichoiceCorrect" name="rbMultichoiceCorrect_1" selected="true"/>
+			<checkbox group="rbMultichoiceCorrect" name="rbMultichoiceCorrect_1" selected="true"
+					action="correctAnswerChanged"/>
 			
 			<label text="B)"/>
 			<textfield name="tfMultichoice2" action="validate(this)"/>
-			<checkbox group="rbMultichoiceCorrect" name="rbMultichoiceCorrect_2"/>
+			<checkbox group="rbMultichoiceCorrect" name="rbMultichoiceCorrect_2"
+					action="correctAnswerChanged"/>
 			
 			<label text="C)"/>
 			<textfield name="tfMultichoice3" action="validate(this)"/>
-			<checkbox group="rbMultichoiceCorrect" name="rbMultichoiceCorrect_3"/>
+			<checkbox group="rbMultichoiceCorrect" name="rbMultichoiceCorrect_3"
+					action="correctAnswerChanged"/>
 		</panel>
 	</panel>
 	
