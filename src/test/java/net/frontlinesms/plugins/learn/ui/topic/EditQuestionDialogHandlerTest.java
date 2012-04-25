@@ -51,6 +51,68 @@ public class EditQuestionDialogHandlerTest extends TopicChoosingDialogHandlerTes
 		assertEquals("HAHA you don't know what the question is.", $("taMessage").getText());
 	}
 	
+	public void testCorrectResponseInitialisation_binary_true() {
+		// when
+		initUiForTests();
+		
+		// then
+		assertTrue($("rbBinaryCorrect_true").isChecked());
+		assertFalse($("rbBinaryCorrect_false").isChecked());
+	}
+	
+	public void testCorrectResponseInitialisation_binary_false() {
+		// given
+		q.setCorrectAnswer(1);
+		
+		// when
+		initUiForTests();
+		
+		// then
+		assertFalse($("rbBinaryCorrect_true").isChecked());
+		assertTrue($("rbBinaryCorrect_false").isChecked());
+	}
+	
+	public void testCorrectResponseInitialisation_multichoice_1() {
+		// given
+		q.setType(Type.MULTIPLE_CHOICE);
+		
+		// when
+		initUiForTests();
+		
+		// then
+		assertTrue($("rbMultichoiceCorrect_1").isChecked());
+		assertFalse($("rbMultichoiceCorrect_2").isChecked());
+		assertFalse($("rbMultichoiceCorrect_3").isChecked());
+	}
+	
+	public void testCorrectResponseInitialisation_multichoice_2() {
+		// given
+		q.setType(Type.MULTIPLE_CHOICE);
+		q.setCorrectAnswer(1);
+		
+		// when
+		initUiForTests();
+		
+		// then
+		assertTrue($("rbMultichoiceCorrect_2").isChecked());
+		assertFalse($("rbMultichoiceCorrect_1").isChecked());
+		assertFalse($("rbMultichoiceCorrect_3").isChecked());
+	}
+	
+	public void testCorrectResponseInitialisation_multichoice_3() {
+		// given
+		q.setType(Type.MULTIPLE_CHOICE);
+		q.setCorrectAnswer(2);
+		
+		// when
+		initUiForTests();
+		
+		// then
+		assertTrue($("rbMultichoiceCorrect_3").isChecked());
+		assertFalse($("rbMultichoiceCorrect_1").isChecked());
+		assertFalse($("rbMultichoiceCorrect_2").isChecked());
+	}
+	
 	public void testQuestionTypeInitialisation() {
 		assertTrue($("rbType_binary").isChecked());
 		assertFalse($("rbType_multichoice").isChecked());

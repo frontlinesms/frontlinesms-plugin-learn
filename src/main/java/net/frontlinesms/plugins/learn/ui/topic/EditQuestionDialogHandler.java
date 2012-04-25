@@ -27,6 +27,13 @@ public class EditQuestionDialogHandler extends TopicChoosingDialogHandler<Questi
 			ui.setText(find("tfMultichoice1"), a[0]);
 			ui.setText(find("tfMultichoice2"), a[1]);
 			ui.setText(find("tfMultichoice3"), a[2]);
+			ui.setSelected(find("rbMultichoiceCorrect_1"), q.getCorrectAnswer() == 0);
+			ui.setSelected(find("rbMultichoiceCorrect_2"), q.getCorrectAnswer() == 1);
+			ui.setSelected(find("rbMultichoiceCorrect_3"), q.getCorrectAnswer() == 2);
+		} else {
+			boolean answerTrue = q.getCorrectAnswer()==0;
+			ui.setSelected(find("rbBinaryCorrect_true"), answerTrue);
+			ui.setSelected(find("rbBinaryCorrect_false"), !answerTrue);
 		}
 		updateBinaryTicksAndCrosses();
 		updateMultichoiceTicksAndCrosses();
