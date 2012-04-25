@@ -23,7 +23,7 @@ public class LearnSettingsHandlerTest extends ThinletEventHandlerTest<LearnSetti
 		when(properties.getIncorrectResponse()).thenReturn("WRONG!");
 		
 		LearnSettingsHandler handler = new LearnSettingsHandler(ui);
-		handler.init(ctx, properties);
+		handler.init(properties, eventBus);
 		return handler;
 	}
 	

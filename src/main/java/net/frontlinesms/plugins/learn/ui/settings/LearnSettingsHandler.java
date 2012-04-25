@@ -5,8 +5,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.context.ApplicationContext;
-
 import thinlet.Thinlet;
 
 import net.frontlinesms.events.EventBus;
@@ -29,10 +27,10 @@ public class LearnSettingsHandler implements UiSettingsSectionHandler, ThinletUi
 		this.ui = ui;
 	}
 	
-	public void init(ApplicationContext ctx, LearnPluginProperties properties) {
+	public void init(LearnPluginProperties properties, EventBus eventBus) {
 		this.properties = properties;
 		panel = ui.loadComponentFromFile("/ui/plugins/learn/settings/pnMain.xml", this);
-		eventBus = (EventBus) ctx.getBean("eventBus");
+		this.eventBus = eventBus;
 		
 		// init fields
 		originalValues = new HashMap<String, Object>();

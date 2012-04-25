@@ -1,10 +1,12 @@
-<panel>
-	<label text="plugins.learn.settings.resend.delay"/>
+<panel columns="2" gap="8" weightx="1" border="true" text="i18n.plugins.learn.settings.title"
+		icon="/icons/plugins/learn/logo_small.png"
+		left="8" right="8" top="8" bottom="8">
+	<label text="i18n.plugins.learn.settings.resend.delay" valign="top"/>
 	<textfield name="tfResendDelay" action="settingChanged(this.name, this.text)"/>
 	
-	<label text="plugins.learn.settings.response.correct"/>
-	<textarea name="taCorrectResponse" action="settingChanged(this.name, this.text)"/>
+	<label text="i18n.plugins.learn.settings.response.correct" valign="top"/>
+	<textarea name="taCorrectResponse" action="settingChanged(this.name, this.text)" weightx="1"/>
 	
-	<label text="plugins.learn.settings.response.incorrect"/>
-	<textarea name="taIncorrectResponse" action="settingChanged(this.name, this.text)"/>
+	<label text="i18n.plugins.learn.settings.response.incorrect" valign="top"/>
+	<textarea name="taIncorrectResponse" action="settingChanged(this.name, this.text)" weightx="1"/>
 </panel>

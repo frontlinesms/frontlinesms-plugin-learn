@@ -48,8 +48,7 @@ public class LearnPluginController extends BasePluginController {
 	}
 	
 	@Override
-	public PluginSettingsController getSettingsController(
-			UiGeneratorController ui) {
-		return new LearnPluginSettingsController(ui);
+	public PluginSettingsController getSettingsController(UiGeneratorController ui) {
+		return new LearnPluginSettingsController(ui, ui.getFrontlineController().getEventBus());
 	}
 }
