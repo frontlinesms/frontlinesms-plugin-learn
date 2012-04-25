@@ -65,7 +65,7 @@ public class ScheduleHandler implements EventObserver {
 			// schedule jobs before starting...
 			for(Assessment a : assessmentDao.list()) {
 				for(AssessmentMessage m : a.getMessages()) {
-					scheduleJob(m);
+					scheduleJobs(m);
 				}
 			}
 			System.out.println("ScheduleHandler.start() : starting scheduler...");
@@ -88,6 +88,10 @@ public class ScheduleHandler implements EventObserver {
 		}
 	}
 	
+	private boolean isResendsEnabled() {
+		return LearnPluginProperties.getInstance().isResendEnabled();
+	}
+	
 //> EVENT HANDLING
 	public void notify(FrontlineEventNotification n) {
 		if(n instanceof DatabaseEntityNotification<?>) {
@@ -95,41 +99,62 @@ public class ScheduleHandler implements EventObserver {
 			if(entity instanceof AssessmentMessage) {
 				AssessmentMessage m = (AssessmentMessage) entity;
 				if(n instanceof EntitySavedNotification<?>) {
-					scheduleJob(m);
+					scheduleJobs(m);
 				} else if(n instanceof EntityUpdatedNotification<?>) {
-					rescheduleJob(m);
+					rescheduleJobs(m);
 				} else if(n instanceof EntityDeletedNotification<?>) {
-					unscheduleJob(m);
+					unscheduleJobs(m);
 				}
 			} else if(entity instanceof Assessment) {
 				for(AssessmentMessage m : ((Assessment) entity).getMessages()) {
-					scheduleOrRescheduleJob(m);
+					scheduleOrRescheduleJobs(m);
 				}
 			}
 		}
 	}
 
 //> SCHEDULE METHODS
-	private void scheduleJob(AssessmentMessage m) {
+	private void scheduleJobs(AssessmentMessage m) {
 		System.out.println("ScheduleHandler.scheduleJob() : " + m.getId());
 		if(m.getEndDate() < System.currentTimeMillis()) return;
 		try {
 			scheduler.scheduleJob(createJob(m), createTrigger(m));
+			if(isResendsEnabled()) scheduler.scheduleJob(createResendJob(m), createResendTrigger(m));
 		} catch (SchedulerException e) {
 			e.printStackTrace();
 		}
 	}
 	
-	private void scheduleOrRescheduleJob(AssessmentMessage m) {
+	private void scheduleOrRescheduleJobs(AssessmentMessage m) {
 		System.out.println("ScheduleHandler.scheduleOrRescheduleJob() : " + m.getId());
 		Trigger trigger = null;
 		try { trigger = scheduler.getTrigger(getTriggerKey(m)); } catch(SchedulerException ex) {
 			ex.printStackTrace();
 		}
 		if(trigger == null) {
-			scheduleJob(m);
+			scheduleJobs(m);
 		} else {
-			rescheduleJob(m);
+			rescheduleJobs(m);
+		}
+	}
+
+	private void rescheduleJobs(AssessmentMessage m) {
+		System.out.println("ScheduleHandler.rescheduleJob() : " + m.getId());
+		try {
+			scheduler.rescheduleJob(getTriggerKey(m), createTrigger(m));
+			if(isResendsEnabled()) scheduler.rescheduleJob(getResendTriggerKey(m), createResendTrigger(m));
+		} catch (SchedulerException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void unscheduleJobs(AssessmentMessage m) {
+		System.out.println("ScheduleHandler.unscheduleJob() : " + m.getId());
+		try {
+			scheduler.unscheduleJob(getTriggerKey(m));
+			if(isResendsEnabled()) scheduler.unscheduleJob(getResendTriggerKey(m));
+		} catch (SchedulerException e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -140,33 +165,36 @@ public class ScheduleHandler implements EventObserver {
 				.build();
 	}
 
-	private void rescheduleJob(AssessmentMessage m) {
-		System.out.println("ScheduleHandler.rescheduleJob() : " + m.getId());
-		try {
-			scheduler.rescheduleJob(getTriggerKey(m), createTrigger(m));
-		} catch (SchedulerException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	private void unscheduleJob(AssessmentMessage m) {
-		System.out.println("ScheduleHandler.unscheduleJob() : " + m.getId());
-		try {
-			scheduler.unscheduleJob(getTriggerKey(m));
-		} catch (SchedulerException e) {
-			e.printStackTrace();
-		}
+	private JobDetail createResendJob(AssessmentMessage m) {
+		System.out.println("ScheduleHandler.createResendJob() : " + m.getId());
+		return JobBuilder.newJob(AssessmentMessageResendJob.class)
+				.usingJobData("assessmentMessageId", m.getId())
+				.build();
 	}
 
 //> TRIGGER BUILDING
 	private TriggerKey getTriggerKey(AssessmentMessage m) {
 		return new TriggerKey(m.getClass().getName() + m.getId());
 	}
+	
+	private TriggerKey getResendTriggerKey(AssessmentMessage m) {
+		return new TriggerKey("resend-" + m.getClass().getName() + m.getId());
+	}
 
 	private Trigger createTrigger(AssessmentMessage m) {
 		System.out.println("ScheduleHandler.createTrigger() : Scheduling with frequency: " + m.getFrequency());
+		return createTrigger(getTriggerKey(m), m.getFrequency(), m.getStartDate(), m.getEndDate());
+	}
+
+	private Trigger createResendTrigger(AssessmentMessage m) {
+		System.out.println("ScheduleHandler.createResendTrigger() : Scheduling with frequency: " + m.getFrequency());
+		int resendDelay = LearnPluginProperties.getInstance().getResendDelay();
+		return createTrigger(getTriggerKey(m), m.getFrequency(), m.getStartDate() + resendDelay, m.getEndDate() + resendDelay);
+	}
+	
+	private Trigger createTrigger(TriggerKey triggerKey, Frequency f, long startDate, long endDate) {
 		String cronExp;
-		switch(m.getFrequency()) {
+		switch(f) {
 			case ONCE:
 				cronExp = "0 m H d M ? y";
 				break;
@@ -182,17 +210,17 @@ public class ScheduleHandler implements EventObserver {
 			case MONTHLY:
 				cronExp = "0 m H d * ? *";
 				break;
-			default: throw new IllegalArgumentException("Cannot schedule at frequency: " + m.getFrequency());
+			default: throw new IllegalArgumentException("Cannot schedule at frequency: " + f);
 		}
 
-		String cronExpression = new SimpleDateFormat(cronExp).format(m.getStartDate());
+		String cronExpression = new SimpleDateFormat(cronExp).format(startDate);
 		System.out.println("ScheduleHandler.createTrigger() : " + cronExpression);
 		TriggerBuilder<CronTrigger> schedule = TriggerBuilder.newTrigger()
 				.startNow()
-				.withIdentity(getTriggerKey(m))
+				.withIdentity(triggerKey)
 				.withSchedule(CronScheduleBuilder.cronSchedule(cronExpression));
-		if(!(m.getFrequency() == Frequency.ONCE)) {
-			schedule = schedule.endAt(new Date(m.getEndDate()));
+		if(f != Frequency.ONCE) {
+			schedule = schedule.endAt(new Date(endDate));
 		}
 		return schedule.build();
 	}

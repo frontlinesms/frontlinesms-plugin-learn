@@ -21,6 +21,10 @@ public class LearnPluginProperties extends UserHomeFilePropertySet {
 		return getPropertyAsInt(PROP_RESEND_DELAY, 300);
 	}
 
+	public boolean isResendEnabled() {
+		return getResendDelay() > 0;
+	}
+
 	public String getCorrectResponse() {
 		return getProperty(PROP_CORRECT_RESPONSE);
 	}
