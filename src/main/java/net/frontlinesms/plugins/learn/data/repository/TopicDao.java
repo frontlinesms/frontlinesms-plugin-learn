@@ -19,7 +19,8 @@ public class TopicDao extends BaseHibernateDao<Topic> {
 	}
 
 	public void save(Topic t) throws DuplicateKeyException {
-		super.save(t);
+		if(t.getId() > 0) super.update(t);
+		else super.save(t);
 	}
 
 	public void delete(Topic t) {

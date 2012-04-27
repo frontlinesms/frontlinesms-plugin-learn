@@ -50,6 +50,23 @@ public class TopicTabHandlerTest extends ThinletEventHandlerTest<TopicTabHandler
 		verify(topicItemDao).getAllByTopic(topicWithName("Drink"));
 	}
 	
+	public void testTopicListRefreshDisablesEditAndDeleteButtons() {
+		// given
+		mockTopics(topicDao, "Food", "Drink");
+		initUiForTests();
+		$("trTopics").getSubNode().withText("Drink").select();
+		assertTrue($("btEditTreeItem").isEnabled());
+		assertTrue($("btDeleteTreeItem").isEnabled());
+		
+		// when
+		h.notify(mockEntityUpdatedNotification(Topic.class));
+		waitForUiEvents();
+		
+		// then
+		assertFalse($("btEditTreeItem").isEnabled());
+		assertFalse($("btDeleteTreeItem").isEnabled());
+	}
+	
 	@SuppressWarnings("unchecked")
 	public void testTopicListUpdatesOnNewTopicAndDeletion() {
 		// given

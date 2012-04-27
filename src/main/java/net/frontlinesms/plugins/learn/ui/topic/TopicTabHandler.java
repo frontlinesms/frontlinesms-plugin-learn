@@ -57,6 +57,10 @@ public class TopicTabHandler implements ThinletUiEventHandler, EventObserver {
 		boolean enableTopicItemCreation = topics.size() > 0;
 		ui.setEnabled(find("btNewReinforcement"), enableTopicItemCreation);
 		ui.setEnabled(find("btNewQuestion"), enableTopicItemCreation);
+		
+		boolean treeHasSelectedItem = ui.getSelectedItem(tree) != null;
+		ui.setEnabled(find("btEditTreeItem"), treeHasSelectedItem);
+		ui.setEnabled(find("btDeleteTreeItem"), treeHasSelectedItem);
 	}
 	
 	private void threadSafeRefresh() {
