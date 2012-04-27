@@ -224,6 +224,10 @@ public class AssessmentTabHandler implements ThinletUiEventHandler, SingleGroupS
 						break;
 					}
 				}
+				if(ui.getSelectedItem(table) == null) {
+					ui.setEnabled(find("btEditAssessment"), false);
+					ui.setEnabled(find("btDeleteAssessment"), false);
+				}
 			}
 		}.execute();
 	}
@@ -241,6 +245,10 @@ public class AssessmentTabHandler implements ThinletUiEventHandler, SingleGroupS
 						ui.remove(row);
 						break;
 					}
+				}
+				if(ui.getSelectedItem(table) == null) {
+					ui.setEnabled(find("btEditAssessment"), false);
+					ui.setEnabled(find("btDeleteAssessment"), false);
 				}
 			}
 		}.execute();
