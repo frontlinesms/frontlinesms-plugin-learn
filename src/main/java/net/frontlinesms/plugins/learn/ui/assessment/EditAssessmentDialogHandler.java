@@ -128,12 +128,13 @@ public class EditAssessmentDialogHandler extends TopicChoosingDialogHandler<Asse
 //> GROUP SELECTION METHODS
 	public void groupSelectionCompleted(Group g) {
 		editItem.setGroup(g);
-		ui.setText(find("tfGroup"), g.getName());
+		Object tfGroup = find("tfGroup");
+		ui.setText(tfGroup, g.getName());
+		validate(tfGroup);
 	}
 	
 //> ASSESSMENT MESSAGE NOTIFICATION METHODS
 	public void notifyAssessmentMessageSaved(AssessmentMessage assessmentMessage) {
-		// TODO find the tableitem for the relevant topic item
 		Object table = find("tbMessages");
 		Object[] rows = ui.getItems(table);
 		for (int i = 0; i < rows.length; i++) {

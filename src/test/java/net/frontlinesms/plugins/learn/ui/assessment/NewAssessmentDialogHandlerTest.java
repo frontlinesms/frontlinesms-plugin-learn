@@ -57,7 +57,6 @@ public class NewAssessmentDialogHandlerTest extends NewTopicChoosingDialogHandle
 			h.validate(null);
 		} else if(fieldName.equals("tfGroup")) {
 			h.groupSelectionCompleted(mockGroup("Beach Boys"));
-			h.validate(null);
 		} else throw new IllegalArgumentException();
 	}
 	
