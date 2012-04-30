@@ -23,6 +23,7 @@ public class EditQuestionDialogHandlerTest extends TopicChoosingDialogHandlerTes
 		q.setQuestionText("Twas brillig...");
 		q.setMessageText("HAHA you don't know what the question is.");
 		q.setAnswers("Slithy tothes were gimbling", "Slithy tothes were gyreing", "Vorpled corpuscles were muscling");
+		q.setIncorrectResponse("TOTAL WRONGNESS!!!");
 		
 		super.setUp();
 	}
@@ -49,6 +50,10 @@ public class EditQuestionDialogHandlerTest extends TopicChoosingDialogHandlerTes
 	
 	public void testMessageTextInitialisation() {
 		assertEquals("HAHA you don't know what the question is.", $("taMessage").getText());
+	}
+	
+	public void testIncorrectResponseTextInitialisation() {
+		assertEquals("TOTAL WRONGNESS!!!", $("tfIncorrectResponse").getText());
 	}
 	
 	public void testCorrectResponseInitialisation_binary_true() {
@@ -145,16 +150,18 @@ public class EditQuestionDialogHandlerTest extends TopicChoosingDialogHandlerTes
 		$("tfMultichoice1").setText("Mimsy");
 		$("tfMultichoice2").setText("Outgrabscious");
 		$("tfMultichoice3").setText("Callayed en route");
+		$("tfIncorrectResponse").setText("wrong");
 		
 		// when
 		$("btSave").click();
 		
 		// then
-		verify(dao).update(questionWithIdAndTextAndTypeAndTopicAndAnswersAndMessageText(64,
+		verify(dao).update(questionWithIdAndTextAndTypeAndTopicAndAnswersAndMessageTextAndIncorrectResponse(64,
 						"How were the borogroves?",
 						Type.MULTIPLE_CHOICE,
 						"Sense",
 						"Mimsy", "Outgrabscious", "Callayed en route",
-						"How were the borogroves?\nA) Mimsy\nB) Outgrabscious\nC) Callayed en route\nReply ${id}A, ${id}B or ${id}C"));
+						"How were the borogroves?\nA) Mimsy\nB) Outgrabscious\nC) Callayed en route\nReply ${id}A, ${id}B or ${id}C",
+						"wrong"));
 	}
 }

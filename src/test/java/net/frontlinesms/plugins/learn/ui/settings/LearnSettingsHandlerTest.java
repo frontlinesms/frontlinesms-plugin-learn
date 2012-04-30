@@ -20,7 +20,6 @@ public class LearnSettingsHandlerTest extends ThinletEventHandlerTest<LearnSetti
 	protected LearnSettingsHandler initHandler() {
 		when(properties.getResendDelay()).thenReturn(360);
 		when(properties.getCorrectResponse()).thenReturn("CORRECT!");
-		when(properties.getIncorrectResponse()).thenReturn("WRONG!");
 		
 		LearnSettingsHandler handler = new LearnSettingsHandler(ui);
 		handler.init(properties, eventBus);
@@ -99,35 +98,6 @@ public class LearnSettingsHandlerTest extends ThinletEventHandlerTest<LearnSetti
 		
 		// then
 		verify(properties).setCorrectResponse("U GOT IT!");
-		verify(properties).saveToDisk();
-	}
-
-	public void testFieldForIncorrectResponseIsPresent() {
-		$("taIncorrectResponse").exists();
-	}
-	
-	public void testFieldForIncorrectResponseIsInitialised() {
-		assertEquals("WRONG!", $("taIncorrectResponse").getText());
-	}
-	
-	public void testChangingFieldForIncorrectResponseEnablesSave() {
-		// when
-		$("taIncorrectResponse").setText("RIGHT?");
-		waitForUiEvents();
-		
-		// then
-		verify(eventBus, atLeastOnce()).notifyObservers(any(SettingsChangedEventNotification.class));
-	}
-
-	public void testSavingPropogatesChangeToIncorrectResponse() {
-		// given
-		$("taIncorrectResponse").setText("NOPE!");
-		
-		// when
-		h.save();
-		
-		// then
-		verify(properties).setIncorrectResponse("NOPE!");
 		verify(properties).saveToDisk();
 	}
 }

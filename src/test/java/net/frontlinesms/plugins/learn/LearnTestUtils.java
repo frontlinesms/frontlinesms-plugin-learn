@@ -13,6 +13,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import net.frontlinesms.data.domain.Contact;
 import net.frontlinesms.data.domain.FrontlineMessage;
@@ -30,6 +32,7 @@ import net.frontlinesms.plugins.learn.data.repository.*;
 import org.mockito.ArgumentMatcher;
 
 public class LearnTestUtils {
+	private static final Pattern ARRAY_REF = Pattern.compile("(.*)\\[(\\d+)\\]");
 	public static final Long YESTERDAY, TODAY, TOMORROW;
 	
 	static {
@@ -301,16 +304,11 @@ public class LearnTestUtils {
 	public static AssessmentMessage assessmentMessageWithTopicItemAndStartDateAndRepeatAndEndDate(
 			final TopicItem expectedTopicItem, final long expectedStartDate,
 			final Frequency expectedFrequency, final long expectedEndDate) {
-		return argThat(new ArgumentMatcher<AssessmentMessage>() {
-			@Override
-			public boolean matches(Object o) {
-				return match("assessmentMessageWithTopicItemAndStartDateAndRepeatAndEndDate", o,
+		return full_match("assessmentMessageWithTopicItemAndStartDateAndRepeatAndEndDate",
 						"topicItem", expectedTopicItem,
 						"startDate", expectedStartDate,
 						"endDate", expectedEndDate,
 						"frequency", expectedFrequency);
-			}
-		});
 	}
 	
 	public static EventObserver eventObserversOfClass(final Class<?>... classes) {
@@ -326,13 +324,8 @@ public class LearnTestUtils {
 	}
 	
 	public static Assessment assessmentWithTopic(final String expectedTopicName) {
-		return argThat(new ArgumentMatcher<Assessment>() {
-			@Override
-			public boolean matches(Object o) {
-				return match("assessmentWithTopic", o,
+		return full_match("assessmentWithTopic",
 						"topic.name", expectedTopicName);
-			}
-		});
 	}
 	
 	public static Assessment assessmentWithTopicAndGroup(final String expectedTopicName, final String expectedGroupName) {
@@ -342,15 +335,10 @@ public class LearnTestUtils {
 	}
 	
 	public static Assessment assessmentWithTopicAndGroupAndMessageCount(final String expectedTopicName, final String expectedGroupName, final int expectedMessageCount) {
-		return argThat(new ArgumentMatcher<Assessment>() {
-			@Override
-			public boolean matches(Object o) {
-				return match("assessmentWithTopicAndGroupAndMessageCount", o,
+		return full_match("assessmentWithTopicAndGroupAndMessageCount",
 						"topic.name", expectedTopicName,
 						"group.name", expectedGroupName,
 						"messages.size()", expectedMessageCount);
-			}
-		});
 	}
 	
 	public static AssessmentMessageResponse assessmentMessageResponseWithMessageAndStudentAndAnswerAndCorrect(final AssessmentMessage expectedAssessmentMessage, final Contact expectedStudent, final int expectedAnswer, final boolean expectedCorrect) {
@@ -376,46 +364,42 @@ public class LearnTestUtils {
 	}
 	
 	public static Reinforcement reinforcementWithIdAndTextAndTopic(final long expectedId, final String expectedReinforementText, final String expectedTopicName) {
-		return argThat(new ArgumentMatcher<Reinforcement>() {
-			@Override
-			public boolean matches(Object o) {
-				return match("reinforcementWithTextAndTopic", o,
+		return full_match("reinforcementWithTextAndTopic",
 						"id", expectedId,
 						"messageText", expectedReinforementText,
 						"topic.name", expectedTopicName);
-			}
-		});
 	}
+
+	public static Question questionWithIdAndTextAndTypeAndTopicAndAnswersAndMessageTextAndIncorrectResponse(final long expectedId,
+			final String expectedQuestionText, final Question.Type expectedType, final String expectedTopicName,
+			final String expectedAnswerA, final String expectedAnswerB, final String expectedAnswerC,
+			final String expectedMessageText, final String expectedIncorrectResponse) {
+		return full_match("questionWithIdAndTextAndTypeAndTopicAndAnswersAndMessageTextAndIncorrectResponse",
+				"id", expectedId,
+				"questionText", expectedQuestionText,
+				"type", expectedType,
+				"topic.name", expectedTopicName,
+				"answers[0]", expectedAnswerA,
+				"answers[1]", expectedAnswerB,
+				"answers[2]", expectedAnswerC,
+				"messageText", expectedMessageText,
+				"incorrectResponse", expectedIncorrectResponse);
+	}
+	
 	
 	public static Question questionWithIdAndTextAndTypeAndTopicAndAnswersAndMessageText(final long expectedId,
 			final String expectedQuestionText, final Question.Type expectedType, final String expectedTopicName,
 			final String expectedAnswerA, final String expectedAnswerB, final String expectedAnswerC,
 			final String expectedMessageText) {
-		return argThat(new ArgumentMatcher<Question>() {
-			@Override
-			public boolean matches(Object o) {
-				Question q = (Question) o;
-				final boolean matches = expectedId == q.getId() &&
-						expectedQuestionText.equals(q.getQuestionText()) &&
-						expectedTopicName.equals(q.getTopic().getName()) &&
-						expectedAnswerA.equals(q.getAnswers()[0]) &&
-						expectedAnswerB.equals(q.getAnswers()[1]) &&
-						expectedAnswerC.equals(q.getAnswers()[2]) &&
-						expectedMessageText.equals(q.getMessageText());
-				if(!matches) {
-					println("LearnTestUtils.questionWithIdAndTextAndTopicAndAnswersAndMessageText(...).new ArgumentMatcher() {...}.matches()");
-					println("\tq.id: " + q.getId() + " vs " + expectedId);
-					println("\tq.type: " + q.getType() + " vs " + expectedType);
-					println("\tq.questionText: " + q.getQuestionText() + " vs " + expectedQuestionText);
-					println("\tq.topicName: " + q.getTopic().getName() + " vs " + expectedTopicName);
-					println("\tq.answerA: " + q.getAnswers()[0] + " vs " + expectedAnswerA);
-					println("\tq.answerB: " + q.getAnswers()[1] + " vs " + expectedAnswerB);
-					println("\tq.answerC: " + q.getAnswers()[2] + " vs " + expectedAnswerC);
-					println("\tq.messageText: " + q.getMessageText() + " vs " + expectedMessageText);
-				}
-				return matches;
-			}
-		});
+		return full_match("questionWithIdAndTextAndTypeAndTopicAndAnswersAndMessageText",
+				"id", expectedId,
+				"questionText", expectedQuestionText,
+				"type", expectedType,
+				"topic.name", expectedTopicName,
+				"answers[0]", expectedAnswerA,
+				"answers[1]", expectedAnswerB,
+				"answers[2]", expectedAnswerC,
+				"messageText", expectedMessageText);
 	}
 	
 	public static Question questionWithMessage(final String expectedMessageText) {
@@ -430,20 +414,9 @@ public class LearnTestUtils {
 	}
 	
 	public static Question questionWithMessageAndCorrectResponse(final String expectedMessageText, int correctResponse) {
-		return argThat(new ArgumentMatcher<Question>() {
-			@Override
-			public boolean matches(Object o) {
-				Question q = (Question) o;
-				final boolean matches = expectedMessageText.equals(q.getMessageText());
-				if(!matches) {
-					println("LearnTestUtils.questionWithMessage(...).new ArgumentMatcher() {...}.matches()");
-					println("\tq.qText:  " + q.getQuestionText());
-					println("\tq.type: " + q.getType());
-					println("\tq.mText: " + q.getMessageText());
-				}
-				return matches;
-			}
-		});
+		return full_match("questionWithMessageAndCorrectResponse",
+				"messageText", expectedMessageText,
+				"corrctResponse", correctResponse);
 	}
 	
 	public static long today9am() {
@@ -514,20 +487,31 @@ public class LearnTestUtils {
 				Method m;
 				if(exp.endsWith("()")) {
 					m = value.getClass().getMethod(exp.substring(0, exp.length() - 2));
+				} else if(ARRAY_REF.matcher(exp).matches()) {
+					Matcher matcher = ARRAY_REF.matcher(exp);
+					matcher.find();
+					String methodNameBody = getMethodNameBody(matcher.group(1));
+					int arrayIndex = Integer.parseInt(matcher.group(2));
+					value = ((Object[]) value.getClass().getMethod("get" + methodNameBody).invoke(value))[arrayIndex];
+					m = null;
 				} else {
-					String methodNameBody = exp.substring(0, 1).toUpperCase() + exp.substring(1);
+					String methodNameBody = getMethodNameBody(exp);
 					try {
 						m = value.getClass().getMethod("get" + methodNameBody);
 					} catch(NoSuchMethodException ex) {
 						m = value.getClass().getMethod("is" + methodNameBody);
 					}
 				}
-				value = m.invoke(value);
+				if(m != null) value = m.invoke(value);
 			}
 			return value;
 		} catch(Exception ex) {
 			throw new RuntimeException(ex);
 		}
+	}
+
+	private static String getMethodNameBody(String exp) {
+		return exp.substring(0, 1).toUpperCase() + exp.substring(1);
 	}
 	
 	private static String getAlternateFormat(Object value) {

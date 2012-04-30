@@ -37,6 +37,7 @@ public class EditQuestionDialogHandler extends TopicChoosingDialogHandler<Questi
 		}
 		updateBinaryTicksAndCrosses();
 		updateMultichoiceTicksAndCrosses();
+		ui.setText(find("tfIncorrectResponse"), q.getIncorrectResponse());
 		
 		validate(null);
 		
@@ -56,6 +57,7 @@ public class EditQuestionDialogHandler extends TopicChoosingDialogHandler<Questi
 		editItem.setTopic(getSelectedTopic());
 		editItem.setMessageText(generateMessageText());
 		editItem.setCorrectAnswer(getCorrectAnswer());
+		editItem.setIncorrectResponse(getText("tfIncorrectResponse"));
 		
 		if(editItem.getId() > 0)
 			dao.update(editItem);

@@ -354,6 +354,7 @@ public class AssessmentTabHandlerTest extends ThinletEventHandlerTest<Assessment
 		// when
 		h.notify(mockEntityUpdatedNotification(
 				mockAssessmentWithTopicAndId(99, "Umbongo", "3/4/12", "14/4/12")));
+		waitForUiEvents();
 		
 		// then
 		assertFalse($("btEditAssessment").isEnabled());

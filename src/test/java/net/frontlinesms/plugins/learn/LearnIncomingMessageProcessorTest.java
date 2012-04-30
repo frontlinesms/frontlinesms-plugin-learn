@@ -171,7 +171,7 @@ public class LearnIncomingMessageProcessorTest extends ApplicationContextAwareTe
 	
 	public void testIncorrectAnswerShouldNotGenerateReplyIfResponseNotSet() {
 		// given
-		when(properties.getIncorrectResponse()).thenReturn("");
+		mockBinaryQuestion(13, true, "");
 		mockContact(contactDao, "+1234567890");
 		
 		// when
@@ -183,8 +183,7 @@ public class LearnIncomingMessageProcessorTest extends ApplicationContextAwareTe
 
 	public void testIncorrectAnswerShouldGenerateReplyIfResponseSet() {
 		// given
-		when(properties.getIncorrectResponse()).thenReturn("TOTALLY WRONG");
-		mockBinaryQuestion(13, true);
+		mockBinaryQuestion(13, true, "TOTALLY WRONG");
 		mockContact(contactDao, "+1234567890");
 		
 		// when
@@ -232,7 +231,7 @@ public class LearnIncomingMessageProcessorTest extends ApplicationContextAwareTe
 		});
 	}
 	
-	private void mockBinaryQuestion(int id, boolean correctAnswer) {
+	private Question mockBinaryQuestion(int id, boolean correctAnswer) {
 		Question q = mock(Question.class);
 		when(q.getType()).thenReturn(Type.BINARY);
 		when(q.getCorrectAnswer()).thenReturn(correctAnswer? 0: 1);
@@ -241,5 +240,12 @@ public class LearnIncomingMessageProcessorTest extends ApplicationContextAwareTe
 		when(m.getTopicItem()).thenReturn(q);
 		
 		when(assessmentMessageDao.get(id)).thenReturn(m);
+		
+		return q;
+	}
+	
+	private void mockBinaryQuestion(int id, boolean correctAnswer, String incorrectResponse) {
+		Question q = mockBinaryQuestion(id, correctAnswer);
+		when(q.getIncorrectResponse()).thenReturn(incorrectResponse);
 	}
 }

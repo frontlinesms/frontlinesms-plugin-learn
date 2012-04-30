@@ -10,6 +10,7 @@ public class Question extends TopicItem {
 	private Type type;
 	private String[] answers;
 	private int correctAnswer;
+	private String incorrectResponse;
 
 //> ACCESSORS
 	public String getQuestionText() {
@@ -42,6 +43,14 @@ public class Question extends TopicItem {
 	
 	public void setCorrectAnswer(int correctAnswer) {
 		this.correctAnswer = correctAnswer;
+	}
+	
+	public String getIncorrectResponse() {
+		return incorrectResponse;
+	}
+	
+	public void setIncorrectResponse(String incorrectResponse) {
+		this.incorrectResponse = incorrectResponse;
 	}
 
 //> FACTORY METHODS

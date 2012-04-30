@@ -6,7 +6,4 @@
 	
 	<label text="i18n.plugins.learn.settings.response.correct" valign="top"/>
 	<textarea name="taCorrectResponse" action="settingChanged(this.name, this.text)" weightx="1"/>
-	
-	<label text="i18n.plugins.learn.settings.response.incorrect" valign="top"/>
-	<textarea name="taIncorrectResponse" action="settingChanged(this.name, this.text)" weightx="1"/>
 </panel>

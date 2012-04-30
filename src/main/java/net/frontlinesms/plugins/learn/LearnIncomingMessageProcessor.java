@@ -76,7 +76,7 @@ public class LearnIncomingMessageProcessor implements EventObserver {
 		
 		responseDao.save(r);
 		
-		String response = r.isCorrect()? properties.getCorrectResponse(): properties.getIncorrectResponse();
+		String response = r.isCorrect()? properties.getCorrectResponse(): q.getIncorrectResponse();
 		if(response != null &&
 				response.length() > 0) {
 			frontlineController.sendTextMessage(m.getSenderMsisdn(), response);

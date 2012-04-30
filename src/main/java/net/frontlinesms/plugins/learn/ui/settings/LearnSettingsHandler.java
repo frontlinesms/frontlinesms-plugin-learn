@@ -37,7 +37,6 @@ public class LearnSettingsHandler implements UiSettingsSectionHandler, ThinletUi
 
 		init("tfResendDelay", properties.getResendDelay());
 		init("taCorrectResponse", properties.getCorrectResponse());
-		init("taIncorrectResponse", properties.getIncorrectResponse());
 	}
 	
 	private void init(String componentName, Integer value) {
@@ -59,7 +58,6 @@ public class LearnSettingsHandler implements UiSettingsSectionHandler, ThinletUi
 	public void save() {
 		properties.setResendDelay(getResendDelay());
 		properties.setCorrectResponse(getText("taCorrectResponse"));
-		properties.setIncorrectResponse(getText("taIncorrectResponse"));
 		properties.saveToDisk();
 	}
 

@@ -5,7 +5,6 @@ import net.frontlinesms.resources.UserHomeFilePropertySet;
 public class LearnPluginProperties extends UserHomeFilePropertySet {
 	private static final String PROP_RESEND_DELAY = "resend.delay";
 	private static final String PROP_CORRECT_RESPONSE = "response.correct";
-	private static final String PROP_INCORRECT_RESPONSE = "response.incorrect";
 	
 	private static LearnPluginProperties instance;
 
@@ -31,14 +30,6 @@ public class LearnPluginProperties extends UserHomeFilePropertySet {
 
 	public void setCorrectResponse(String response) {
 		setProperty(PROP_CORRECT_RESPONSE, response);
-	}
-
-	public String getIncorrectResponse() {
-		return getProperty(PROP_INCORRECT_RESPONSE);
-	}
-
-	public void setIncorrectResponse(String response) {
-		setProperty(PROP_INCORRECT_RESPONSE, response);
 	}
 	
 	/**

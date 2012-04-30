@@ -68,6 +68,10 @@ public class NewQuestionDialogHandlerTest extends NewTopicChoosingDialogHandlerT
 		assertFalse($("rbType_multichoice").isChecked());
 	}
 	
+	public void testIncorrectResponseInitialisedEmpty() {
+		assertEquals("", $("tfIncorrectResponse").getText());
+	}
+	
 	public void testTypeBinaryValidation() {
 		// given
 		setValidValuesExcept("rbType");
