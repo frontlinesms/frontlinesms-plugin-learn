@@ -9,6 +9,7 @@ import net.frontlinesms.data.domain.FrontlineMessage;
 import net.frontlinesms.data.repository.ContactDao;
 import net.frontlinesms.events.EventBus;
 import net.frontlinesms.plugins.learn.data.domain.AssessmentMessage;
+import net.frontlinesms.plugins.learn.data.domain.AssessmentMessageResponse;
 import net.frontlinesms.plugins.learn.data.domain.Question;
 import net.frontlinesms.plugins.learn.data.domain.Question.Type;
 import net.frontlinesms.plugins.learn.data.repository.AssessmentMessageDao;
@@ -79,7 +80,7 @@ public class LearnIncomingMessageProcessorTest extends ApplicationContextAwareTe
 	}
 	
 	private void testGetAssessmentMessage(long expectedId, String messageText) {
-		AssessmentMessage actualQuestion = limp.getAssessmentMessage(mockMessage(messageText));
+		AssessmentMessage actualQuestion = limp.getAssessmentMessage(mockIncomingMessage(messageText));
 		assertNotNull(actualQuestion);
 		assertEquals(expectedId, actualQuestion.getId());
 	}
@@ -89,7 +90,7 @@ public class LearnIncomingMessageProcessorTest extends ApplicationContextAwareTe
 		final String from = "+123456789";
 		Question q = mock(Question.class);
 		AssessmentMessage am = mockAssessmentMessage(q);
-		FrontlineMessage fmessage = mockMessage(from, "123 true");
+		FrontlineMessage fmessage = mockIncomingMessage(from, "123 true");
 		Contact student = mockContact(contactDao, from);
 		when(assessmentMessageDao.get(123)).thenReturn(am);
 		
@@ -100,9 +101,25 @@ public class LearnIncomingMessageProcessorTest extends ApplicationContextAwareTe
 		verify(responseDao).save(assessmentMessageResponseWithMessageAndStudentAndAnswerAndCorrect(am, student, 0, true));
 	}
 	
+	public void testProcessMessageShouldIgnoreOutgoing() {
+		// given
+		final String from = "+123456789";
+		Question q = mock(Question.class);
+		AssessmentMessage am = mockAssessmentMessage(q);
+		FrontlineMessage fmessage = mockOutgoingMessage(from, "123 true");
+		mockContact(contactDao, from);
+		when(assessmentMessageDao.get(123)).thenReturn(am);
+		
+		// when
+		limp.processMessage(fmessage);
+		
+		// then
+		verify(responseDao, never()).save(any(AssessmentMessageResponse.class));
+	}
+	
 	public void testGetAssessmentMessageForUnprocessableText() {
 		// when
-		AssessmentMessage m = limp.getAssessmentMessage(mockMessage("asdf"));
+		AssessmentMessage m = limp.getAssessmentMessage(mockIncomingMessage("asdf"));
 		
 		// then
 		assertNull(m);
@@ -133,13 +150,13 @@ public class LearnIncomingMessageProcessorTest extends ApplicationContextAwareTe
 	}
 	
 	private void testGetAnswer(int expected, String messageText) {
-		int actual = limp.getAnswer(mockMessage(messageText));
+		int actual = limp.getAnswer(mockIncomingMessage(messageText));
 		assertEquals(expected, actual);
 	}
 	
 	public void testGetAnswer_badInput() {
 		// when
-		int answer = limp.getAnswer(mockMessage("something random"));
+		int answer = limp.getAnswer(mockIncomingMessage("something random"));
 		
 		// then
 		assertEquals(-1, answer);
@@ -151,7 +168,7 @@ public class LearnIncomingMessageProcessorTest extends ApplicationContextAwareTe
 		mockContact(contactDao, "+1234567890");
 		
 		// when
-		limp.processMessage(mockMessage("+1234567890", "13f"));
+		limp.processMessage(mockIncomingMessage("+1234567890", "13f"));
 
 		// then
 		verify(frontlineController, never()).sendTextMessage(anyString(), anyString());
@@ -164,7 +181,7 @@ public class LearnIncomingMessageProcessorTest extends ApplicationContextAwareTe
 		mockContact(contactDao, "+1234567890");
 		
 		// when
-		limp.processMessage(mockMessage("+1234567890", "13f"));
+		limp.processMessage(mockIncomingMessage("+1234567890", "13f"));
 
 		// then
 		verify(frontlineController).sendTextMessage("+1234567890", "TOTALLY WRONG");
@@ -177,7 +194,7 @@ public class LearnIncomingMessageProcessorTest extends ApplicationContextAwareTe
 		mockContact(contactDao, "+1234567890");
 		
 		// when
-		limp.processMessage(mockMessage("+1234567890", "13t"));
+		limp.processMessage(mockIncomingMessage("+1234567890", "13t"));
 
 		// then
 		verify(frontlineController, never()).sendTextMessage(anyString(), anyString());
@@ -190,7 +207,7 @@ public class LearnIncomingMessageProcessorTest extends ApplicationContextAwareTe
 		mockContact(contactDao, "+1234567890");
 		
 		// when
-		limp.processMessage(mockMessage("+1234567890", "13t"));
+		limp.processMessage(mockIncomingMessage("+1234567890", "13t"));
 
 		// then
 		verify(frontlineController).sendTextMessage("+1234567890", "well done");

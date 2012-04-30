@@ -210,14 +210,28 @@ public class LearnTestUtils {
 		return q;
 	}
 	
-	public static FrontlineMessage mockMessage(String messageText) {
+	public static FrontlineMessage mockIncomingMessage(String messageText) {
 		FrontlineMessage m = mock(FrontlineMessage.class);
+		when(m.getType()).thenReturn(FrontlineMessage.Type.RECEIVED);
 		when(m.getTextContent()).thenReturn(messageText);
 		return m;
 	}
 	
-	public static FrontlineMessage mockMessage(String from, String messageText) {
-		FrontlineMessage m = mockMessage(messageText);
+	public static FrontlineMessage mockIncomingMessage(String from, String messageText) {
+		FrontlineMessage m = mockIncomingMessage(messageText);
+		when(m.getSenderMsisdn()).thenReturn(from);
+		return m;
+	}
+	
+	public static FrontlineMessage mockOutgoingMessage(String messageText) {
+		FrontlineMessage m = mock(FrontlineMessage.class);
+		when(m.getType()).thenReturn(FrontlineMessage.Type.OUTBOUND);
+		when(m.getTextContent()).thenReturn(messageText);
+		return m;
+	}
+	
+	public static FrontlineMessage mockOutgoingMessage(String from, String messageText) {
+		FrontlineMessage m = mockOutgoingMessage(messageText);
 		when(m.getSenderMsisdn()).thenReturn(from);
 		return m;
 	}

@@ -31,13 +31,14 @@ public class LearnIncomingMessageProcessor implements EventObserver {
 	@Autowired private AssessmentMessageDao assessmentMessageDao;
 	@Autowired private AssessmentMessageResponseDao responseDao;
 	
-	public LearnIncomingMessageProcessor() {}
-	
-	public LearnIncomingMessageProcessor(FrontlineSMS frontlineController, LearnPluginProperties properties) {
-		this.frontlineController = frontlineController;
-		this.properties = properties;
+	public LearnIncomingMessageProcessor() {
+		properties = LearnPluginProperties.getInstance();
 	}
 
+	public void setFrontlineController(FrontlineSMS frontlineController) {
+		this.frontlineController = frontlineController;
+	}
+	
 	public void start() {
 		eventBus.registerObserver(this);
 	}
@@ -56,6 +57,8 @@ public class LearnIncomingMessageProcessor implements EventObserver {
 
 //> MESSAGE PROCESSING
 	void processMessage(FrontlineMessage m) {
+		if(m.getType() != FrontlineMessage.Type.RECEIVED) return;
+		
 		AssessmentMessage am = getAssessmentMessage(m);
 		if(am == null) return;
 		Question q = getQuestion(am);

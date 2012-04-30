@@ -25,6 +25,7 @@ public class LearnPluginController extends BasePluginController {
 		ctx = applicationContext;
 		scheduleHandler = new ScheduleHandler(frontlineController, ctx);
 		messageProcessor = (LearnIncomingMessageProcessor) ctx.getBean("learnIncomingMessageProcessor");
+		messageProcessor.setFrontlineController(frontlineController);
 	}
 
 	public void deinit() {
