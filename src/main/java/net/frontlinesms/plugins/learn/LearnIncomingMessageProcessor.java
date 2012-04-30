@@ -22,7 +22,7 @@ import net.frontlinesms.plugins.learn.data.repository.AssessmentMessageResponseD
 
 public class LearnIncomingMessageProcessor implements EventObserver {
 	private static final String ALPHABET = "abc";
-	private static final Pattern ANSWER_PATTERN = Pattern.compile("\\s*(\\d+)\\s*(?:(t(?:rue)?|f(?:alse)?)|([a-c]))\\s*");
+	private static final Pattern ANSWER_PATTERN = Pattern.compile("\\s*(\\d+)(?:[\\s\\.]*)(?:(t(?:rue)?|f(?:alse)?)|([a-c]))\\s*");
 
 	private FrontlineSMS frontlineController;
 	private LearnPluginProperties properties;
