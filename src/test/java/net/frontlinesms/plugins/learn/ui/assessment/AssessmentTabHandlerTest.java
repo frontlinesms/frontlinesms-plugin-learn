@@ -328,9 +328,9 @@ public class AssessmentTabHandlerTest extends ThinletEventHandlerTest<Assessment
 		
 		// when
 		h.notify(mockEntitySavedNotification(Topic.class));
+		waitForUiEvents();
 		
 		// then
-		waitForUiEvents();
 		assertEquals("Displayed topics",
 				array("Cookery", "Music", "Philately", "Tomfoolery"),
 				$("cbTopic").getOptions());
@@ -376,9 +376,9 @@ public class AssessmentTabHandlerTest extends ThinletEventHandlerTest<Assessment
 		// when
 		h.notify(mockEntityUpdatedNotification(
 				mockAssessmentWithTopicAndId(99, "Umbongo", "3/4/12", "14/4/12")));
+		waitForUiEvents();
 		
 		// then
-		waitForUiEvents();
 		assertEquals("Assessments displayed", 1, $("tblAssessments").getRowCount());
 		assertEquals("Final first row contents.",
 				new String[]{ "Umbongo", "3/4/2012", "14/4/2012" },
@@ -400,9 +400,9 @@ public class AssessmentTabHandlerTest extends ThinletEventHandlerTest<Assessment
 		// when
 		h.notify(mockEntitySavedNotification(
 				mockAssessmentWithTopicAndId(100, "Umbongo", "3/4/12", "14/4/12")));
+		waitForUiEvents();
 		
 		// then
-		waitForUiEvents();
 		assertEquals("Assessments displayed", 2, $("tblAssessments").getRowCount());
 		assertEquals("Final first row contents.",
 				new String[]{ "Topicana", "20/12/2011", "13/12/2012" },
@@ -427,6 +427,7 @@ public class AssessmentTabHandlerTest extends ThinletEventHandlerTest<Assessment
 		// when
 		h.notify(mockEntityDeletedNotification(
 				mockAssessmentWithId(100)));
+		waitForUiEvents();
 		
 		// then
 		assertFalse($("btEditAssessment").isEnabled());
@@ -452,9 +453,9 @@ public class AssessmentTabHandlerTest extends ThinletEventHandlerTest<Assessment
 		// when
 		h.notify(mockEntityDeletedNotification(
 				mockAssessmentWithId(100)));
+		waitForUiEvents();
 		
 		// then
-		waitForUiEvents();
 		assertEquals("Assessments displayed", 1, $("tblAssessments").getRowCount());
 		assertEquals("Final first row contents.",
 				new String[]{ "Topicana", "20/12/2011", "13/12/2012" },
