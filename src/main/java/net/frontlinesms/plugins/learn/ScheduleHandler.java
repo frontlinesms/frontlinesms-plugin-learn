@@ -19,6 +19,7 @@ import net.frontlinesms.plugins.learn.data.domain.Assessment;
 import net.frontlinesms.plugins.learn.data.domain.AssessmentMessage;
 import net.frontlinesms.plugins.learn.data.domain.Frequency;
 import net.frontlinesms.plugins.learn.data.repository.AssessmentDao;
+import net.frontlinesms.ui.i18n.InternationalisationUtils;
 
 import org.apache.log4j.Logger;
 import org.quartz.CronScheduleBuilder;
@@ -31,6 +32,7 @@ import org.quartz.Trigger;
 import org.quartz.TriggerBuilder;
 import org.quartz.TriggerKey;
 import org.quartz.impl.StdSchedulerFactory;
+import org.quartz.impl.matchers.GroupMatcher;
 import org.springframework.context.ApplicationContext;
 
 public class ScheduleHandler implements EventObserver {
@@ -123,8 +125,9 @@ public class ScheduleHandler implements EventObserver {
 		} catch (SchedulerException e) {
 			e.printStackTrace();
 		}
+		printScheduleDebug();
 	}
-	
+
 	private void scheduleOrRescheduleJobs(AssessmentMessage m) {
 		System.out.println("ScheduleHandler.scheduleOrRescheduleJob() : " + m.getId());
 		Trigger trigger = null;
@@ -146,6 +149,7 @@ public class ScheduleHandler implements EventObserver {
 		} catch (SchedulerException e) {
 			e.printStackTrace();
 		}
+		printScheduleDebug();
 	}
 	
 	private void unscheduleJobs(AssessmentMessage m) {
@@ -156,6 +160,7 @@ public class ScheduleHandler implements EventObserver {
 		} catch (SchedulerException e) {
 			e.printStackTrace();
 		}
+		printScheduleDebug();
 	}
 
 	private JobDetail createJob(AssessmentMessage m) {
@@ -188,15 +193,15 @@ public class ScheduleHandler implements EventObserver {
 
 	private Trigger createResendTrigger(AssessmentMessage m) {
 		System.out.println("ScheduleHandler.createResendTrigger() : Scheduling with frequency: " + m.getFrequency());
-		int resendDelay = LearnPluginProperties.getInstance().getResendDelay();
-		return createTrigger(getTriggerKey(m), m.getFrequency(), m.getStartDate() + resendDelay, m.getEndDate() + resendDelay);
+		long resendDelay = LearnPluginProperties.getInstance().getResendDelay() * 60000L;
+		return createTrigger(getResendTriggerKey(m), m.getFrequency(), m.getStartDate() + resendDelay, m.getEndDate() + resendDelay);
 	}
 	
 	private Trigger createTrigger(TriggerKey triggerKey, Frequency f, long startDate, long endDate) {
 		String cronExp;
 		switch(f) {
 			case ONCE:
-				cronExp = "0 m H d M ? y";
+				cronExp = "0 m H d M ? yyyy";
 				break;
 			case DAILY:
 				cronExp = "0 m H * * ? *";
@@ -216,12 +221,29 @@ public class ScheduleHandler implements EventObserver {
 		String cronExpression = new SimpleDateFormat(cronExp).format(startDate);
 		System.out.println("ScheduleHandler.createTrigger() : " + cronExpression);
 		TriggerBuilder<CronTrigger> schedule = TriggerBuilder.newTrigger()
-				.startNow()
+				.startAt(new Date(startDate))
 				.withIdentity(triggerKey)
 				.withSchedule(CronScheduleBuilder.cronSchedule(cronExpression));
 		if(f != Frequency.ONCE) {
 			schedule = schedule.endAt(new Date(endDate));
 		}
 		return schedule.build();
+	}
+
+//> DEBUG
+	private void printScheduleDebug() {
+		try {
+			for(String groupName : scheduler.getTriggerGroupNames()) {
+				System.out.println("TRIGGER GROUP: " + groupName);
+				for(TriggerKey k : scheduler.getTriggerKeys(GroupMatcher.triggerGroupEquals(groupName))) {
+					Date nextFireTime = scheduler.getTrigger(k).getNextFireTime();
+					String formatedDate = InternationalisationUtils.formatDate(nextFireTime);
+					String formatedTime = InternationalisationUtils.formatTime(nextFireTime.getTime());
+					System.out.println(k + " -> " + formatedDate + " " + formatedTime);
+				}
+			}
+		} catch(SchedulerException ex) {
+			ex.printStackTrace();
+		}
 	}
 }
