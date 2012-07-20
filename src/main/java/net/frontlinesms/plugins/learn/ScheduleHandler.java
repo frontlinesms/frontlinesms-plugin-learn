@@ -18,6 +18,7 @@ import net.frontlinesms.plugins.PluginInitialisationException;
 import net.frontlinesms.plugins.learn.data.domain.Assessment;
 import net.frontlinesms.plugins.learn.data.domain.AssessmentMessage;
 import net.frontlinesms.plugins.learn.data.domain.Frequency;
+import net.frontlinesms.plugins.learn.data.domain.Question;
 import net.frontlinesms.plugins.learn.data.repository.AssessmentDao;
 import net.frontlinesms.ui.i18n.InternationalisationUtils;
 
@@ -121,7 +122,9 @@ public class ScheduleHandler implements EventObserver {
 		if(m.getEndDate() < System.currentTimeMillis()) return;
 		try {
 			scheduler.scheduleJob(createJob(m), createTrigger(m));
-			if(isResendsEnabled()) scheduler.scheduleJob(createResendJob(m), createResendTrigger(m));
+			if(isResendsEnabled() && m.getTopicItem() instanceof Question) {
+				scheduler.scheduleJob(createResendJob(m), createResendTrigger(m));
+			}
 		} catch (SchedulerException e) {
 			e.printStackTrace();
 		}
@@ -231,7 +234,7 @@ public class ScheduleHandler implements EventObserver {
 	}
 
 //> DEBUG
-	private void printScheduleDebug() {
+	public void printScheduleDebug() {
 		try {
 			for(String groupName : scheduler.getTriggerGroupNames()) {
 				System.out.println("TRIGGER GROUP: " + groupName);
@@ -247,3 +250,4 @@ public class ScheduleHandler implements EventObserver {
 		}
 	}
 }
+

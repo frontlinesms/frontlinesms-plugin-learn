@@ -1,32 +1,36 @@
 package net.frontlinesms.plugins.learn;
 
+import org.mockito.Mock;
+import org.quartz.JobDetail;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
+import org.quartz.Trigger;
 
 import net.frontlinesms.events.EventBus;
+import net.frontlinesms.events.FrontlineEventNotification;
 import net.frontlinesms.junit.BaseTestCase;
+import net.frontlinesms.plugins.learn.data.domain.AssessmentMessage;
+import net.frontlinesms.plugins.learn.data.domain.Question;
+import net.frontlinesms.plugins.learn.data.domain.Reinforcement;
 import net.frontlinesms.plugins.learn.data.repository.AssessmentDao;
 
 import static org.mockito.Mockito.*;
+import static net.frontlinesms.plugins.learn.LearnTestUtils.*;
 
 public class ScheduleHandlerTest extends BaseTestCase {
 	/** instance under test */
 	private ScheduleHandler handler;
-	private EventBus eventBus;
-	private AssessmentDao assessmentDao;
-	private Scheduler scheduler;
+	@Mock private EventBus eventBus;
+	@Mock private AssessmentDao assessmentDao;
+	@Mock private Scheduler scheduler;
+	private LearnPluginProperties properties = LearnPluginProperties.getInstance();
 
 	@Override
 	protected void setUp() throws Exception {
+		super.setUp();
 		this.handler = new ScheduleHandler();
-		
-		this.eventBus = mock(EventBus.class);
 		inject(handler, "eventBus", eventBus);
-		
-		this.assessmentDao = mock(AssessmentDao.class);
 		inject(handler, "assessmentDao", assessmentDao);
-		
-		this.scheduler = mock(Scheduler.class);
 		inject(handler, "scheduler", scheduler);
 	}
 	
@@ -70,5 +74,67 @@ public class ScheduleHandlerTest extends BaseTestCase {
 		
 		// then
 		pass("No exception should have been thrown previously.");
+	}
+	
+	public void testResendNotScheduledForQuestionIfResendsAreDisabled() throws Exception {
+		// given
+		properties.setResendDelay(0);
+		properties.saveToDisk();
+		
+		// when
+		handler.notify(createQuestionAmSavedNotification());
+		
+		// then
+		verifyJobsScheduled(1);
+	}
+	
+	public void testResendScheduledForQuestionIfResendsAreEnabled() throws Exception {
+		// given
+		properties.setResendDelay(3000);
+		properties.saveToDisk();
+		
+		// when
+		handler.notify(createQuestionAmSavedNotification());
+		
+		// then
+		verifyJobsScheduled(2);
+	}
+
+	public void testResendNotScheduledForReinforcementIfResendsAreDisabled() throws Exception {
+		// given
+		properties.setResendDelay(0);
+		properties.saveToDisk();
+		
+		// when
+		handler.notify(createReinforcementAmSavedNotification());
+		
+		// then
+		verifyJobsScheduled(1);
+	}
+
+	public void testResendNotScheduledForReinforcementIfResendsAreEnabled() throws Exception {
+		// given
+		properties.setResendDelay(3000);
+		properties.saveToDisk();
+		
+		// when
+		handler.notify(createReinforcementAmSavedNotification());
+		
+		// then
+		verifyJobsScheduled(1);
+	}
+
+	private void verifyJobsScheduled(int invocationCount) throws Exception {
+		verify(scheduler, times(invocationCount)).scheduleJob(any(JobDetail.class), any(Trigger.class));
+	}
+	
+	private FrontlineEventNotification createQuestionAmSavedNotification() {
+		AssessmentMessage m = mockAssessmentMessage(mock(Question.class), TODAY, TOMORROW);
+		return mockEntitySavedNotification(m);
+	}
+	
+	private FrontlineEventNotification createReinforcementAmSavedNotification() {
+		AssessmentMessage m = mockAssessmentMessage(mock(Reinforcement.class), TODAY, TOMORROW);
+		return mockEntitySavedNotification(m);
 	}
 }

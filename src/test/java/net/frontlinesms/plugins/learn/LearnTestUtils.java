@@ -146,15 +146,27 @@ public class LearnTestUtils {
 		return a;
 	}
 	
-	public static AssessmentMessage mockAssessmentMessage(long startDate, long endDate) {
+	private static AssessmentMessage mockAssessmentMessage() {
 		AssessmentMessage m = mock(AssessmentMessage.class);
+		when(m.getFrequency()).thenReturn(Frequency.ONCE);
+		return m;
+	}
+	
+	public static AssessmentMessage mockAssessmentMessage(TopicItem item) {
+		AssessmentMessage m = mockAssessmentMessage();
+		when(m.getTopicItem()).thenReturn(item);
+		return m;
+	}
+	
+	public static AssessmentMessage mockAssessmentMessage(long startDate, long endDate) {
+		AssessmentMessage m = mockAssessmentMessage();
 		when(m.getStartDate()).thenReturn(startDate);
 		when(m.getEndDate()).thenReturn(endDate);
 		return m;
 	}
 	
-	public static AssessmentMessage mockAssessmentMessage(TopicItem item) {
-		AssessmentMessage m = mock(AssessmentMessage.class);
+	public static AssessmentMessage mockAssessmentMessage(TopicItem item, long startDate, long endDate) {
+		AssessmentMessage m = mockAssessmentMessage(startDate, endDate);
 		when(m.getTopicItem()).thenReturn(item);
 		return m;
 	}
