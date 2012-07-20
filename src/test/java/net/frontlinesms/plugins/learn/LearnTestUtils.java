@@ -30,10 +30,13 @@ import net.frontlinesms.plugins.learn.data.gradebook.StudentGrades;
 import net.frontlinesms.plugins.learn.data.repository.*;
 
 import org.mockito.ArgumentMatcher;
+import org.quartz.Trigger;
 
 public class LearnTestUtils {
 	private static final Pattern ARRAY_REF = Pattern.compile("(.*)\\[(\\d+)\\]");
 	public static final Long YESTERDAY, TODAY, TOMORROW;
+	public static final long THE_BEGINNING_OF_TIME = 0;
+	public static final long THE_END_OF_TIME = Long.MAX_VALUE;
 	
 	static {
 		final long ONE_DAY = 1000L * 60 * 60 * 24;
@@ -359,6 +362,19 @@ public class LearnTestUtils {
 				"student", expectedStudent,
 				"answer", expectedAnswer,
 				"correct", expectedCorrect);
+	}
+	
+	public static Trigger triggerWhichStartedWithin5MinutesOfNow() {
+		return argThat(new ArgumentMatcher<Trigger>() {
+			@Override
+			public boolean matches(Object argument) {
+				long delta = Math.abs(((Trigger) argument).getStartTime().getTime() - System.currentTimeMillis());
+				boolean wasRecent = delta < 300000;
+				if(!wasRecent) System.out
+						.println("triggerWhichStartedWithin5MinutesOfNow() : delta=" + delta);
+				return wasRecent;
+			}
+		});
 	}
 	
 	public static Topic topicWithName(final String expectedName) {

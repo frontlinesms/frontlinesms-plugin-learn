@@ -123,18 +123,53 @@ public class ScheduleHandlerTest extends BaseTestCase {
 		// then
 		verifyJobsScheduled(1);
 	}
+	
+	public void testSendsScheduledInThePastShouldNotBeHonoured() throws Exception {
+		// given
+		properties.setResendDelay(0);
+		properties.saveToDisk();
+		
+		// when a repeating AM scheduled for 5 hours time is created
+		handler.notify(createReinforcementAmSavedNotification(THE_BEGINNING_OF_TIME, THE_END_OF_TIME));
+		
+		// then no messages are sent immediately
+		verify(scheduler).scheduleJob(any(JobDetail.class), triggerWhichStartedWithin5MinutesOfNow());
+	}
 
+	public void testResendsScheduledInThePastShouldNotBeHonoured() throws Exception {
+		// given
+		properties.setResendDelay(1);
+		properties.saveToDisk();
+		
+		// when a repeating AM scheduled for 5 hours time is created
+		handler.notify(createQuestionAmSavedNotification(THE_BEGINNING_OF_TIME, THE_END_OF_TIME));
+		
+		// then no messages are sent immediately
+		verify(scheduler, times(2)).scheduleJob(
+				any(JobDetail.class),
+				triggerWhichStartedWithin5MinutesOfNow());
+	}
+
+//> TEST HELPER METHODS
 	private void verifyJobsScheduled(int invocationCount) throws Exception {
 		verify(scheduler, times(invocationCount)).scheduleJob(any(JobDetail.class), any(Trigger.class));
 	}
 	
 	private FrontlineEventNotification createQuestionAmSavedNotification() {
-		AssessmentMessage m = mockAssessmentMessage(mock(Question.class), TODAY, TOMORROW);
+		return createQuestionAmSavedNotification(TODAY, TOMORROW);
+	}
+	
+	private FrontlineEventNotification createQuestionAmSavedNotification(long startDate, long endDate) {
+		AssessmentMessage m = mockAssessmentMessage(mock(Question.class), startDate, endDate);
 		return mockEntitySavedNotification(m);
 	}
 	
 	private FrontlineEventNotification createReinforcementAmSavedNotification() {
-		AssessmentMessage m = mockAssessmentMessage(mock(Reinforcement.class), TODAY, TOMORROW);
+		return createReinforcementAmSavedNotification(TODAY, TOMORROW);
+	}
+	
+	private FrontlineEventNotification createReinforcementAmSavedNotification(long startTime, long endTime) {
+		AssessmentMessage m = mockAssessmentMessage(mock(Reinforcement.class), startTime, endTime);
 		return mockEntitySavedNotification(m);
 	}
 }

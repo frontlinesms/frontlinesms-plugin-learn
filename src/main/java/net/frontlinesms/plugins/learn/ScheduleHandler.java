@@ -224,7 +224,7 @@ public class ScheduleHandler implements EventObserver {
 		String cronExpression = new SimpleDateFormat(cronExp).format(startDate);
 		System.out.println("ScheduleHandler.createTrigger() : " + cronExpression);
 		TriggerBuilder<CronTrigger> schedule = TriggerBuilder.newTrigger()
-				.startAt(new Date(startDate))
+				.startAt(new Date(Math.max(startDate, System.currentTimeMillis())))
 				.withIdentity(triggerKey)
 				.withSchedule(CronScheduleBuilder.cronSchedule(cronExpression));
 		if(f != Frequency.ONCE) {
