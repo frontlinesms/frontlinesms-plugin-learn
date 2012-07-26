@@ -12,6 +12,14 @@
 	<name>Learn Plugin</name>
 	<description>A plugin for FrontlineSMS for running multiple choice quizzes.</description>
 
+	<repositories>
+		<repository>
+			<id>frontlinesms.repo</id>
+			<name>FrontlineSMS Maven repository</name>
+			<url>http://dev.frontlinesms.com/m2repo</url>
+		</repository>
+	</repositories>
+
 	<dependencies>
 		<dependency>
 			<groupId>net.frontlinesms.core</groupId>
